@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './style.css';
+import api from '../../../utilities/api';
 
 const style = {
   formInstructions: {
@@ -27,7 +28,10 @@ class createAccountModal extends Component {
     super(props);
     this.closeModal = this.closeModal.bind(this);
     this.submitForm = this.submitForm.bind(this);
-    this.state = { formMessage: '' };
+    this.state = {
+      formMessage: '',
+      hasSuccess: false
+    };
   }
 
   closeModal() {
@@ -40,17 +44,26 @@ class createAccountModal extends Component {
     const email = document.getElementById('email-input').value;
     const password = document.getElementById('password-input').value;
     const passwordVerify = document.getElementById('verify-password-input').value;
-    const formMessageDisplay = document.getElementById('new-user-form-message');
-    if (!username && !email) {
-      formMessageDisplay.className = 'help is-danger';
-      return this.setState({ formMessage: 'You must enter a username or email address.'});
-    };
+    if (!username && !email) return this.setState({ formMessage: 'You must enter a username or email address.'});
     if (username && username.length < 4) return this.setState({ formMessage: 'Your username must be at least 4 characters long.' });
-    // if (email && ) return this.setState({ formMessage: 'Your username must be at least 4 characters long.' });
+    if (email && !(/.+@.+\..+/.test(email))) return this.setState({ formMessage: 'The email address you entered is not valid.' });
     if (!password) return this.setState({ formMessage: 'You must create a password.' });
+    if (password.length < 7) return this.setState({ formMessage: 'Your password must be at least 7 characters long.' });
     if (!passwordVerify) return this.setState({ formMessage: 'You must re-enter your password to verify it.' });
-    // if (!) return this.setState({ formMessage: 'You must create a password.' });
-    this.setState({ formMessage: 'success!'})
+    if (password !== passwordVerify) return this.setState({ formMessage: 'Your passwords don\'t match.' });
+    let newUser = { password };
+    if (username) newUser.username = username;
+    if (email) newUser.email = email;
+    api.auth.createAccount(newUser)
+      .then(res => {
+        console.log(res);
+        this.setState({
+          formMessage: 'Success! Your account was created.',
+          hasSuccess: true
+        });
+      })
+      .catch(err => console.log(err));
+
   }
 
   render() {
@@ -59,7 +72,7 @@ class createAccountModal extends Component {
         <div className="modal-background"></div>
         <div className="modal-card">
           <header className="modal-card-head">
-            <p className="modal-card-title">Create Account</p>
+            <p className="modal-card-title">{this.state.hasSuccess ? 'Account Created!' : 'Create Account'}</p>
             <button onClick={this.closeModal} className="delete" aria-label="close"></button>
           </header>
           <section className="modal-card-body">
@@ -108,13 +121,13 @@ class createAccountModal extends Component {
               </div>
             </form>
             <div className="content">
-              <p id="new-user-form-message" style={style.formMessage}>{this.state.formMessage}</p>
+              <p id="new-user-form-message" className={this.state.hasSuccess ? 'help is-success' : 'help is-danger'} style={style.formMessage}>{this.state.formMessage}</p>
               <p style={style.privacyMessage}>I will never share or sell your information.</p>
             </div>
           </section>
           <footer className="modal-card-foot buttons is-right">
-            <button onClick={this.submitForm} type="submit" form="new-user-form" className="button is-success">Create Account</button>
-            <button onClick={this.closeModal} className="button">Cancel</button>
+            {!this.state.hasSuccess && <button onClick={this.submitForm} type="submit" form="new-user-form" className="button is-success">Create Account</button>}
+            <button onClick={this.closeModal} className={this.state.hasSuccess ? "button is-success" : "button"}>{this.state.hasSuccess ? 'OK' : 'Cancel'}</button>
           </footer>
         </div>
       </div>

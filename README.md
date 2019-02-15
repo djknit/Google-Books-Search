@@ -25,8 +25,13 @@
 
 ## Technologies Used
 #### Front End
+* Bulma
 
 #### Back End
+* Passport.js Local Strategy
+* Express
+* Node
+* MongoDB
 
 ## Instructions for Use
 #### Building the App

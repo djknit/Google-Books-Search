@@ -1,0 +1,12 @@
+.landingPageMenu {
+  text-align: 'center';
+  /* padding: 20px; */
+}
+
+.landingPageMenu > .button {
+  margin: 10px;
+  font-weight: 500;
+  font-size: 24px;
+  background-color: rgb(0,185,146);
+  color: white;
+}

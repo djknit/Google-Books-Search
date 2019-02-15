@@ -1,0 +1,43 @@
+.navbar {
+  border-bottom: 1px solid #aaaaaa;
+  box-shadow: 0 1px 6px #888888;
+  display: flex;
+  min-width: 510px;
+}
+
+.navbar-brand {
+  padding: 0 .75rem;
+  position: relative;
+}
+
+.navbar-brand > .navbar-item {
+  color: rgb(54, 54, 54);
+}
+
+.navbar .dropdown-trigger > button {
+  border: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.navbar .dropdown-trigger > button:focus:not(:active) {
+  box-shadow: none;
+  border: none;
+  outline: none;
+}
+
+#auth-links {
+  width: 186px;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  box-shadow: none;
+  margin-left: 318px;
+}
+
+/* Needs attention */
+.navbar-end, .navbar-menu {
+  /* display: flex !important; */
+  display: inline-block !important;
+  right: 0;
+}

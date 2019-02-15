@@ -1,0 +1,4 @@
+.navbar-item.is-active {
+  font-style: italic;
+  cursor: text;
+}

@@ -18,17 +18,13 @@ function createAccountModal(props) {
     }
   }
 
-  function closeModal() {
-    document.getElementById('loginModal').classList.remove('is-active');
-  }
-
   return(
     <div id="loginModal" className="modal">
       <div className="modal-background"></div>
       <div className="modal-card">
         <header className="modal-card-head">
           <p className="modal-card-title">Sign In</p>
-          <button onClick={closeModal} className="delete" aria-label="close"></button>
+          <button onClick={props.closeModal} className="delete" aria-label="close"></button>
         </header>
         <section className="modal-card-body">
           <div className="content">
@@ -61,7 +57,7 @@ function createAccountModal(props) {
         </section>
         <footer className="modal-card-foot">
           <button className="button is-success">Save changes</button>
-          <button onClick={closeModal} className="button">Cancel</button>
+          <button onClick={props.closeModal} className="button">Cancel</button>
         </footer>
       </div>
     </div>

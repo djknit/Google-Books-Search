@@ -17,7 +17,7 @@ function createAccount(newUser, callback) {
     .catch(err => {
       let response = { success: false };
       console.log(err)
-      if (err.code === 11000) response.message = "Duplicate email or username."
+      if (err.code === 11000) response.message = "That username is taken."
       response._message = err.message;
       response.errors = err.errors;
       callback(response);

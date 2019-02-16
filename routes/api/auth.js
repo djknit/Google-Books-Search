@@ -20,8 +20,9 @@ router.post('/create', (req, res) => {
       req.login(
         result.user,
         err => err ?
-          res.json({ success: false, error: 'Error logging in.'}) :
-          res.json({ success: true, message: 'You\'re now logged in.' })
+          res.json({ success: false, error: 'Error logging in.'})
+          :
+          res.json({ success: true, message: 'You\'re now logged in.', user:req.user })
       );
     }
     else res.json(result);

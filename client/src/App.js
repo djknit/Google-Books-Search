@@ -66,7 +66,6 @@ class App extends Component {
             isLoggedIn={this.state.isLoggedIn}
             user={this.state.user}
           />
-          <h1>{!this.state.isLoggedIn ? 'NOT Logged In' : 'LOGGED IN'}</h1>
           <Switch>
             {/* source: https://tylermcginnis.com/react-router-pass-props-to-components/ */}
             <Route exact path="/" render={props => <LandingPage {...props} openCreateAccountModal={this.openCreateAccountModal} openLoginModal={this.openLoginModal} />} />

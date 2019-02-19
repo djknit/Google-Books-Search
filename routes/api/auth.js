@@ -55,9 +55,27 @@ router.post(
 );
 
 router.get('/fail', (req, res) => {
-  let response = { success: false };
+  let response = {};
   const message = req.flash();
-  response.message = message.error ? message.error[0] : 'You are not authenticated.';
+  if (message.error && message.error[0] === 'user') {
+    response = {
+      message: 'Username or email address not found.',
+      problems: { usernameOrEmail: true }
+    }
+  }
+  else if (message.error && message.error[0] === 'password') {
+    response = {
+      message: 'Incorrect password.',
+      problems: { password: true }
+    }
+  }
+  else {
+    response = {
+      message: 'Unknown error. You are not authenticated.',
+      problems: {}
+    }
+  }
+  response.success = false;
   res.status(401);
   res.json(response);
 });

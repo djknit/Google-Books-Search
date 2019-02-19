@@ -9,16 +9,14 @@ module.exports.configurePassport = passport => {
       usernameField: 'usernameOrEmail'
     },
     function (usernameOrEmail, password, done) {
-
       require('../controllers/User').findByUsernameOrEmail(usernameOrEmail, result => {
         if (result.error) return done(result.error);
         const { user } = result;
-        console.log(user)
         if (!user) {
-          return done(null, false, { message: 'Username or email not found.' });
+          return done(null, false, { message: 'user' });
         }
         else if (user.password !== password) {
-          return done(null, false, { message: 'Incorrect password.' });
+          return done(null, false, { message: 'password' });
         }
         else {
           user.password = undefined;

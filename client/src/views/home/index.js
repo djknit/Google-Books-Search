@@ -4,7 +4,7 @@ import Hero from '../../components/hero';
 import Box from '../../components/box';
 import Button from '../../components/landing-button';
 
-function searchView(props) {
+function homeView(props) {
   const style = {
     box: {
       textAlign: 'center',
@@ -28,4 +28,4 @@ function searchView(props) {
   );
 }
 
-export default searchView;
+export default homeView;

@@ -1,80 +1,177 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import './style.css';
 import api from '../../../utilities/api';
-
-const style = {
-  formInstructions: {
-    fontSize: 15
-  },
-  label: {
-    textAlign: 'left'
-  },
-  formMessage: {
-    margin: '15px 0 0',
-    fontSize: 15
-  },
-  privacyMessage: {
-    fontSize: 14,
-    marginTop: 20
-  },
-  button: {
-    marginTop: 15
-  }
-}
 
 class createAccountModal extends Component {
   constructor(props) {
     // info about super(): http://cheng.logdown.com/posts/2016/03/26/683329
     super(props);
     this.submitForm = this.submitForm.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.cancelForm = this.cancelForm.bind(this);
     this.state = {
-      formMessage: 'You must create a username OR provide an e-mail address. You may also choose to do both. If you enter a username and an email address, you can use either to sign in. Usernames are case-sensitive; email addresses are not. If you provide an email, you will be able to use it to recover your password.',
-      formMessageClass: 'help',
-      hasSuccess: false
+      showInstructions: true,
+      username: '',
+      email: '',
+      password: '',
+      verifyPassword: '',
+      problemMessage: '',
+      hasSuccess: false,
+      hasProblems: false,
+      hasUsernameProblem: false,
+      hasEmailProblem: false,
+      hasPasswordProblem: false,
+      hasVerifyPasswordProblem: false
     };
+  }
+  
+  handleChange(event) {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
   }
 
   submitForm(event) {
     event.preventDefault();
-    const username = document.getElementById('username-input').value;
-    const email = document.getElementById('email-input').value;
-    const password = document.getElementById('password-input').value;
-    const passwordVerify = document.getElementById('verify-password-input').value;
-    //Next line helps shorten repeated value for setState below
-    const formMessageClass = 'help is-danger';
-    if (!username && !email) return this.setState({ formMessage: 'You must enter a username or email address.', formMessageClass });
-    if (username && username.length < 4) return this.setState({ formMessage: 'Your username must be at least 4 characters long.', formMessageClass });
-    if (email && !(/.+@.+\..+/.test(email))) return this.setState({ formMessage: 'The email address you entered is not valid.', formMessageClass });
-    if (!password) return this.setState({ formMessage: 'You must create a password.', formMessageClass });
-    if (password.length < 7) return this.setState({ formMessage: 'Your password must be at least 7 characters long.', formMessageClass });
-    if (!passwordVerify) return this.setState({ formMessage: 'You must re-enter your password to verify it.', formMessageClass });
-    if (password !== passwordVerify) return this.setState({ formMessage: 'Your passwords don\'t match.', formMessageClass });
-    let newUser = { password };
-    if (username) newUser.username = username;
-    if (email) newUser.email = email;
+    this.setState({ showInstructions: false });
+    const { username, email, password, verifyPassword } = this.state;
+    if (!username && !email) return this.setState({
+      problemMessage: 'You must enter a username or email address.',
+      hasProblems: true,
+      hasUsernameProblem: true,
+      hasEmailProblem: true,
+      hasPasswordProblem: false,
+      hasVerifyPasswordProblem: false
+    });
+    if (username && username.length < 4) return this.setState({
+      problemMessage: 'Your username must be at least 4 characters long.',
+      hasProblems: true,
+      hasUsernameProblem: true,
+      hasEmailProblem: false,
+      hasPasswordProblem: false,
+      hasVerifyPasswordProblem: false
+    });
+    if (email && !(/.+@.+\..+/.test(email))) return this.setState({
+      problemMessage: 'The email address you entered does not appear to be a valid.',
+      hasProblems: true,
+      hasUsernameProblem: false,
+      hasEmailProblem: true,
+      hasPasswordProblem: false,
+      hasVerifyPasswordProblem: false
+    });
+    if (!password) return this.setState({
+      problemMessage: 'You must create a password.',
+      hasProblems: true,
+      hasUsernameProblem: false,
+      hasEmailProblem: false,
+      hasPasswordProblem: true,
+      hasVerifyPasswordProblem: true
+    });
+    if (password.length < 7) return this.setState({
+      problemMessage: 'Your password must be at least 7 characters long.',
+      hasProblems: true,
+      hasUsernameProblem: false,
+      hasEmailProblem: false,
+      hasPasswordProblem: true,
+      hasVerifyPasswordProblem: true
+    });
+    if (!verifyPassword) return this.setState({
+      problemMessage: 'You must re-enter your password to verify it.',
+      hasProblems: true,
+      hasUsernameProblem: false,
+      hasEmailProblem: false,
+      hasPasswordProblem: false,
+      hasVerifyPasswordProblem: true
+    });
+    if (password !== verifyPassword) return this.setState({
+      problemMessage: 'Your passwords don\'t match.',
+      hasProblems: true,
+      hasUsernameProblem: false,
+      hasEmailProblem: false,
+      hasPasswordProblem: true,
+      hasVerifyPasswordProblem: true
+    });
+    this.setState({
+      hasUsernameProblem: false,
+      hasEmailProblem: false,
+      hasPasswordProblem: false,
+      hasVerifyPasswordProblem: false
+    });
+    const newUser = {
+      username: username || undefined,
+      email: email || undefined,
+      password
+    };
     api.auth.createAccount(newUser)
       .then(res => {
-        if (res.data.success) {
-          console.log(res.data)
+        const resData = res.data;
+        console.log(resData);
+        if (resData.success) {
           this.setState({
-            formMessage: 'Success! Your account was created.',
-            formMessageClass: 'help is-success',
+            hasProblems: false,
             hasSuccess: true
           });
-          this.props.logUserIn(res.data.user)
+          this.props.logUserIn(resData.user);
         }
         else {
           this.setState({
-            formMessage: res.data.message || 'Account creation failed. Please try again.',
-            formMessageClass
+            problemMessage: resData.message,
+            hasProblems: true,
+            hasUsernameProblem: resData.problems.username,
+            hasEmailProblem: resData.problems.email,
+            hasPasswordProblem: resData.problems.password,
+            hasVerifyPasswordProblem: resData.problems.verifyPassword
           });  
         }
       })
-      .catch(err => console.log(err));
-
+      .catch(err => this.setState({
+          problemMessage: 'Unknown error.',
+          hasProblems: true,
+          hasUsernameProblem: false,
+          hasEmailProblem: false,
+          hasPasswordProblem: false,
+          hasVerifyPasswordProblem: false
+        })
+      );
+  }
+  
+  cancelForm() {
+    this.setState({
+      username: '',
+      email: '',
+      password: '',
+      verifyPassword: '',
+      hasProblems: false,
+      hasUsernameProblem: false,
+      hasEmailProblem: false,
+      hasPasswordProblem: false,
+      hasVerifyPasswordProblem: false
+    });
+    this.props.closeModal();
   }
 
   render() {
+    const style = {
+      formInstructions: {
+        fontSize: 15,
+        whiteSpace: 'pre-wrap',
+        marginBottom: 20
+      },
+      label: {
+        textAlign: 'left'
+      },
+      problemNotification: {
+        whiteSpace: 'pre-line'
+      },
+      privacyMessage: {
+        fontSize: 14,
+        marginTop: 20
+      },
+      button: {
+        marginTop: 15
+      }
+    }
+
     return(
       <div id="createAccountModal" className="modal">
         <div className="modal-background"></div>
@@ -84,14 +181,28 @@ class createAccountModal extends Component {
             <button onClick={this.props.closeModal} className="delete" aria-label="close"></button>
           </header>
           <section className="modal-card-body">
-            <div className="content">
-              <p className={this.state.formMessageClass} style={style.formInstructions}>{this.state.formMessage}</p>
-            </div>
+            {this.state.showInstructions &&
+              <p className="help" style={style.formInstructions}>
+                You must create a username OR provide an e-mail address. You may also choose to do both. If you enter a username and an email address, you can use
+                either to sign in. Usernames are case-sensitive; email addresses are not. If you provide an email, you will be able to use it to recover your password.
+              </p>
+            }
+            {this.state.hasSuccess &&
+              <div className="notification is-success">
+                <strong>Success!</strong> Your account was created.
+                <br />You are now signed in.
+              </div>
+            }
+            {this.state.hasProblems &&
+              <div className="notification is-danger" style={style.problemNotification}>
+                {this.state.problemMessage}
+              </div>
+            }
             <form id="new-user-form" style={style.form}>
               <div className="field">
                 <label className="label" htmlFor="username-input" style={style.label}>Create a username</label>
                 <div className="control has-icons-left">
-                  <input id="username-input" className="input" placeholder="Your username..." disabled={this.state.hasSuccess} />
+                  <input id="username-input" name="username" value={this.state.username} placeholder="Your username..." onChange={this.handleChange} disabled={this.state.hasSuccess} className={this.state.hasUsernameProblem && !this.state.hasSuccess ? 'input is-danger' : 'input'} />
                   <span className="icon is-small is-left">
                     <i className="fas fa-user-tag"></i>
                   </span>
@@ -101,7 +212,7 @@ class createAccountModal extends Component {
               <div className="field">
                 <label className="label" htmlFor="email-input" style={style.label}>And/or enter your email</label>
                 <div className="control has-icons-left">
-                  <input id="email-input" className="input" type="email" placeholder="Your email address..." disabled={this.state.hasSuccess} />
+                  <input id="email-input" name="email" value={this.state.email} type="email" placeholder="Your email address..." onChange={this.handleChange} disabled={this.state.hasSuccess} className={this.state.hasEmailProblem && !this.state.hasSuccess ? 'input is-danger' : 'input'} />
                   <span className="icon is-small is-left">
                     <i className="fas fa-envelope"></i>
                   </span>
@@ -111,7 +222,7 @@ class createAccountModal extends Component {
               <div className="field">
                 <label className="label" htmlFor="password-input" style={style.label}>Create a password</label>
                 <div className="control has-icons-left">
-                  <input id="password-input" className="input" type="password" placeholder="Your password..." disabled={this.state.hasSuccess} />
+                  <input id="password-input" name="password" value={this.state.password} type="password" placeholder="Your password..." onChange={this.handleChange} disabled={this.state.hasSuccess} className={this.state.hasPasswordProblem && !this.state.hasSuccess ? 'input is-danger' : 'input'} />
                   <span className="icon is-small is-left">
                     <i className="fas fa-lock"></i>
                   </span>
@@ -121,7 +232,7 @@ class createAccountModal extends Component {
               <div className="field">
                 <label className="label" htmlFor="verify-password-input" style={style.label}>Verify your password</label>
                 <div className="control has-icons-left">
-                  <input id="verify-password-input" className="input" type="password" placeholder="Your password..." disabled={this.state.hasSuccess} />
+                  <input id="verify-password-input" name="verifyPassword" value={this.state.verifyPassword} type="password" placeholder="Retype your password..." onChange={this.handleChange} disabled={this.state.hasSuccess} className={this.state.hasVerifyPasswordProblem && !this.state.hasSuccess ? 'input is-danger' : 'input'} />
                   <span className="icon is-small is-left">
                     <i className="fas fa-unlock"></i>
                   </span>
@@ -132,14 +243,20 @@ class createAccountModal extends Component {
               <p style={style.privacyMessage}>I will never share or sell your information.</p>
             </div>
           </section>
-          <footer className="modal-card-foot buttons is-right">
-            {!this.state.hasSuccess && <button onClick={this.submitForm} type="submit" form="new-user-form" className="button is-success">Create Account</button>}
-            <button onClick={this.props.closeModal} className={this.state.hasSuccess ? "button is-success" : "button"}>{this.state.hasSuccess ? 'OK' : 'Cancel'}</button>
-          </footer>
+          {this.state.hasSuccess ?
+            <footer className="modal-card-foot buttons is-right">
+              <Link onClick={this.cancelForm} to="/search" className="button is-success">OK</Link>
+            </footer>
+            :
+            <footer className="modal-card-foot buttons is-right">
+              <button onClick={this.submitForm} type="submit" form="new-user-form" className="button is-success">Submit</button>
+              <button onClick={this.cancelForm} className="button">Cancel</button>
+            </footer>
+          }
         </div>
       </div>
     );
   }
 }
 
-export default createAccountModal;
+export default createAccountModal; 

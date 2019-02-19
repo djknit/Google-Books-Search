@@ -14,14 +14,11 @@ function createAccount(newUser, callback) {
       }
       else callback({ success: false });
     })
-    .catch(err => {
-      let response = { success: false };
-      console.log(err)
-      if (err.code === 11000) response.message = "That username is taken."
-      response._message = err.message;
-      response.errors = err.errors;
-      callback(response);
-    });
+    .catch(err => callback({
+      success: false,
+      message: err.code === 11000 ? 'That username is taken.' : 'Unknown server error.',
+      problems: err.code === 11000 ? { username: true } : {}
+    }));
 }
 
 module.exports = {
@@ -30,43 +27,55 @@ module.exports = {
     console.log(user)
     if (!user.email && !user.username) return callback({
       success: false,
-      message: 'You must supply a username or email.'
+      message: 'You must supply a username or email.',
+      problems: { username: true, email: true }
     });
     else if (!user.password) return callback({
       success: false,
-      message: 'You must supply a password (min. 7 characters).'
+      message: 'You must supply a password (min. 7 characters).',
+      problems: { password: true, verifyPassword: true }
     });
     else if (user.email) {
       user.lowerCaseEmail = user.email.toLowerCase();
       User.findOne({ lowerCaseEmail: user.lowerCaseEmail })
-        .then(result =>
-          result ?
-          callback({
-            success: false,
-            message: 'There is already an account with that email.'
-          }) :
+        .then(result => result ?
+          user.username ? 
+            User.findOne({ username: user.username })
+              .then(result_2 => result_2 ?
+                callback({
+                  success: false,
+                  message: 'That username is taken.\nThere is already an account for that email.',
+                  problems: { email: true, username: true }
+                }) :
+                callback({
+                  success: false,
+                  message: 'There is already an account for that email.',
+                  problems: { email: true }
+                }))
+            :
+            callback({
+              success: false,
+              message: 'There is already an account for that email.',
+              problems: { email: true }
+            })
+          :
           createAccount(user, callback)
         )
-        .catch(err => callback({ success: false, error: err, message: 'Server error' }));
+        .catch(err => callback({ success: false, error: err, message: 'Unknown server error.' }));
     }
     else createAccount(user, callback);
   },
   findByUsernameOrEmail(usernameOrEmail, callback) {
-    console.log('\n\n' + '-#@-'.repeat(16));
-    console.log(usernameOrEmail)
-console.log('--!~~~~~~~~~~~'.repeat(8));
     User.findOne({ username: usernameOrEmail })
-      .then(result1 => {
-        if (result1) {
-          callback({ success: true, user: result1 });
-        }
-        else User.findOne({ lowerCaseEmail: usernameOrEmail })
-          .then(result2 => {
-            if (result2) callback({ success: true, user: result2 });
-            else callback({ success: false, message: 'Invalid username or email.' });
-          })
-          .catch(err => callback({ success: false, error: err }));
-      })
+      .then(result1 => result1 ?
+        callback({ success: true, user: result1 }) :
+        User.findOne({ lowerCaseEmail: usernameOrEmail })
+          .then(result2 => result2 ?
+            callback({ success: true, user: result2 }) :
+            callback({ success: false, message: 'Invalid username or email.' })
+          )
+          .catch(err => callback({ success: false, error: err }))
+      )
       .catch(err => callback({ success: false, error: err }));
   },
   findById(userId, done) {

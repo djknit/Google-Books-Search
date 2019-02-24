@@ -27,6 +27,7 @@ class createAccountModal extends Component {
   }
   
   handleChange(event) {
+    // source: https://medium.com/@tmkelly28/handling-multiple-form-inputs-in-react-c5eb83755d15
     const { name, value } = event.target;
     this.setState({ [name]: value });
   }

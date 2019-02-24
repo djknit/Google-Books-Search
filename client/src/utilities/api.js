@@ -8,6 +8,7 @@ function createApiCall(subRoute) {
 }
 
 const authApi = createApiCall('auth');
+const searchApi = createApiCall('search');
 
 export default {
   auth: {
@@ -17,5 +18,8 @@ export default {
     test: () => authApi.get('/test'),
     forgotPassword: email => authApi.post('/forgotpassword', { email }),
     resetPassword: (token, newPassword) => authApi.post('/resetpassword/', { token, newPassword })
+  },
+  search: {
+    submitSearch: query => searchApi.get(`/${query}`)
   }
 }

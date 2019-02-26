@@ -11,7 +11,7 @@ class searchView extends Component {
     this.submitSearch = this.submitSearch.bind(this);
     this.state = {
       query: '',
-      results: []
+      results: {}
     };
   }
 
@@ -23,7 +23,10 @@ class searchView extends Component {
     event.preventDefault();
     console.log(this.state.query);
     api.search.submitSearch(this.state.query)
-      .then(res => console.log(res.data));
+      .then(res => {
+        // console.log(res.data);
+        this.setState({ results: res.data });
+      });
   }
 
   render() {
@@ -31,7 +34,7 @@ class searchView extends Component {
       <div>
         <Hero pageName="Search for Books" />
         <SearchBar handleChange={this.handleInputChange} submitSearch={this.submitSearch} />
-        <SearchResults />
+        <SearchResults results={this.state.results} />
       </div>
     );
   }

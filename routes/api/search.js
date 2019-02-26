@@ -4,7 +4,6 @@ const gBooksSearch = require('../../utilities/google-books-search');
 
 router.get(
   '/:query',
-  require('connect-ensure-login').ensureLoggedIn('/api/auth/fail'),
   (req, res) => {
     const query = req.params.query;
     console.log('`'.repeat(40)+'\n');

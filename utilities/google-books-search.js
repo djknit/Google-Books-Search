@@ -8,7 +8,8 @@ function processResponse(response) {
   const processedResults = { number: results.totalItems, items: [] };
   results.items.forEach(item => {
     const { volumeInfo, accessInfo } = item;
-    const { imageLinks, industryIdentifiers } = volumeInfo;
+    if (!volumeInfo) return false;
+    const { imageLinks, industryIdentifiers, authors } = volumeInfo;
     const isbn = {};
     industryIdentifiers.forEach(_isbn => _isbn.type === 'ISBN_13' ?
       isbn.isbn13 = _isbn.identifier :
@@ -20,8 +21,13 @@ function processResponse(response) {
         pdf: accessInfo.pdf && accessInfo.pdf.isAvailable
       } :
       false
+    const author = undefined;
+    if (authors) authors.forEach((author, index) => {
+      
+    });
     processedResults.items.push({
       title: volumeInfo.title,
+      subtitle: volumeInfo.subtitle,
       publisher: volumeInfo.publisher,
       description: volumeInfo.description,
       image: imageLinks.thumbnail || imageLinks.smallThumbnail || imageLinks.medium || imageLinks.large || imageLinks.small,
@@ -29,13 +35,19 @@ function processResponse(response) {
       language: volumeInfo.language ? ISO6391.getName(volumeInfo.language) : undefined,
       isMature: volumeInfo.maturityRating === 'MATURE',
       pageCount: volumeInfo.pageCount,
+      links: {
+        preview: volumeInfo.previewLink,
+        webReader: accessInfo && accessInfo.webReaderLink,
+        info: volumeInfo.infoLink
+      },
       isbn,
       viewability: {
         formats: availableFormats,
         level: accessInfo && accessInfo.viewability ?
           accessInfo.viewability === "ALL_PAGES" ? 'Full View' : 'Limited Preview' :
           'No Preview'
-      }
+      },
+      gId: item.id
     });
   });
   return processedResults;  

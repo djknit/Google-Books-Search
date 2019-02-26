@@ -1,0 +1,7 @@
+.preview-button-link {
+  border: 1px solid transparent;
+}
+
+.preview-button-link:focus {
+  border-color: #bbbbbb;
+}

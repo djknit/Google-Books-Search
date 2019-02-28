@@ -48,6 +48,30 @@ function bookInfoDisplay({ book, ...otherProps }) {
       {book.image &&
         <img src={book.image} alt={book.title} style={style.image} />
       }
+      {book.authors ?
+        <p style={{ fontSize: '1.2em' }}>
+          By
+          <span>{book.authors.length > 2 ?
+            book.authors.map((author, i, arr) => (
+              i < arr.length - 1 ?
+                ` ${author}, ` :
+                `and ${author}`
+            )) :
+            book.authors.map((author, i) => (
+              i < 1 ?
+                ` ${author}` :
+                ` and ${author}`
+            ))
+          }</span>
+        </p> :
+        <p style={{ fontSize: '1.2em' }}>Author unknown</p>
+      }
+      {book.isMature &&
+        <p style={{ fontWeight: 'bold' }}>Contains mature content.</p>
+      }
+      {book.description &&
+        <p>{book.description}</p>
+      }
       {book.links.preview &&
         <a href={book.links.preview} target="_blank" rel="noreferrer noopener" className="preview-button-link" style={style.previewButtonLink} >
           <img src="/assets/images/gbs_preview_button.png" alt="open preview" style={style.previewButton} />

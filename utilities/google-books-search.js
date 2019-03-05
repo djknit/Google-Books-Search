@@ -3,57 +3,69 @@ const ISO6391 = require('iso-639-1');
 const apiKey = process.env.G_BOOKS_KEY;
 
 function processResponse(response) {
+  console.log('`````````````````````````````````````````````````````````````````')
+  console.log(response.data.items.map(item => item.accessInfo.viewability))
+  console.log('`````````````````````````````````````````````````````````````````')
+
   const results = response.data;
-  if (results.totalItems < 1) return { number: 0 }
-  const processedResults = { number: results.totalItems, items: [] };
-  results.items.forEach(item => {
-    const { volumeInfo, accessInfo } = item;
-    if (!volumeInfo) return false;
-    const { imageLinks, industryIdentifiers, authors } = volumeInfo;
-    const isbn = {};
-    industryIdentifiers.forEach(_isbn => _isbn.type === 'ISBN_13' ?
-      isbn.isbn13 = _isbn.identifier :
-      isbn.isbn10 = _isbn.identifier
-    );
-    const availableFormats = accessInfo ?
-      {
+  if (results.totalItems < 1) return { number: 0 };
+  return {
+    number: results.totalItems,
+    items: results.items.map(processResultItem)
+  };
+};
+
+function processResultItem(item) {
+  const { volumeInfo, accessInfo } = item;
+  if (!volumeInfo) return {};
+  const { imageLinks, industryIdentifiers } = volumeInfo;
+  const isbn = {};
+  industryIdentifiers.forEach(_isbn => _isbn.type === 'ISBN_13' ?
+    isbn.isbn13 = _isbn.identifier :
+    isbn.isbn10 = _isbn.identifier
+  );
+  let viewability;
+  if (accessInfo) {
+    viewability = {
+      availableFormats: {
         epub: accessInfo.epub && accessInfo.epub.isAvailable,
         pdf: accessInfo.pdf && accessInfo.pdf.isAvailable
-      } :
-      false
-    const author = undefined;
-    if (authors) authors.forEach((author, index) => {
-      
-    });
-    processedResults.items.push({
-      title: volumeInfo.title,
-      subtitle: volumeInfo.subtitle,
-      publisher: volumeInfo.publisher,
-      description: volumeInfo.description,
-      image: imageLinks.thumbnail || imageLinks.smallThumbnail || imageLinks.medium || imageLinks.large || imageLinks.small,
-      authors: volumeInfo.authors,
-      language: volumeInfo.language ? ISO6391.getName(volumeInfo.language) : undefined,
-      isMature: volumeInfo.maturityRating === 'MATURE',
-      pageCount: volumeInfo.pageCount,
-      links: {
-        preview: volumeInfo.previewLink,
-        webReader: accessInfo && accessInfo.webReaderLink,
-        info: volumeInfo.infoLink
-      },
-      isbn,
-      viewability: {
-        formats: availableFormats,
-        level: accessInfo && accessInfo.viewability ?
-          accessInfo.viewability === "ALL_PAGES" ? 'Full View' : 'Limited Preview' :
-          'No Preview'
-      },
-      gId: item.id
-    });
-  });
-  return processedResults;  
-}
+      }
+    };
+    switch (accessInfo.viewability) {
+      case 'ALL_PAGES':
+        viewability.level = 'Full View';
+        break;
+      case 'PARTIAL':
+        viewability.level = 'Limited Preview';
+        break;
+      case 'NO_PAGES':
+        viewability.level = 'No Preview';
+        break;
+    }
+  }
+  return {
+    title: volumeInfo.title,
+    subtitle: volumeInfo.subtitle,
+    publisher: volumeInfo.publisher,
+    description: volumeInfo.description,
+    image: imageLinks.thumbnail || imageLinks.smallThumbnail || imageLinks.medium || imageLinks.large || imageLinks.small,
+    authors: volumeInfo.authors,
+    language: volumeInfo.language ? ISO6391.getName(volumeInfo.language) : undefined,
+    isMature: volumeInfo.maturityRating === 'MATURE',
+    pageCount: volumeInfo.pageCount,
+    links: {
+      preview: volumeInfo.previewLink,
+      webReader: accessInfo && accessInfo.webReaderLink,
+      info: volumeInfo.infoLink
+    },
+    isbn,
+    viewability,
+    gId: item.id
+  }
+};
 
 module.exports = {
   search: query => axios.get(`https://www.googleapis.com/books/v1/volumes?q=${query}&key=${apiKey}`)
     .then(processResponse)
-}
+};

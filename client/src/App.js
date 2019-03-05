@@ -69,8 +69,8 @@ class App extends Component {
           <Switch>
             {/* source: https://tylermcginnis.com/react-router-pass-props-to-components/ */}
             <Route exact path="/" render={props => <LandingPage {...props} openCreateAccountModal={this.openCreateAccountModal} openLoginModal={this.openLoginModal} />} />
-            <Route exact path="/search" component={SearchView} />
-            <Route exact path="/saved" component={SavedView} />
+            <Route exact path="/search" render={props => <SearchView {...props} isLoggedIn={this.state.isLoggedIn} />} />
+            <Route exact path="/saved" render={props => <SearchView {...props} isLoggedIn={this.state.isLoggedIn} />} />
             <Route component={NotFoundView} />
           </Switch>
           <CreateAccountModal closeModal={this.closeCreateAccountModal} logUserIn={this.logUserIn} />

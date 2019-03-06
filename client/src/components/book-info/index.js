@@ -4,7 +4,7 @@ import LinkButton from './link-button';
 import SaveButton from './save-button';
 import './style.css';
 
-function bookInfoDisplay({ book, ...otherProps }) {
+function bookInfoDisplay({ book, openSaveBookModal, ...otherProps }) {
   let style = {
     box: {
       textAlign: 'left',
@@ -58,6 +58,7 @@ function bookInfoDisplay({ book, ...otherProps }) {
 
   function saveToPublic(bookId) {
     console.log(bookId);
+    openSaveBookModal();
   }
 
 
@@ -149,10 +150,10 @@ function bookInfoDisplay({ book, ...otherProps }) {
         }
         <hr style={style.divider} />
         <div className="content">
-          <p style={style.infoKey}>Save this Information:</p>
+          <p style={style.infoKey}>Save:</p>
           <p>
             This title is not saved to the public list.
-            <SaveButton handleClick={saveToPublic} bookId={book.gId}>Save to Public List</SaveButton>
+            <SaveButton handleClick={saveToPublic} book={book}>Save to Public List</SaveButton>
           </p>
           <p>Login or Create an Account if You Wish to Use Your Private List.</p>
         </div>

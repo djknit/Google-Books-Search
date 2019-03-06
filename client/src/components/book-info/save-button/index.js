@@ -11,7 +11,7 @@ function button(props) {
   style.button.margin = '0 15px';
 
   function handleClick() {
-    return props.handleClick(props.bookId);
+    return props.handleClick(props.book);
   }
 
   return(

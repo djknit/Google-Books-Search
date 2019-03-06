@@ -11,11 +11,14 @@ function searchBar(props) {
     },
     button: {
       marginTop: 15
+    },
+    box: {
+      backgroundColor: '#fdfdfd'
     }
   }
 
   return(
-    <Box>
+    <Box style={style.box}>
       <form style={style.form}>
         <div className="field">
           <label className="label" htmlFor="search-input" style={style.label}>Search Google Books</label>

@@ -9,7 +9,8 @@ router.get(
   (req, res) => {
     res.json({
       success: true,
-      message: 'You are authenticated.'
+      message: 'You are authenticated.',
+      user: req.user
     });
   }
 );

@@ -80,12 +80,11 @@ module.exports = {
   },
   findById(userId, done) {
     User.findById(userId)
-      .then(result => done(null, result))
+      .then(result => {
+        result.password = undefined;
+        result.lowerCaseEmail = undefined;
+        done(null, result)
+      })
       .catch(err => done(err, null));
   }
 }
-
-// x.findByUsernameOrEmail({ nameOrEmail: 'djknasty'}, result => {
-//   console.log('\n\n' + '$ ** * *****'.repeat(15) + result);
-//   console.log(result);
-// });

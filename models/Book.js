@@ -3,35 +3,31 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const BookSchema = new Schema({
-  user: {
+  gId: String,
+  poster: {
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
-  type: {
-    type: String,
-    validate: {
-      validator: value => value === 'text' || value === 'content' || value === 'event',
-      message: 'Valid types are "text", "content", and "event".'
-    }
-  },
-  body: String,
-  url: String,
   title: String,
-  image: String,
+  subtitle: String,
+  publisher: String,
   description: String,
-  date: Date,
-  likes: [{
-      type: Schema.Types.ObjectId,
-      ref: 'User'
-  }],
-  comments: [new Schema({
-    body: String,
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    date: Date
-  })]
+  image: String,
+  authors: [String],
+  language: String,
+  isMature: Boolean,
+  pageCount: Number,
+  links: {
+    preview: String,
+    webReader: String,
+    info: String
+  },
+  isbn: {
+    isbn10: String,
+    isbn13: String
+  },
+  viewability: String,
+  dateAdded: Date
 });
 
 const Book = mongoose.model('Book', BookSchema);

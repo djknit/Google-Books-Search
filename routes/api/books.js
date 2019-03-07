@@ -1,33 +1,33 @@
 const router = require('express').Router();
 
-const controllers = require('../../controllers');
+const bookController = require('../../controllers/Book');
 
 router.post(
-  '/',
-  require('connect-ensure-login').ensureLoggedIn('/api/auth/fail'),
+  '/public-list/guest',
   (req, res) => {
-    let post = req.body;
-    post.user = req.user._id;
-    controllers.Post.create(
-      post,
-      result_1 => {
-        controllers.User.addPost(
-          post.user,
-          result_1._id,
-          result_2 => res.json({ result_1, result_2 })
-        );
-      }
+    bookController.addGuestChoiceToPublicList(
+      req.body,
+      result => res.json(result)
     );
   }
 );
 
-router.delete(
-  '/:id',
+router.post(
+  '/public-list',
   require('connect-ensure-login').ensureLoggedIn('/api/auth/fail'),
   (req, res) => {
-    controllers.Post.delete(
-      req.user._id,
-      req.params.id,
+    bookController.addGuestChoiceToPublicList(
+      req.body,
+      result => res.json(result)
+    );
+  }
+);
+
+router.get(
+  '/public-list/guest',
+  (req, res) => {
+    bookController(
+      req.body,
       result => res.json(result)
     );
   }

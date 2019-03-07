@@ -62,8 +62,11 @@ class navbar extends Component {
             <div className="navbar-item">
               {this.props.isLoggedIn ?
                 <div className="buttons">
-                  <span id="welcome-message">Hi {this.props.user.username || this.props.user.email}</span>
-                  <button onClick={()=>console.log('log out click')} className="button is-light">
+                  <span id="welcome-message">{this.props.user ?
+                    `Hi ${this.props.user.username || this.props.user.email} ` :
+                    'Welcome'
+                  }</span>
+                  <button onClick={this.props.logOut} className="button is-light">
                     Log out
                   </button>
                 </div>

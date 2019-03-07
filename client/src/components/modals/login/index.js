@@ -92,9 +92,11 @@ class loginModal extends Component {
     this.setState({
       usernameOrEmail: '',
       password: '',
+      problemMessage: '',
+      hasSuccess: false,
       hasProblems: false,
       hasUsernameOrEmailProblem: false,
-      hasPasswordProblem: false
+      hasPasswordProblem: false,
     });
     this.props.closeModal();
   }
@@ -129,7 +131,7 @@ class loginModal extends Component {
     }
 
     return(
-      <div id="loginModal" className="modal">
+      <div id="loginModal" className={this.props.isActive ? 'modal is-active' : 'modal'}>
         <div className="modal-background"></div>
         <div className="modal-card">
           <header className="modal-card-head" style={this.state.hasSuccess ? { backgroundColor: '#20bc56' } : {}}>

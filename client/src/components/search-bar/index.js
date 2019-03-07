@@ -21,7 +21,7 @@ function searchBar(props) {
     <Box style={style.box}>
       <form style={style.form}>
         <div className="field">
-          <label className="label" htmlFor="search-input" style={style.label}>Search Google Books</label>
+          <label className="label" htmlFor="search-input" style={style.label}>Search Books</label>
           <div className="control has-icons-left">
             <input id="search-input" className="input" placeholder="Enter an author or title..." onChange={props.handleChange} />
             <span className="icon is-small is-left">

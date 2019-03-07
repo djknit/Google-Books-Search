@@ -138,10 +138,13 @@ class createAccountModal extends Component {
   
   cancelForm() {
     this.setState({
+      showInstructions: true,
       username: '',
       email: '',
       password: '',
       verifyPassword: '',
+      problemMessage: '',
+      hasSuccess: false,
       hasProblems: false,
       hasUsernameProblem: false,
       hasEmailProblem: false,
@@ -153,6 +156,10 @@ class createAccountModal extends Component {
 
   render() {
     const style = {
+      cardHeader: this.state.hasSuccess ?
+        { backgroundColor: '#20bc56' } :
+        {}
+      ,
       formInstructions: {
         fontSize: 15,
         whiteSpace: 'pre-wrap',
@@ -174,12 +181,20 @@ class createAccountModal extends Component {
     }
 
     return(
-      <div id="createAccountModal" className="modal">
+      <div id="createAccountModal" className={this.props.isActive ? 'modal is-active' : 'modal'}>
         <div className="modal-background"></div>
         <div className="modal-card">
-          <header className="modal-card-head" style={this.state.hasSuccess ? { backgroundColor: '#20bc56' } : {}}>
-            <p className={this.state.hasSuccess ? 'modal-card-title is-success' : 'modal-card-title'}>{this.state.hasSuccess ? 'Account Created!' : 'Create Account'}</p>
-            <button onClick={this.props.closeModal} className="delete" aria-label="close"></button>
+          <header className="modal-card-head" style={style.cardHeader}>
+            {this.state.hasSuccess ?
+              <>
+                <p className="modal-card-title is-success">Account Created!</p>
+                <Link onClick={this.cancelForm} to="/search" className="delete" aria-label="close" />
+              </> :
+              <>
+                <p className="modal-card-title">Create Account</p>
+                <button onClick={this.props.closeModal} className="delete" aria-label="close" />
+              </>
+            }
           </header>
           <section className="modal-card-body">
             {this.state.showInstructions &&
@@ -244,16 +259,15 @@ class createAccountModal extends Component {
               <p style={style.privacyMessage}>I will never share or sell your information.</p>
             </div>
           </section>
-          {this.state.hasSuccess ?
-            <footer className="modal-card-foot buttons is-right">
-              <Link onClick={this.cancelForm} to="/search" className="button is-success">OK</Link>
-            </footer>
-            :
-            <footer className="modal-card-foot buttons is-right">
-              <button onClick={this.submitForm} type="submit" form="new-user-form" className="button is-success">Submit</button>
-              <button onClick={this.cancelForm} className="button">Cancel</button>
-            </footer>
-          }
+          <footer className="modal-card-foot buttons is-right">
+            {this.state.hasSuccess ?
+              <Link onClick={this.cancelForm} to="/search" className="button is-success">OK</Link> :
+              <>
+                <button onClick={this.submitForm} type="submit" form="new-user-form" className="button is-success">Submit</button>
+                <button onClick={this.cancelForm} className="button">Cancel</button>
+              </>
+            }
+          </footer>
         </div>
       </div>
     );

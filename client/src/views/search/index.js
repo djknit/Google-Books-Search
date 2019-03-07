@@ -34,7 +34,7 @@ class searchView extends Component {
       <div>
         <Hero pageName="Search for Books" />
         <SearchBar handleChange={this.handleInputChange} submitSearch={this.submitSearch} />
-        <SearchResults results={this.state.results} openSaveBookModal={this.props.openSaveBookModal} />
+        <SearchResults query={this.state.query} results={this.state.results} openSaveBookModal={this.props.openSaveBookModal} openLoginModal={this.props.openLoginModal} openCreateAccountModal={this.props.openCreateAccountModal}/>
       </div>
     );
   }

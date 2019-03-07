@@ -31,6 +31,10 @@ const UserSchema = new Schema({
     },
     required: true
   },
+  books: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Book'
+  }],
   passwordResetToken: String,
   resetTokenExpiration: Number
 });

@@ -7,7 +7,8 @@ const UserSchema = new Schema({
   email: {
     type: String,
     // from bootcamp week 18 activity 15
-    match: [/.+@.+\..+/, 'Please enter a valid e-mail address.']
+    match: [/.+@.+\..+/, 'Please enter a valid e-mail address.'],
+    unique: true
   },
   username: {
     type: String,
@@ -31,14 +32,21 @@ const UserSchema = new Schema({
     },
     required: true
   },
-  books: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Book'
-  }],
+  books: [new Schema({
+    book: {
+      type: Schema.Types.ObjectId,
+      ref: 'Book'
+    },
+    timeAdded: Date,
+    notes: [new Schema({
+      body: String,
+      time: Date
+    })]
+  })],
   passwordResetToken: String,
   resetTokenExpiration: Number
 });
 
 const User = mongoose.model('User', UserSchema);
-
+ 
 module.exports = User;

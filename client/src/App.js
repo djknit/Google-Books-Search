@@ -33,7 +33,8 @@ class App extends Component {
       isSavingToPublic: false,
       isCreateAccountModalActive: false,
       isLoginModalActive: false,
-      isSaveBookModalActive: false
+      isSaveBookModalActive: false,
+      publicBooksList: []
     };
   }
 
@@ -93,16 +94,11 @@ class App extends Component {
   }
 
   openSaveBookModal(book, isPublic) {
-    console.log('\n\n')
-    console.log(isPublic)
-    console.log('-------------------------')
-    console.log(book + '\n\n')
     this.setState({
       bookToSave: book,
       isSavingToPublic: isPublic,
       isSaveBookModalActive: true
     });
-    console.log(this.state)
   }
 
   closeSaveBookModal() {
@@ -116,7 +112,8 @@ class App extends Component {
   }
 
   render() { 
-    console.log(this.state)
+    // console.log(this.state)
+    console.log(document.location.pathname)
     return (
       <Router>
         <div>

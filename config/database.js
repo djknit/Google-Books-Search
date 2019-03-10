@@ -1,4 +1,4 @@
-module.exports.connect = function() {
+module.exports.connect = function(cb) {
   const mongoose = require('mongoose');
 
   const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/googleBooksSearch';
@@ -8,5 +8,6 @@ module.exports.connect = function() {
   db.on('error', () => console.error('Error connecting to MongoDB.'));
   db.once('open', () => {
     console.log('Database connection was successful');
+    if (cb) cb();
   });
 }

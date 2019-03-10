@@ -7,13 +7,15 @@ import api from '../../../utilities/api';
 class SaveBookModal extends Component {
   constructor(props) {
     super(props);
-    // this.handlewChange = this.handleChange.bind(this);
-    // this.submitForm = this.submitForm.bind(this);
-    // this.cancelForm = this.cancelForm.bind(this);
-    // this.redirectAfterLogin = this.redirectAfterLogin.bind(this);
+    this.saveBook = this.saveBook.bind(this);
     this.state = {
       hasSuccess: false
     };
+  }
+
+  saveBook() {
+    api.publicList.saveBookAsGuest(this.props.book)
+      .then(res => console.log(res))
   }
 
   render() {

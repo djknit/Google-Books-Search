@@ -3,9 +3,6 @@ const ISO6391 = require('iso-639-1');
 const apiKey = process.env.G_BOOKS_KEY;
 
 function processResponse(response) {
-  console.log('`````````````````````````````````````````````````````````````````')
-  console.log(response.data.items.map(item => item.accessInfo.viewability))
-  console.log('`````````````````````````````````````````````````````````````````')
 
   const results = response.data;
   if (results.totalItems < 1) return { number: 0 };

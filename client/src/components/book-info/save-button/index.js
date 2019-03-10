@@ -8,17 +8,12 @@ function button(props) {
       whiteSpace: 'normal'
     }
   };
-  style.button.margin = '0 15px';
-
-  function handleClick() {
-    return props.handleClick(props.book);
-  }
 
   return(
     <button
       className="button is-success is-outlined link-button"
       style={style.button}
-      onClick={handleClick}
+      onClick={props.handleClick}
     >
       <span className="label" style={style.label}>{props.children}</span>
     </button>

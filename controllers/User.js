@@ -83,8 +83,24 @@ module.exports = {
       .then(result => {
         result.password = undefined;
         result.lowerCaseEmail = undefined;
+        result.passwordResetToken = undefined;
+        result.resetTokenExpiration = undefined;
         done(null, result)
       })
       .catch(err => done(err, null));
+  },
+  checkIfBookIsOnList(userId, mongoBookId, cb) {
+    User.findById(userId)
+      .where({ 'books.book': mongoBookId })
+      .then(cb)
+      .catch(cb)
+  },
+  addBookToList(userId, mongoBookId, cb) {
+    User.findByIdAndUpdate(
+      userId,
+      { $push: { 'books.book': mongoBookId } }
+    )
+      .then(cb)
+      .catch(cb)
   }
 }

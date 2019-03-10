@@ -4,10 +4,6 @@ const Schema = mongoose.Schema;
 
 const BookSchema = new Schema({
   gId: String,
-  poster: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
-  },
   title: String,
   subtitle: String,
   publisher: String,
@@ -26,8 +22,13 @@ const BookSchema = new Schema({
     isbn10: String,
     isbn13: String
   },
-  viewability: String,
-  dateAdded: Date
+  viewability: {
+    availableFormats: {
+      epub: Boolean,
+      pdf: Boolean
+    },
+    level: String
+  }
 });
 
 const Book = mongoose.model('Book', BookSchema);

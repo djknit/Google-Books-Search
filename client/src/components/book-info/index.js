@@ -5,7 +5,6 @@ import SaveButton from './save-button';
 import './style.css';
 
 function bookInfoDisplay({ book, openSaveBookModal, openLoginModal, openCreateAccountModal, ...otherProps }) {
-  console.log(otherProps)
   let style = {
     box: {
       textAlign: 'left',
@@ -61,7 +60,7 @@ function bookInfoDisplay({ book, openSaveBookModal, openLoginModal, openCreateAc
   style.previewButtonLink = Object.assign({}, style.link);
   style.previewButtonLink.position = 'relative';
 
-  function saveToPublic(book) {
+  function saveToPublicList() {
     console.log(book);
     openSaveBookModal(book, true);
   }
@@ -158,7 +157,7 @@ function bookInfoDisplay({ book, openSaveBookModal, openLoginModal, openCreateAc
           <p style={style.infoKey}>Save:</p>
           <p style={{lineHeight: 2}}>
             This book is not yet saved to the public list.
-            <SaveButton handleClick={saveToPublic} book={book} style={{verticalAlign: 'super'}}>Save to Public List</SaveButton>
+            <SaveButton handleClick={saveToPublicList} style={{verticalAlign: 'super'}}>Save to Public List</SaveButton>
           </p>
           <p style={{lineHeight: 2}}>
             You must&nbsp;

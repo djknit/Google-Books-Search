@@ -29,9 +29,9 @@ class navbar extends Component {
               </div>
               <div className="dropdown-menu" id="dropdown-menu3" role="menu">
                 <div className="dropdown-content">
-                  <NavLink path="/saved" text="Public List" />
+                  <NavLink path="/public-list" text="Public List" />
                   {this.props.isLoggedIn &&
-                    <NavLink path="/mylist" text="Your List" />
+                    <NavLink path="/my-list" text="Your List" />
                   }
                 </div>
               </div>

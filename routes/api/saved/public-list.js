@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const controllers = require('../../controllers');
+const controllers = require('../../../controllers');
 
 const addBookToList = (req, res, isLoggedIn) => {
   const { bookInfo, note } = req.body;

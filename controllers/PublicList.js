@@ -3,6 +3,12 @@ const Book = require('../models/Book');
 
 module.exports = {
   getList: cb => PublicList.findOne({})
+    .populate([{
+      path: 'books.book'
+    }, {
+      path: 'books.addedBy',
+      select: 'username email'
+    }])
     .then(cb)
     .catch(cb),
   // Doesn't prevent duplicates

@@ -9,7 +9,7 @@ function createApiCall(subRoute) {
 
 const authApi = createApiCall('auth');
 const searchApi = createApiCall('search');
-const publicListApi = createApiCall('public-list');
+const savedApi = createApiCall('saved');
 
 export default {
   auth: {
@@ -23,9 +23,9 @@ export default {
   search: {
     submitSearch: query => searchApi.get(`/${query}`)
   },
-  publicList: {
-    getList: () => publicListApi.get('/'),
-    saveBookAsGuest: (bookInfo, note) => publicListApi.post('/guest', { bookInfo, note }),
-    saveBookAsUser: (bookInfo, note) => publicListApi.post('/user', { bookInfo, note })
+  saved: {
+    getList: () => savedApi.get('/check-if-saved/guest'),
+    saveBookAsGuest: (bookInfo, note) => savedApi.post('/guest', { bookInfo, note }),
+    saveBookAsUser: (bookInfo, note) => savedApi.post('/user', { bookInfo, note })
   }
 }

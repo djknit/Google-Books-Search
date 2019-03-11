@@ -14,8 +14,8 @@ router.get('/:token', (req, res) => {
   );
 });
 
-router.post('/:token', (req, res) => {
-  console.log(req.body);
-});
+// router.post('/:token', (req, res) => {
+//   console.log(req.body);
+// });
 
 module.exports = router;

@@ -1,7 +1,6 @@
 import React from 'react';
 import Box from '../box';
 import LinkButton from './link-button';
-import SaveButton from './save-button';
 import './style.css';
 
 function bookInfoDisplay({ book, openSaveBookModal, openLoginModal, openCreateAccountModal, ...otherProps }) {
@@ -55,12 +54,19 @@ function bookInfoDisplay({ book, openSaveBookModal, openLoginModal, openCreateAc
       textDecoration: 'underline',
       color: 'blue',
       cursor: 'pointer'
+    },
+    saveButtonArea: {
+      paddingTop: 10,
+      textAlign: 'right'
+    },
+    saveButton: {
+      borderRadius: 8
     }
   };
   style.previewButtonLink = Object.assign({}, style.link);
   style.previewButtonLink.position = 'relative';
 
-  function saveToPublicList() {
+  function save() {
     console.log(book);
     openSaveBookModal(book, true);
   }
@@ -153,19 +159,8 @@ function bookInfoDisplay({ book, openSaveBookModal, openLoginModal, openCreateAc
           </div>
         }
         <hr style={style.divider} />
-        <div className="content">
-          <p style={style.infoKey}>Save:</p>
-          <p style={{lineHeight: 2}}>
-            This book is not yet saved to the public list.
-            <SaveButton handleClick={saveToPublicList} style={{verticalAlign: 'super'}}>Save to Public List</SaveButton>
-          </p>
-          <p style={{lineHeight: 2}}>
-            You must&nbsp;
-            <span style={style.textLink} onClick={openLoginModal}>login</span>
-            &nbsp;or&nbsp;
-            <span style={style.textLink} onClick={openCreateAccountModal}>create an account</span>
-            &nbsp;if you want to keep a personal list.
-          </p>
+        <div style={style.saveButtonArea}>
+          <button onClick={save} className="button is-primary">Save</button>
         </div>
       </div>
     </Box>

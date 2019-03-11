@@ -1,9 +1,6 @@
 const router = require('express').Router();
 
-const apiRoutes = require('./api');
-const passwordResetRoutes = require('./passwordreset');
-
-router.use('/api', apiRoutes);
-router.use('/passwordreset', passwordResetRoutes);
+router.use('/api', require('./api'));
+router.use('/passwordreset', require('./passwordreset'));
 
 module.exports = router;

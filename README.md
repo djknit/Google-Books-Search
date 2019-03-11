@@ -11,7 +11,7 @@
 * [Developer](#developer)
 
 ## Links
-* GitHub Repository: [github.com/djknit/burger](https://github.com/djknit/Google-Books-Search)
+* GitHub Repository: [github.com/djknit/Google-Books-Search](https://github.com/djknit/Google-Books-Search)
 
 ## Project Goals
 * Create an app that allows the user to search for books using the Google Books API.

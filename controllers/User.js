@@ -89,6 +89,13 @@ module.exports = {
       })
       .catch(err => done(err, null));
   },
+  getBooksList(userId, cb) {
+    User.findById(userId)
+      .populate({
+        path: 'books.book'
+      })
+      .then(cb)
+  },
   checkIfBookIsOnList(userId, mongoBookId, cb) {
     User.findById(userId)
       .where({ 'books.book': mongoBookId })

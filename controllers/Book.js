@@ -30,4 +30,8 @@ module.exports = {
       console.log(err);
       cb(err);
     })
+  ,
+  getMongoIdOfBookAndCreateNewRecordIfNecessary(googleId, cb) {
+    this.findByGoogleId(googleId, cb)
+  }
 }

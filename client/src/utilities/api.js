@@ -24,7 +24,7 @@ export default {
     submitSearch: query => searchApi.get(`/${query}`)
   },
   saved: {
-    getList: () => savedApi.get('/check-if-saved/guest'),
+    getList: () => savedApi.get('/public-list'),
     saveBookAsGuest: (bookInfo, note) => savedApi.post('/guest', { bookInfo, note }),
     saveBookAsUser: (bookInfo, note) => savedApi.post('/user', { bookInfo, note })
   }

@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 router.use('/public-list', require('./public-list'));
+router.use('/user-list', require('./user-list'));
 
 const controllers = require('../../../controllers');
 

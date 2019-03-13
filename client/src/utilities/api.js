@@ -18,14 +18,22 @@ export default {
     logout: () => authApi.post('/logout'),
     test: () => authApi.get('/test'),
     forgotPassword: email => authApi.post('/forgotpassword', { email }),
-    resetPassword: (token, newPassword) => authApi.post('/resetpassword/', { token, newPassword })
+    resetPassword: (token, newPassword) => authApi.post('/resetpassword', { token, newPassword })
   },
   search: {
     submitSearch: query => searchApi.get(`/${query}`)
   },
   saved: {
-    getList: () => savedApi.get('/public-list'),
-    saveBookAsGuest: (bookInfo, note) => savedApi.post('/guest', { bookInfo, note }),
-    saveBookAsUser: (bookInfo, note) => savedApi.post('/user', { bookInfo, note })
+    checkSavedStatusAsGuest: (bookInfo) => savedApi.get('/check-if-saved/guest'),
+    checkSavedStatusAsUser: (bookInfo) => savedApi.get('/check-if-saved/user'),
+    publicList: {
+      getList: () => savedApi.get('/public-list'),
+      postAsGuest: (bookInfo, note) => savedApi.post('/public-list/guest', { bookInfo, note }),
+      postAsUser: (bookInfo, note) => savedApi.post('/public-list/user', { bookInfo, note })
+    },
+    userList: {
+      getList: () => savedApi.get('/user-list'),
+      post: (bookInfo, note) => savedApi.post('/user-list', { bookInfo, note })
+    }
   }
 }

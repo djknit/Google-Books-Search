@@ -2,83 +2,56 @@ const router = require('express').Router();
 
 const controllers = require('../../../controllers');
 
-const addBookToList = (req, res, isLoggedIn) => {
-  const { bookInfo, note } = req.body;
-  if (!bookInfo) return res.json({
-    success: false,
-    message: 'Improperly formatted request. Missing "bookInfo".'
-  });
-  const currentUserId = isLoggedIn ? req.user._id : undefined;
-
-  const sendResAfterAddingToList = result_ => result_._id ?
-    res.json({
-      success: true,
-      message: 'Book added to public list.'
-    }) :
-    res.json({
-      success: false,
-      message: 'Unknown error when saving to list.'
-    })
-
-  controllers.Book.findByGoogleId(
-    bookInfo.gId,
-    result_1 => result_1 ?
-      // (Book is already created in db)
-      controllers.PublicList.checkIfListContainsBook(
-        result_1._id,
-        result_2 => result_2 ?
-          res.json({
-            success: false,
-            message: 'That book is already on the list.'
-          }) :
-          controllers.PublicList.addBook(
-            {
-              mongoBookId: result_1._id,
-              note,
-              currentUserId
-            },
-            sendResAfterAddingToList
-          )
-      ) :
-      // (Book not already in db)
-      controllers.Book.create(
-        bookInfo,
-        result_3 => result_3._id ?
-          controllers.PublicList.addBook(
-            {
-              mongoBookId: result_3._id,
-              note,
-              currentUserId
-            },
-            sendResAfterAddingToList
-          ) :
-          res.json({
-            success: false,
-            message: 'Improperly formatted book information.',
-            errors: result_3.errors
-          })
-      )
-  );
-}
-
 router.get(
   '/',
   (req, res) => {
     controllers.PublicList.getList(
-      result => res.json(result)
+      result => res.json(result),
+      error => res.status(500).json({ error })
     );
   }
 );
 
 router.post(
   '/guest',
-  (req, res) => addBookToList(req, res, false)
+  (req, res) => {
+    const { bookInfo, note } = req.body;
+    if (!bookInfo || !bookInfo.gId) res.status(400).json({ message: 'Missing book information or missing Google Books Id' });
+    controllers.Book.getMongoIdOfBookAndCreateNewRecordIfNecessary(
+      bookInfo,
+      result_1 => controllers.PublicList.addBook(
+        {
+          mongoBookId: result_1,
+          note
+        },
+        result_2 => res.json(result_2),
+        error => res.status(500).json({ error })
+      ),
+      error => res.status(500).json({ error })
+    );
+  }
 );
 
 router.post(
   '/user',
   require('connect-ensure-login').ensureLoggedIn('/api/auth/fail'),
-  (req, res) => addBookToList(req, res, true)
+  (req, res) => {
+    const { bookInfo, note } = req.body;
+    if (!bookInfo || !bookInfo.gId) res.status(400).json({ message: 'Missing book information or missing Google Books Id' });
+    controllers.Book.getMongoIdOfBookAndCreateNewRecordIfNecessary(
+      bookInfo,
+      result_1 => controllers.PublicList.addBook(
+        {
+          mongoBookId: result_1,
+          currentUserId: req.user._id,
+          note
+        },
+        result_2 => res.json(result_2),
+        error => res.status(500).json({ error })
+      ),
+      error => res.status(500).json({ error })
+    );
+  }
 );
 
 module.exports = router;

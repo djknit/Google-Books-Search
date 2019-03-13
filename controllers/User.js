@@ -1,7 +1,6 @@
 const User = require("../models/User");
 
 function createAccount(newUser, callback) {
-  console.log(newUser)
   User.create(newUser)
     .then(result => {
       if (result) {
@@ -23,8 +22,6 @@ function createAccount(newUser, callback) {
 
 module.exports = {
   newAccount(user, callback) {
-    user.username = user.username || user.email;
-    console.log(user)
     if (!user.email && !user.username) return callback({
       success: false,
       message: 'You must supply a username or email.',
@@ -85,29 +82,57 @@ module.exports = {
         result.lowerCaseEmail = undefined;
         result.passwordResetToken = undefined;
         result.resetTokenExpiration = undefined;
-        done(null, result)
+        done(null, result);
       })
       .catch(err => done(err, null));
   },
-  getBooksList(userId, cb) {
+  getBooksList(userId, cb, handleError) {
     User.findById(userId)
       .populate({
         path: 'books.book'
       })
       .then(cb)
+      .catch(handleError)
   },
-  checkIfBookIsOnList(userId, mongoBookId, cb) {
+  checkIfBookIsOnList(userId, mongoBookId, cb, handleError) {
     User.findById(userId)
       .where({ 'books.book': mongoBookId })
       .then(cb)
-      .catch(cb)
+      .catch(handleError)
   },
-  addBookToList(userId, mongoBookId, cb) {
-    User.findByIdAndUpdate(
+  addBookToList({ userId, mongoBookId, note }, cb, handleError) {
+    this.checkIfBookIsOnList(
       userId,
-      { $push: { 'books.book': mongoBookId } }
-    )
-      .then(cb)
-      .catch(cb)
+      mongoBookId,
+      result => {
+        if (result) return cb({ success: false, message: 'Book is already on your list.' })
+        const rightNow = new Date();
+        const listItem = {
+          book: mongoBookId,
+          timeAdded: rightNow,
+          notes: note ?
+            {
+              body: note,
+              time: rightNow
+            } :
+            undefined
+        }
+        User.findByIdAndUpdate(
+          userId,
+          { $push: { 'books.book': mongoBookId } },
+          { new: true }
+        )
+          .then(result_2 => result_2 ?
+            cb({
+              success: true,
+              message: 'Book added to your personal list.',
+              yourList: result_2
+            }) :
+            cb({ success: false })
+          )
+          .catch(handleError)
+      },
+      handleError
+    );
   }
 }

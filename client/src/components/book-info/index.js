@@ -57,7 +57,8 @@ function bookInfoDisplay({ book, openSaveBookModal, openLoginModal, openCreateAc
     },
     saveButtonArea: {
       paddingTop: 10,
-      textAlign: 'right'
+      textAlign: 'right',
+      clear: 'both'
     },
     saveButton: {
       borderRadius: 8

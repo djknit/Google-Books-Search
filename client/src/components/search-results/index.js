@@ -12,7 +12,7 @@ function resultsDisplay({ results, query, openSaveBookModal, openLoginModal, ope
       textAlign: 'left'
     }
   }
-  style.boxHasResults = Object.assign({ backgroundColor: '#fafafa' }, style.box);
+  style.boxHasResults = Object.assign({ backgroundColor: '#fafafa', paddingBottom: 1 }, style.box);
   style.boxNoResults = Object.assign({ backgroundColor: '#f0f0f0' }, style.box);
 
   return(results.items ?

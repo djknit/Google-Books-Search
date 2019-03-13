@@ -8,30 +8,59 @@ const controllers = require('../../../controllers');
 router.get(
   '/check-if-saved/guest',
   (req, res) => {
-    controllers.Book.findByGoogleId(req.body.gId)
-      .then(result_1 => result_1 ?
+    controllers.Book.findByGoogleId(
+      req.body.gId,
+      result => result ?
         controllers.PublicList.checkIfListContainsBook(
-          result_1._id,
+          result._id,
           result_2 => result_2 ?
             res.json({ publicList: true }) :
             res.json({ publicList: false })
+          ,
+          error => res.status(500).json({ error })
         ) :
         res.json({ publicList: false })
-      )
-      .catch(err => res.status(500).send());
+      ,
+      error => res.status(500).json({ error })
+    );
   }
-)
+);
 
 router.get(
   '/check-if-saved/user',
   require('connect-ensure-login').ensureLoggedIn('/api/auth/fail'),
   (req, res) => {
-    controllers.Book.findByGoogleId(req.body.gId)
-      .then(result_1 => result_1 ?
-        0 :
-        res.json({ })
-      )
+    controllers.Book.findByGoogleId(
+      req.body.gId,
+      result => result ?
+        controllers.PublicList.checkIfListContainsBook(
+          result._id,
+          result_2 => controllers.User.checkIfBookIsOnList(
+            req.user._id,
+            result._id,
+            result_3 => res.json({
+              publicList: result_2 != null,
+              userList: result_3 != null
+            }),
+            error => res.status(500).json({ error })
+          ),
+          error => res.status(500).json({ error })
+        ) :
+        res.json({ publicList: false, userList: false })
+      ,
+      error => res.status(500).json({ error })
+    );
   }
-)
+);
+
+// router.get('/test',
+//   (req, res) => {
+//     controllers.Book.findByMongoId(
+//       req.body.bookInfo.gId,
+//       result => res.json(result),
+//       er => res.json({success: false, err: er})
+//     )    
+//   }
+// );
 
 module.exports = router;

@@ -30,10 +30,15 @@ function ConfirmSaveBody(props) {
         }
       </Box>
       <p className="is-size-5 has-text-right">
-        {props.isPublic ? '...to the public list.' : '...to your personal list.'}
+        {props.isPublic &&
+          '...to the public list.'
+        }
+        {props.isUser &&
+          '...to your personal list.'
+        }
       </p>
     </div>
   )
 }
 
-module.exports = ConfirmSaveBody;
+export default ConfirmSaveBody;

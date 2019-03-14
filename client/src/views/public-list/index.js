@@ -12,11 +12,13 @@ class publicListView extends Component {
   }
 
   componentDidMount() {
-    api.saved.getList()
+    api.saved.publicList.getList()
       .then(res => {
         console.log(res);
         this.setState({ list: res.data.books })
       });
+
+    console.log(this.props)
   }
 
   render() {

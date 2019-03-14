@@ -22,15 +22,11 @@ class App extends Component {
     this.checkAuthentication = this.checkAuthentication.bind(this);
     this.logUserIn = this.logUserIn.bind(this);
     this.logUserOut = this.logUserOut.bind(this);
-    this.showLoggedIn = this.showLoggedIn.bind(this);
-    this.showLoggedOut = this.showLoggedOut.bind(this);
     this.openSaveBookModal = this.openSaveBookModal.bind(this);
     this.closeSaveBookModal = this.closeSaveBookModal.bind(this);
     this.state = {
-      isLoggedIn: false,
-      user: undefined,
-      bookToSave: undefined,
-      isSavingToPublic: false,
+      user: null,
+      bookToSave: null,
       isCreateAccountModalActive: false,
       isLoginModalActive: false,
       isSaveBookModalActive: false,
@@ -57,46 +53,28 @@ class App extends Component {
   checkAuthentication() {
     api.auth.test()
       .then(res => res.data.success ?
-        this.showLoggedIn(res.data.user) :
-        this.showLoggedOut()
+        this.setState({ user: res.data.user }) :
+        this.setState({ user: null })
       )
-      .catch(this.showLoggedOut);
+      .catch(err => console.log(err));
   }
 
   logUserIn(user) {
-    this.setState({
-      isLoggedIn: true,
-      user
-    });
-    console.log(this.state)
+    this.setState({ user });
   }
 
   logUserOut() {
     api.auth.logout()
-      .then(this.showLoggedOut)
+      .then(res => this.setState({ user: null }))
       .catch(err => {
-        this.checkAuthentication()
+        console.log(err);
+        this.checkAuthentication();
       });
   }
 
-  showLoggedIn(user) {
-    this.setState({
-      isLoggedIn: true,
-      user
-    });
-  }
-
-  showLoggedOut() {
-    this.setState({
-      isLoggedIn: false,
-      user: undefined
-    });
-  }
-
-  openSaveBookModal(book, isPublic) {
+  openSaveBookModal(book) {
     this.setState({
       bookToSave: book,
-      isSavingToPublic: isPublic,
       isSaveBookModalActive: true
     });
   }
@@ -114,27 +92,63 @@ class App extends Component {
 
   render() { 
     // console.log(this.state)
-    console.log(document.location.pathname)
+    // console.log(document.location.pathname)
     return (
       <Router>
         <div>
           <Navbar
             openCreateAccountModal={this.openCreateAccountModal}
             openLoginModal={this.openLoginModal}
-            isLoggedIn={this.state.isLoggedIn}
             user={this.state.user}
             logOut={this.logUserOut}
           />
           <Switch>
              {/* source: https://tylermcginnis.com/react-router-pass-props-to-components/ */}
-            <Route exact path="/" render={props => <LandingPage {...props} openCreateAccountModal={this.openCreateAccountModal} openLoginModal={this.openLoginModal} />} />
-            <Route exact path="/search" render={props => <SearchView {...props} isLoggedIn={this.state.isLoggedIn} openSaveBookModal={this.openSaveBookModal} openCreateAccountModal={this.openCreateAccountModal} openLoginModal={this.openLoginModal} />} />
-            <Route exact path="/public-list" render={props => <PublicListView {...props} isLoggedIn={this.state.isLoggedIn} />} />
+            <Route
+              exact path="/"
+              render={props => <LandingPage
+                {...props}
+                openCreateAccountModal={this.openCreateAccountModal}
+                openLoginModal={this.openLoginModal}
+              />}
+            />
+            <Route
+              exact path="/search"
+              render={props => <SearchView
+                {...props}
+                user={this.state.user}
+                openSaveBookModal={this.openSaveBookModal}
+                openCreateAccountModal={this.openCreateAccountModal}
+                openLoginModal={this.openLoginModal}
+              />}
+            />
+            <Route
+              exact path="/public-list"
+              render={props => <PublicListView {...props} user={this.state.user} />}
+            />
             <Route component={NotFoundView} />
           </Switch>
-          <CreateAccountModal closeModal={this.closeCreateAccountModal} isActive={this.state.isCreateAccountModalActive} logUserIn={this.logUserIn} className={this.openCreateAccountModal} />
-          <LoginModal closeModal={this.closeLoginModal} isActive={this.state.isLoginModalActive} logUserIn={this.logUserIn} />
-          <SaveBookModal closeModal={this.closeSaveBookModal} isActive={this.state.isSaveBookModalActive} book={this.state.bookToSave} isPublic={this.state.isSavingToPublic} />
+          <CreateAccountModal
+            closeModal={this.closeCreateAccountModal}
+            isActive={this.state.isCreateAccountModalActive}
+            logUserIn={this.logUserIn}
+            className={this.openCreateAccountModal}
+          />
+          <LoginModal
+            closeModal={this.closeLoginModal}
+            isActive={this.state.isLoginModalActive}
+            logUserIn={this.logUserIn}
+          />
+          {this.state.bookToSave &&
+            <SaveBookModal
+              closeModal={this.closeSaveBookModal}
+              isActive={this.state.isSaveBookModalActive}
+              openLoginModal={this.openLoginModal}
+              openCreateAccountModal={this.openCreateAccountModal}
+              book={this.state.bookToSave}
+              user={this.state.user}
+            />
+          }
         </div>
       </Router>
     );

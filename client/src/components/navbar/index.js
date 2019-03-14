@@ -30,7 +30,7 @@ class navbar extends Component {
               <div className="dropdown-menu" id="dropdown-menu3" role="menu">
                 <div className="dropdown-content">
                   <NavLink path="/public-list" text="Public List" />
-                  {this.props.isLoggedIn &&
+                  {this.props.user !== null &&
                     <NavLink path="/my-list" text="Your List" />
                   }
                 </div>
@@ -60,12 +60,11 @@ class navbar extends Component {
         <div id="auth-links" className="navbar-menu">
           <div className="navbar-end">
             <div className="navbar-item">
-              {this.props.isLoggedIn ?
+              {this.props.user ?
                 <div className="buttons">
-                  <span id="welcome-message">{this.props.user ?
-                    `Hi ${this.props.user.username || this.props.user.email} ` :
-                    'Welcome'
-                  }</span>
+                  <span id="welcome-message">
+                    Hi {this.props.user.username || this.props.user.email}
+                  </span>
                   <button onClick={this.props.logOut} className="button is-light">
                     Log out
                   </button>

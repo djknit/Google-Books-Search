@@ -42,8 +42,9 @@ function SaveOptionsDisplay(props) {
         </Box>
       :
       <Box style={style.inactiveBox}>
-        If you <span style={style.link} onClick={props.openLoginModal}>sign in</span>
-         or <span style={style.link} onClick={props.openCreateAccountModal}>create an account</span>,
+        If you <span style={style.link} onClick={props.openLoginModal}>
+          sign in</span> or <span style={style.link} onClick={props.openCreateAccountModal}>
+          create an account</span>,
         you can save books to a personal list.
       </Box>
     }

@@ -2,8 +2,12 @@ import React from 'react';
 import Box from '../../../box';
 
 function BookInfoSummary(props) {
+  const style = {
+
+  }
+
   return (
-    <div className="content has-text-centered" >
+    <div className="content has-text-centered is-marginless" >
       {props.book.subtitle ?
         <p>
           <span className={props.isSmall ? 'title is-6' : 'title is-4'}>"{props.book.title}</span> 
@@ -11,25 +15,26 @@ function BookInfoSummary(props) {
         </p> :
         <p><span className={props.isSmall ? 'title is-6' : 'title is-4'}>"{props.book.title}"</span></p>
       }
-      {props.book.authors ?
-        <p className={props.isSmall ? 'is-size-6' : 'is-size-4'}>
-          By
-          <span>{props.book.authors.length > 2 ?
-            props.book.authors.map((author, i, arr) => (
-              i < arr.length - 1 ?
-                ` ${author}, ` :
-                `and ${author}`
-            )) :
-            props.book.authors.map((author, i) => (
-              i < 1 ?
-                ` ${author}` :
-                ` and ${author}`
-            ))
-          }</span>
-        </p> :
-        <p>Author unknown</p>
-      }
-      <hr style={{ height: 1, backgroundColor: '#a7a7a7', width: '50%', display: 'inline-block', margin: 0 }}></hr>
+      <p className={`is-marginless is-size-${props.isSmall ? '6' : '4'}`}>
+        {props.book.authors ?
+          <>
+            By
+            <span>{props.book.authors.length > 2 ?
+              props.book.authors.map((author, i, arr) => (
+                i < arr.length - 1 ?
+                  ` ${author}, ` :
+                  `and ${author}`
+              )) :
+              props.book.authors.map((author, i) => (
+                i < 1 ?
+                  ` ${author}` :
+                  ` and ${author}`
+              ))
+            }</span>
+          </> :
+          'Author unknown'
+        }
+      </p>
     </div>
   );
 }

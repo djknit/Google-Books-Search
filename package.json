@@ -8,9 +8,10 @@
   "scripts": {
     "install": "cd client && yarn install",
     "build": "cd client && yarn build",
-    "dev": "cd client && yarn start",
+    "heroku-postbuild": "yarn build",
     "start": "node server.js",
-    "heroku-postbuild": "yarn build"
+    "dev": "cd client && yarn start",
+    "serve": "nodemon server.js"
   },
   "dependencies": {
     "async": "^2.6.2",

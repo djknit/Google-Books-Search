@@ -3,10 +3,20 @@
   box-shadow: 2px 4px 10px #808080;
 }
 
-@media screen and (max-width: 460px) {
+@media screen and (max-width: 565px) {
+  .box {
+    margin: 20px 20px;
+  }
+}
+
+@media screen and (max-width: 525px) {
   .box {
     margin: 20px 10px;
-    box-shadow: 2px 4px 10px #808080;
-    padding: 20px 5px;
+  }
+}
+
+@media screen and (max-width: 505px) {
+  .box {
+    margin: 20px 0px;
   }
 }

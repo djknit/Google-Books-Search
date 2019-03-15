@@ -16,14 +16,14 @@ function resultsDisplay({ results, query, openSaveBookModal, openLoginModal, ope
   style.boxNoResults = Object.assign({ backgroundColor: '#f0f0f0' }, style.box);
 
   return(results.items ?
-    <Box style={style.boxHasResults} id="search-results">
+    <Box style={style.boxHasResults} id="search-results" mainContainer>
       <label className="label" style={style.label}>Results</label>
       <p className="is-size-5">Showing {results.items.length} of {results.number} matches for "{query}"</p>
       {results.items.map(item => (
         <BookInfoDisplay book={item} key={item.gId} openSaveBookModal={openSaveBookModal} openLoginModal={openLoginModal} openCreateAccountModal={openCreateAccountModal}/>
       ))}
     </Box> :
-    <Box style={style.boxNoResults} id="search-results">
+    <Box style={style.boxNoResults} id="search-results" mainContainer>
       <label className="label" style={style.label}>Results</label>
       <h4 className="title is-6">There are no results to display yet.</h4>
       <h5 className="subtitle is-6">Search for a book using the search bar above.</h5>

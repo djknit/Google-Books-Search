@@ -10,11 +10,16 @@ function bookInfoDisplay({ book, openSaveBookModal, openLoginModal, openCreateAc
       margin: '30px 0'
     },
     title: {
-      textAlign: 'center'
+      textAlign: 'center',
+      marginBottom: '.5rem'
+    },
+    subtitle: {
+      textAlign: 'center',
+      margin: '.5rem 0'
     },
     authors: {
       textAlign: 'center',
-      margin: '1.25rem'
+      margin: '.7rem 0 12px'
     },
     image: {
       width: 180,
@@ -22,12 +27,16 @@ function bookInfoDisplay({ book, openSaveBookModal, openLoginModal, openCreateAc
       margin: '7px 10px 5px 0',
     },
     description: {
+      marginBottom: 10
+    },
+    infoItem: {
+      margin: '7px 0'
     },
     infoKey: {
       fontWeight: 500
     },
     divider: {
-      margin: '20px 0 10px',
+      margin: '5px 0',
       height: 1,
       backgroundColor: '#bbbbbb'
     },
@@ -35,11 +44,14 @@ function bookInfoDisplay({ book, openSaveBookModal, openLoginModal, openCreateAc
     spacer: {
       clear: 'both'
     },
+    linksDiv: {
+      marginBottom: 10
+    },
     link: {
       height: 52,
       width: 132,
       display: 'inline-block',
-      borderRadius: 17,
+      borderRadius: 17
     },
     previewButton: {
       height: 50,
@@ -64,8 +76,11 @@ function bookInfoDisplay({ book, openSaveBookModal, openLoginModal, openCreateAc
       borderRadius: 8
     }
   };
-  style.previewButtonLink = Object.assign({}, style.link);
-  style.previewButtonLink.position = 'relative';
+  style.infoItemBold = Object.assign({ fontWeight: 500 }, style.infoItem);
+  style.secondDivider = Object.assign({}, style.divider);
+  style.secondDivider.margin ='15px 0 5px';
+  style.previewButtonLink = Object.assign({ position: 'relative', marginRight: 'calc(50% - 198px)' }, style.link);
+  style.thirdLinkButton = Object.assign({ float: 'right' }, style.link);
 
   function save() {
     console.log(book);
@@ -77,7 +92,7 @@ function bookInfoDisplay({ book, openSaveBookModal, openLoginModal, openCreateAc
     <Box style={style.box}>
       <h5 className="title is-5" style={style.title}>{book.title}</h5>
       {book.subtitle && 
-        <h5 className="subtitle is-5" style={style.title}>{book.subtitle}</h5>
+        <h5 className="subtitle is-5" style={style.subtitle}>{book.subtitle}</h5>
       }
       {book.authors ?
         <h5 className="subtitle is-5" style={style.authors}>
@@ -95,7 +110,7 @@ function bookInfoDisplay({ book, openSaveBookModal, openLoginModal, openCreateAc
             ))
           }</span>
         </h5> :
-        <p style={{ fontSize: '1.2em' }}>Author unknown</p>
+        <h5 className="subtitle is-5" style={style.authors}>Author unknown</h5>
       }
       <div className="content">
         {book.image &&
@@ -110,42 +125,42 @@ function bookInfoDisplay({ book, openSaveBookModal, openLoginModal, openCreateAc
           </>
         }
         {book.language &&
-          <p>
+          <p style={style.infoItem}>
             <span style={style.infoKey}>Language:</span> {book.language}
           </p>
         }
         {book.publisher &&
-          <p>
+          <p style={style.infoItem}>
             <span style={style.infoKey}>Publisher:</span> {book.publisher}
           </p>
         }
         {book.pageCount &&
-          <p>
+          <p style={style.infoItem}>
             <span style={style.infoKey}>Page Count:</span> {book.pageCount} pages</p>
         }
         {book.isbn && book.isbn.isbn10 &&
-          <p>
+          <p style={style.infoItem}>
             <span style={style.infoKey}>ISBN 10:</span> {book.isbn.isbn10}
           </p>
         }
         {book.isbn && book.isbn.isbn13 &&
-          <p>
+          <p style={style.infoItem}>
             <span style={style.infoKey}>ISBN 13:</span> {book.isbn.isbn13}
           </p>
         }
         {book.viewability && book.viewability.level &&
-          <p>
+          <p style={style.infoItem}>
             <span style={style.infoKey}>Viewability:</span> {book.viewability.level}
           </p>
         }
         {book.isMature &&
-          <p style={{ fontWeight: 'bold' }}>Contains mature content.</p>
+          <p style={style.infoItemBold}>Contains mature content.</p>
         }
         <div style={style.spacer}></div>
+        <hr style={style.secondDivider} />
         {book.links &&
-          <div className="content">
-            <hr style={style.divider} />
-            <p style={style.infoKey}>Links:</p>
+          <div className="content" style={style.linksDiv}>
+            <p style={style.infoItemBold}>Links:</p>
             {book.links.preview &&
               <a href={book.links.preview} target="_blank" rel="noreferrer noopener" className="preview link-button" style={style.previewButtonLink} >
                 <img src="/assets/images/gbs_preview_button.png" alt="open preview" style={style.previewButton} />
@@ -155,7 +170,7 @@ function bookInfoDisplay({ book, openSaveBookModal, openLoginModal, openCreateAc
               <LinkButton href={book.links.webReader} style={style.link}>Open in Web Reader</LinkButton>
             }
             {book.links.info &&
-              <LinkButton href={book.links.info} style={style.link}>Go to Information Page</LinkButton>
+              <LinkButton href={book.links.info} style={style.thirdLinkButton}>Go to Information Page</LinkButton>
             }
           </div>
         }

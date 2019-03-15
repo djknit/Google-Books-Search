@@ -35,7 +35,11 @@ class App extends Component {
   }
 
   openCreateAccountModal() {
-    this.setState({ isCreateAccountModalActive: true });
+    this.setState({
+      isCreateAccountModalActive: true,
+      isLoginModalActive: false,
+      isSaveBookModalActive: false
+    });
   }
   
   closeCreateAccountModal() {
@@ -43,7 +47,11 @@ class App extends Component {
   }
 
   openLoginModal() {
-    this.setState({ isLoginModalActive: true });
+    this.setState({
+      isCreateAccountModalActive: false,
+      isLoginModalActive: true,
+      isSaveBookModalActive: false
+    });
   }
 
   closeLoginModal() {
@@ -139,7 +147,7 @@ class App extends Component {
             isActive={this.state.isLoginModalActive}
             logUserIn={this.logUserIn}
           />
-          {this.state.bookToSave &&
+          {this.state.isSaveBookModalActive &&
             <SaveBookModal
               closeModal={this.closeSaveBookModal}
               isActive={this.state.isSaveBookModalActive}

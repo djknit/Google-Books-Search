@@ -12,7 +12,6 @@ class SaveBookModal extends Component {
     super(props);
     this.saveBook = this.saveBook.bind(this);
     this.state = {
-      isReady: false,
       hasSuccess: false,
       savedStatus: null,
       saveTo: null,
@@ -21,7 +20,7 @@ class SaveBookModal extends Component {
   }
 
   saveBook() {
-    api.saved.saveBookAsGuest(this.props.book)
+    api.saved.checkSavedStatusAsGuest(this.props.book)
       .then(res => {
         
       });
@@ -45,10 +44,11 @@ class SaveBookModal extends Component {
             <p className={this.state.hasSuccess ? 'modal-card-title is-success' : 'modal-card-title'}>Save</p>
             <button onClick={this.props.closeModal} className="delete" aria-label="close"></button>
           </header>
-          <section className="modal-card-body">
+          <section className="modal-card-body has-text-centered">
             {!this.state.saveTo ?
               <>
                 <BookInfoSummary book={this.props.book} isSmall></BookInfoSummary>
+                <hr style={{ height: 1, backgroundColor: '#a7a7a7', width: 'calc(100% - 50px)', display: 'inline-block', margin: 0 }}></hr>
                 {!this.state.savedStatus ?
                   <Box style={{ backgroundColor: '#f0f0f0' }}>
                     Checking save status...

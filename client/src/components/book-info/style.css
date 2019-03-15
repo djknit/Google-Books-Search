@@ -5,11 +5,3 @@
 .preview.link-button:focus {
   border-color: #bbbbbb;
 }
-
-.link-button:nth-child(4) {
-  margin-left: Calc(50% - 198px);
-}
-
-.link-button:nth-child(5) {
-  float: right;
-}

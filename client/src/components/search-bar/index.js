@@ -18,7 +18,7 @@ function searchBar(props) {
   }
 
   return(
-    <Box style={style.box}>
+    <Box style={style.box} mainContainer>
       <form style={style.form}>
         <div className="field">
           <label className="label" htmlFor="search-input" style={style.label}>Search Books</label>

@@ -22,11 +22,11 @@ router.post(
     if (!bookInfo || !bookInfo.gId) res.status(400).json({ message: 'Missing book information or missing Google Books Id' });
     controllers.Book.getMongoIdOfBookAndCreateNewRecordIfNecessary(
       bookInfo,
-      result_1 => controllers.User.addBook(
+      result_1 => controllers.User.addBookToList(
         {
           mongoBookId: result_1,
           userId: req.user._id,
-          note
+          note: note || undefined
         },
         result_2 => res.json(result_2),
         error => res.status(500).json({ error })

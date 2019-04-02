@@ -6,10 +6,10 @@ router.use('/user-list', require('./user-list'));
 const controllers = require('../../../controllers');
 
 router.get(
-  '/check-if-saved/guest',
+  '/check-if-saved/guest/:gId',
   (req, res) => {
     controllers.Book.findByGoogleId(
-      req.body.gId,
+      req.params.gId,
       result => result ?
         controllers.PublicList.checkIfListContainsBook(
           result._id,
@@ -27,11 +27,11 @@ router.get(
 );
 
 router.get(
-  '/check-if-saved/user',
+  '/check-if-saved/user/:gId',
   require('connect-ensure-login').ensureLoggedIn('/api/auth/fail'),
   (req, res) => {
     controllers.Book.findByGoogleId(
-      req.body.gId,
+      req.params.gId,
       result => result ?
         controllers.PublicList.checkIfListContainsBook(
           result._id,

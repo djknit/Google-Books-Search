@@ -20,10 +20,11 @@ class SaveBookModal extends Component {
   }
 
   saveBook() {
-    api.saved.checkSavedStatusAsGuest(this.props.book)
-      .then(res => {
-        
-      });
+    if (!this.state.saveTo) return console.error('list not chosen');
+    const apiCall = this.state.saveTo.userList ?
+      api.saved.userList.post :
+      this.props.user ? api.saved.publicList.postAsUser : api.saved.publicList.postAsGuest;
+    apiCall(this.props.book).then(res => console.log(res))
   }
 
   componentDidMount() {

@@ -105,21 +105,22 @@ module.exports = {
       userId,
       mongoBookId,
       result => {
+        console.log(result + '\n\n\n')
         if (result) return cb({ success: false, message: 'Book is already on your list.' })
         const rightNow = new Date();
         const listItem = {
           book: mongoBookId,
           timeAdded: rightNow,
           notes: note ?
-            {
+            [{
               body: note,
               time: rightNow
-            } :
+            }] :
             undefined
         }
         User.findByIdAndUpdate(
           userId,
-          { $push: { 'books.book': mongoBookId } },
+          { $push: { 'books': listItem } },
           { new: true }
         )
           .then(result_2 => result_2 ?

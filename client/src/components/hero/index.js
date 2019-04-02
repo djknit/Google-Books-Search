@@ -1,20 +1,23 @@
 import React from 'react';
+import './style.css';
 
-function hero(props) {
-  return(
-    <section className={`hero is-primary is-bold${props.isMedium ? " is-medium" : ""}`}>
+function hero({ pageName, isMedium, is404 }) {
+  return(<>
+    <section className={`hero is-primary is-bold${isMedium ? " is-medium" : ""}`}>
       <div className="hero-body">
         <div className="container">
           <h1 className="title">
-            {props.is404 ? '404' : 'Google Books Search App'}
+            {is404 ? '404' : 'Book Search App'}
           </h1>
           <h2 className="subtitle">
-            {props.pageName}
+            {pageName}
           </h2>
         </div>
       </div>
+      <div className="shadow"></div>
+      <div className="shadow-cover"></div>
     </section>
-  );
+  </>);
 }
 
 export default hero;

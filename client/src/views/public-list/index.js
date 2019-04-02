@@ -15,7 +15,7 @@ class publicListView extends Component {
     api.saved.publicList.getList()
       .then(res => {
         console.log(res);
-        this.setState({ list: res.data.books })
+        if (res.data.books) this.setState({ list: res.data.books.reverse() });
       });
 
     console.log(this.props)

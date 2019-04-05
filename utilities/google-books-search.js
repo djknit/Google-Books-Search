@@ -46,7 +46,7 @@ function processResultItem(item) {
     subtitle: volumeInfo.subtitle,
     publisher: volumeInfo.publisher,
     description: volumeInfo.description,
-    image: imageLinks.thumbnail || imageLinks.smallThumbnail || imageLinks.medium || imageLinks.large || imageLinks.small,
+    image: imageLinks ? imageLinks.thumbnail || imageLinks.smallThumbnail || imageLinks.medium || imageLinks.large || imageLinks.small : undefined,
     authors: volumeInfo.authors,
     language: volumeInfo.language ? ISO6391.getName(volumeInfo.language) : undefined,
     isMature: volumeInfo.maturityRating === 'MATURE',

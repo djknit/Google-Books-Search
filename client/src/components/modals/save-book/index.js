@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import Box from '../../box';
 import BookInfoSummary from './book-info-summary';
 import ConfirmSave from './confirm-save';

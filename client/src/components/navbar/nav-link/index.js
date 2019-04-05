@@ -2,12 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './style.css';
 
-function navLink(props) {
-  return(
-    <Link to={props.path} className={window.location.pathname === props.path ? "navbar-item is-active" : "navbar-item"} >
-      {props.text}
+export default ({
+  path,
+  text
+}) => {
+
+  return (
+    <Link to={path} className={window.location.pathname === path ? "navbar-item is-active" : "navbar-item"} >
+      {text}
     </Link>
   );
 }
-
-export default navLink;

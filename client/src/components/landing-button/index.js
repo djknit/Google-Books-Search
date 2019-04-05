@@ -1,10 +1,12 @@
 import React from 'react';
-import style from './style.css';
 
-function button(props) {
-  return(
-    <button className="button is-primary home-btn" onClick={props.onClick}>{props.text}</button>
+export default ({
+  onClick,
+  text
+}) => {
+
+  // Styles for classes 'is-primary' and 'is-deep' are defined in App.css
+  return (
+    <button className="button is-primary is-deep" onClick={onClick}>{text}</button>
   );
-}
-
-export default button;
+} 

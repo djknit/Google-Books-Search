@@ -1,19 +1,17 @@
 body {
   background-color: #fcfcfc;
+  width: 100vw;
+  min-width: 360px;
 }
 
-#whole-page {
-  position: relative;
-  padding-bottom: 20px;
-  min-width: 100vw;
-}
 #whole-page-except-footer {
   position: relative;
-  top: 0;
+  /* Not exactly sure what's going on here, but next line prevents the unwanted extra space before footer  */
   height: 100%;
   width: 100%;
-  z-index: 2;
+  z-index: 20;
   background-color: #fcfcfc;
+  border-bottom: 1px solid #aaaaaa;
 }
 
 body::-webkit-scrollbar {
@@ -21,21 +19,79 @@ body::-webkit-scrollbar {
   border-left: 2px solid #c3c3c3;
 }
 body::-webkit-scrollbar-track {
-  background: rgba(250, 250, 250, .4);
+  background: rgba(250, 250, 250, .3);
+  overflow: auto;
 }
 body::-webkit-scrollbar-thumb {
   background: rgba(0,209,180, .5);
   border: 1.5px solid #e0e0e0;
   border-radius: 8px;
-  fill-opacity: 0;
-  opacity: 0;
 }
 body::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 209, 178, .85);
-  border: 1.7px solid #f2f2f2;
-  outline: 4px solid purple;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 0 8px rgba(106, 156, 150, .8), 0 0 4px #aaaaaa;
+}
+body::-webkit-scrollbar-thumb:active {
+  background: rgba(0, 234, 199, .9);
+  box-shadow: 0 0 3px rgba(106, 156, 150, .9), 0 0 1.5px #aaaaaa;
+  border: 2px solid #e0e0e0;
 }
 body::-webkit-scrollbar-button {
   height: 1.5px;
   background-color: #c3c3c3;
+}
+
+/* Box shadow classes for use throughout app (in several components) */
+  /* note: most buttons and input fields will all be given shadow unless otherwise specified */
+.has-shadow,
+button,
+button.button,
+nav.navbar.has-shadow {
+  box-shadow: 0 0 5px #202020;
+}
+.has-shadow.is-deep,
+button.is-deep,
+button.button.is-deep,
+nav.navbar.has-shadow {
+  box-shadow: 0 0 8px #202020;
+}
+button.button:focus,
+.button:focus,
+button.button:focus,
+button.has-shadow:focus {
+  box-shadow: 0 0 2.5px #202020;
+}
+.has-shadow.is-low {
+  box-shadow: inset 0 0 5px #202020;
+}
+.has-shadow.is-deep.is-low {
+  box-shadow: inset 0 0 8px #202020;
+}
+.has-no-shadow,
+button.has-no-shadow,
+button.has-no-shadow:focus,
+button.button.has-no-shadow {
+  box-shadow: none;
+}
+input.input {
+  box-shadow: inset 0 0 5px #505050;
+}
+input.input:hover {
+  box-shadow: inset 0 0 2px #505050;
+}
+input.input:disabled {
+  box-shadow: none;
+}
+input.input:focus {
+  box-shadow: 0 0 6px #3273dc;
+}
+input.input.is-danger {
+  box-shadow: inset 0 0 5px #ff3860;
+}
+input.input.is-danger:hover {
+  box-shadow: inset 0 0 2px #ff3860;
+}
+input.input.is-danger:focus {
+  box-shadow: 0 0 6px #ff3860;
 }

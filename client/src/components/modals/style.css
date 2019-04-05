@@ -1,0 +1,16 @@
+/* Modal form styles */
+.modal-card-body form p.help {
+  font-size: 15px;
+  white-space: 'pre-wrap';
+  margin-bottom: 20px;
+}
+.modal-card-body form label {
+  text-align: 'left';
+}
+.modal-card-body form .notification.is-danger {
+  white-space: 'pre-line';
+}
+.modal-card-body form p.privacy-message {
+  font-size: 14px;
+  margin-top: 20px;
+}

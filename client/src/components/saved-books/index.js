@@ -1,32 +1,41 @@
 import React from 'react';
+import './style.css';
 import Box from '../box';
 import BookInfoDisplay from '../book-info';
 
-function savedBooksDisplay({ list, openSaveBookModal, openLoginModal, openCreateAccountModal, ...otherProps }) {
-  let style = {
+export default ({
+  list,
+  openSaveBookModal,
+  openLoginModal,
+  openCreateAccountModal, 
+  ...otherProps
+}) => {
+
+  const style = {
     box: {
       minHeight: 200,
-      textAlign: 'center'
-    },
-    label: {
-      textAlign: 'left'
+      backgroundColor: list ? '#fafafa' : '#f0f0f0'
     }
   }
-  style.boxHasResults = Object.assign({ backgroundColor: '#fafafa' }, style.box);
-  style.boxNoResults = Object.assign({ backgroundColor: '#f0f0f0' }, style.box);
 
-  return(list ?
-    <Box style={style.boxHasResults} id="saved-books">
-      <label className="label" style={style.label}>Public List</label>
-      {list.map(item => (
-        <BookInfoDisplay book={item.book} key={item.book._id} openSaveBookModal={openSaveBookModal} openLoginModal={openLoginModal} openCreateAccountModal={openCreateAccountModal}/>
-      ))}
-    </Box> :
-    <Box style={style.boxNoResults} id="saved-books">
-      <label className="label" style={style.label}>Public List</label>
-      <h4 className="title is-6">Fetching list...</h4>
+  return (
+    <Box style={style.box} id="saved-books" mainContainer>
+      <label className="label">Public List</label>
+      {list && list.length ?
+        list.map(item => (
+          <BookInfoDisplay
+            book={item.book}
+            key={item.book._id}
+            openSaveBookModal={openSaveBookModal}
+            openLoginModal={openLoginModal}
+            openCreateAccountModal={openCreateAccountModal}
+          />
+        )) 
+        :
+        <h4 className="title is-6">
+          {list ? 'There are no books saved to the public list yet.' : 'Fetching list...'}
+        </h4>
+      }
     </Box>
   );
 }
-
-export default savedBooksDisplay;

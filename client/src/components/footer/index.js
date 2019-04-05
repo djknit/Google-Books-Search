@@ -1,12 +1,12 @@
 import React from 'react';
 import './style.css';
 
-function footer({ height }) {
+export default ({
+  height
+}) => {
+  
   return(
-    <footer id="my-footer" style={{ height, bottom: -1 * height }}>
-      <div class="shadow"></div>
+    <footer id="my-footer" className="has-shadow is-deep is-low" style={{ height }}>
     </footer>
   );
 }
-
-export default footer;

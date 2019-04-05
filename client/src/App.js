@@ -6,9 +6,7 @@ import LandingPage from './views/home';
 import SearchView from './views/search';
 import PublicListView from './views/public-list';
 import NotFoundView from './views/not-found';
-import CreateAccountModal from './components/modals/create-account';
-import LoginModal from './components/modals/login';
-import SaveBookModal from './components/modals/save-book';
+import Modals from './components/modals';
 import MyFooter from './components/footer';
 import api from './utilities/api';
 
@@ -106,71 +104,61 @@ class App extends Component {
     // console.log(document.location.pathname)
     return (
       <Router>
-        <div>
-          <div id="whole-page" style={{ color: 'black', minHeight: `calc(100vh - ${this.footerHeight}px)` }}>
-            <div id="whole-page-except-footer">
-              <Navbar
-                openCreateAccountModal={this.openCreateAccountModal}
-                openLoginModal={this.openLoginModal}
-                user={this.state.user}
-                logOut={this.logUserOut}
-              />
-              <Switch>
-                {/* source: https://tylermcginnis.com/react-router-pass-props-to-components/ */}
-                <Route
-                  exact path="/"
-                  render={props => <LandingPage
-                    {...props}
-                    openCreateAccountModal={this.openCreateAccountModal}
-                    openLoginModal={this.openLoginModal}
-                  />}
-                />
-                <Route
-                  exact path="/search"
-                  render={props => <SearchView
-                    {...props}
-                    user={this.state.user}
-                    openSaveBookModal={this.openSaveBookModal}
-                    openCreateAccountModal={this.openCreateAccountModal}
-                    openLoginModal={this.openLoginModal}
-                  />}
-                />
-                <Route
-                  exact path="/public-list"
-                  render={props => <PublicListView
-                    {...props}
-                    user={this.state.user}
-                    openSaveBookModal={this.openSaveBookModal}
-                    openCreateAccountModal={this.openCreateAccountModal}
-                    openLoginModal={this.openLoginModal}
-                  />}
-                />
-                <Route component={NotFoundView} />
-              </Switch>
-            </div>
-            <MyFooter height={this.footerHeight} />
-          </div>
-          <CreateAccountModal
-            closeModal={this.closeCreateAccountModal}
-            isActive={this.state.isCreateAccountModalActive}
-            logUserIn={this.logUserIn}
-            className={this.openCreateAccountModal}
-          />
-          <LoginModal
-            closeModal={this.closeLoginModal}
-            isActive={this.state.isLoginModalActive}
-            logUserIn={this.logUserIn}
-          />
-          {this.state.isSaveBookModalActive &&
-            <SaveBookModal
-              closeModal={this.closeSaveBookModal}
-              isActive={this.state.isSaveBookModalActive}
-              openLoginModal={this.openLoginModal}
+        <div id="whole-page">
+          <div id="whole-page-except-footer" className="deep" style={{ color: 'black', minHeight: `calc(100vh - ${this.footerHeight}px)` }}>
+            <Navbar
               openCreateAccountModal={this.openCreateAccountModal}
-              book={this.state.bookToSave}
+              openLoginModal={this.openLoginModal}
               user={this.state.user}
+              logOut={this.logUserOut}
             />
-          }
+            <Switch>
+              {/* source: https://tylermcginnis.com/react-router-pass-props-to-components/ */}
+              <Route
+                exact path="/"
+                render={props => <LandingPage
+                  {...props}
+                  openCreateAccountModal={this.openCreateAccountModal}
+                  openLoginModal={this.openLoginModal}
+                />}
+              />
+              <Route
+                exact path="/search"
+                render={props => <SearchView
+                  {...props}
+                  user={this.state.user}
+                  openSaveBookModal={this.openSaveBookModal}
+                  openCreateAccountModal={this.openCreateAccountModal}
+                  openLoginModal={this.openLoginModal}
+                />}
+              />
+              <Route
+                exact path="/public-list"
+                render={props => <PublicListView
+                  {...props}
+                  user={this.state.user}
+                  openSaveBookModal={this.openSaveBookModal}
+                  openCreateAccountModal={this.openCreateAccountModal}
+                  openLoginModal={this.openLoginModal}
+                />}
+              />
+              <Route component={NotFoundView} />
+            </Switch>
+          </div>
+          <MyFooter height={this.footerHeight} />
+          <Modals
+            isCreateAccountModalActive={this.state.isCreateAccountModalActive}
+            closeCreateAccountModal={this.closeCreateAccountModal}
+            logUserIn={this.logUserIn}
+            isLoginModalActive={this.state.isLoginModalActive}
+            closeLoginModal={this.closeLoginModal}
+            isSaveBookModalActive={this.state.isSaveBookModalActive}
+            closeSaveBookModal={this.closeSaveBookModal}
+            openLoginModal={this.openLoginModal}
+            openCreateAccountModal={this.openCreateAccountModal}
+            bookToSave={this.state.bookToSave}
+            user={this.state.user}
+          />
         </div>
       </Router>
     );

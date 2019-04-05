@@ -1,18 +1,25 @@
 import React from 'react';
 import './style.css';
 
-function box(props) {
-  let style = props.style || {};
-  if (props.mainContainer) {
-    const minWidth = 485;
-    style = Object.assign({ minWidth }, props.style);
-  }
+export default ({
+  style,
+  className,
+  id,
+  mainContainer,
+  children
+}) => {
+  
+  let boxClass = 'box has-shadow';
+  if (className) boxClass += ` ${className}`;
+  if (mainContainer) boxClass += ' is-deep has-text-centered';
 
-  return(
-    <div className='box' style={style}>
-      {props.children}
+  return (id ?
+    <div className={boxClass} id={id} style={style || {}}>
+      {children}
+    </div>
+    :
+    <div className={boxClass} style={style || {}}>
+      {children}
     </div>
   );
 }
-
-export default box;

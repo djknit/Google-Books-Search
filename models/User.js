@@ -7,8 +7,7 @@ const UserSchema = new Schema({
   email: {
     type: String,
     // from bootcamp week 18 activity 15
-    match: [/.+@.+\..+/, 'Please enter a valid e-mail address.'],
-    unique: true
+    match: [/.+@.+\..+/, 'Please enter a valid e-mail address.']
   },
   username: {
     type: String,
@@ -48,5 +47,5 @@ const UserSchema = new Schema({
 });
 
 const User = mongoose.model('User', UserSchema);
- 
+
 module.exports = User;

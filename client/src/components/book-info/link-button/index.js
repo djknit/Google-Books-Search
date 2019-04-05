@@ -1,25 +1,25 @@
 import React from 'react';
+import './style.css';
 
-function button(props) {
-  const style = {
-    button: props.style || {},
-    label: {
-      fontSize: 12,
-      whiteSpace: 'normal'
-    }
-  }
+export default ({
+  href,
+  children,
+  style,
+  className
+}) => {
 
-  return(
+  let linkClass = 'button is-primary is-outlined link-button';
+  if (className) linkClass += ` ${className}`;
+
+  return (
     <a
-      href={props.href}
-      className="button is-primary is-outlined link-button"
+      href={href}
+      className={linkClass}
       target="_blank"
       rel="noreferrer noopener"
-      style={style.button}
+      style={style || {}}
     >
-      <span className="label" style={style.label}>{props.children}</span>
+      <span className="label">{children}</span>
     </a>
   );
 }
-
-export default button;

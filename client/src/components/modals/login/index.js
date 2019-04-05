@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import './style.css';
 import api from '../../../utilities/api';
+import ModalSkeleton from '../modal-skeleton';
+import LoginForm from './login-form';
 
 class loginModal extends Component {
   constructor(props) {
@@ -10,7 +10,6 @@ class loginModal extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.submitForm = this.submitForm.bind(this);
     this.cancelForm = this.cancelForm.bind(this);
-    // this.redirectAfterLogin = this.redirectAfterLogin.bind(this);
     this.state = {
       usernameOrEmail: '',
       password: '',
@@ -19,6 +18,7 @@ class loginModal extends Component {
       hasProblems: false,
       hasUsernameOrEmailProblem: false,
       hasPasswordProblem: false,
+      isLoading: false
     };
   }
   
@@ -57,6 +57,7 @@ class loginModal extends Component {
     this.setState({
       hasUsernameOrEmailProblem: false,
       hasPasswordProblem: false,
+      isLoading: true
     });
     api.auth.login(usernameOrEmail, password)
       .then(res => {
@@ -65,25 +66,27 @@ class loginModal extends Component {
         if (resData.success) {
           this.setState({
             hasProblems: false,
-            hasSuccess: true
+            hasSuccess: true,
+            isLoading: false
           });
           this.props.logUserIn(resData.user);
         }
         else {
           this.setState({
             problemMessage: resData.message,
-            hasProblems: true
+            hasProblems: true,
+            isLoading: false
           });
         }
       })
       .catch(err => {
-        const resData = err.response.data;
+        const resData = err.response ? err.response.data : {};
         console.log(resData);
         this.setState({
           problemMessage: resData.message || 'Unknown error. Please try again.',
           hasProblems: true,
-          hasUsernameOrEmailProblem: resData.problems.usernameOrEmail,
-          hasPasswordProblem: resData.problems.password,
+          hasUsernameOrEmailProblem: resData.problems && resData.problems.usernameOrEmail,
+          hasPasswordProblem: resData.problems && resData.problems.password,
         });
       });
   }
@@ -97,99 +100,49 @@ class loginModal extends Component {
       hasProblems: false,
       hasUsernameOrEmailProblem: false,
       hasPasswordProblem: false,
+      isLoading: false
     });
     this.props.closeModal();
   }
 
-  // redirectAfterLogin(event) {
-  //   event.preventDefault();
-  //   console.log('pre-push')
-  //   this.props.history.push('/search')
-  //   console.log('post-push')
-  // }
-
   render() {
-    const style = {
-      formInstructions: {
-        fontSize: 15,
-        whiteSpace: 'pre-wrap',
-        marginBottom: 20
-      },
-      label: {
-        textAlign: 'left'
-      },
-      problemNotification: {
-        whiteSpace: 'pre-line'
-      },
-      privacyMessage: {
-        fontSize: 14,
-        marginTop: 20
-      },
-      button: {
-        marginTop: 15
-      }
-    }
-
     return(
-      <div id="loginModal" className={this.props.isActive ? 'modal is-active' : 'modal'}>
-        <div className="modal-background"></div>
-        <div className="modal-card">
-          <header className="modal-card-head" style={this.state.hasSuccess ? { backgroundColor: '#20bc56' } : {}}>
-            <p className={this.state.hasSuccess ? 'modal-card-title is-success' : 'modal-card-title'}>Sign In</p>
-            <button onClick={this.props.closeModal} className="delete" aria-label="close"></button>
-          </header>
-          <section className="modal-card-body">
-            <p className="help" style={style.formInstructions}>
-              Enter the username or email address associated with your account.
-              <br />
-              Usernames are case-sensitive; email addresses are not.
-            </p>
-            {this.state.hasSuccess &&
-              <div className="notification is-success">
-                <strong>Success!</strong> You're logged in.
-              </div>
-            }
-            {this.state.hasProblems &&
-              <div className="notification is-danger" style={style.problemNotification}>
-                {this.state.problemMessage}
-              </div>
-            }
-            <form id="login-form" style={style.form}>
-              <div className="field">
-                <label className="label" htmlFor="username-or-email-input" style={style.label}>Enter your username or email</label>
-                <div className="control has-icons-left">
-                  <input id="username-or-email-input" name="usernameOrEmail" value={this.state.usernameOrEmail} placeholder="Your username or email address..." onChange={this.handleChange} disabled={this.state.hasSuccess} className={this.state.hasUsernameOrEmailProblem && !this.state.hasSuccess ? 'input is-danger' : 'input'} />
-                  <span className="icon is-small is-left">
-                    <i className="fas fa-user-tag"></i>
-                  </span>
-                </div>
-              </div>
-              <div className="field">
-                <label className="label" htmlFor="login-password-input" style={style.label}>Enter your password</label>
-                <div className="control has-icons-left">
-                  <input id="login-password-input" name="password" value={this.state.password} type="password" placeholder="Your password..." onChange={this.handleChange} disabled={this.state.hasSuccess} className={this.state.hasPasswordProblem && !this.state.hasSuccess ? 'input is-danger' : 'input'} />
-                  <span className="icon is-small is-left">
-                    <i className="fas fa-lock"></i>
-                  </span>
-                </div>
-              </div>
-            </form>
-            <div className="content">
-              <p style={style.privacyMessage}>I will never share or sell your information.</p>
-            </div>
-          </section>
-          {this.state.hasSuccess ?
-            <footer className="modal-card-foot buttons is-right">
-              <Link onClick={this.cancelForm} to="/search" className="button is-success">OK</Link>
-            </footer>
-            :
-            <footer className="modal-card-foot buttons is-right">
-              <button onClick={this.submitForm} type="submit" form="login-form" className="button is-success">Sign In</button>
-              <button onClick={this.cancelForm} className="button">Cancel</button>
-            </footer>
-          }
-        </div>
-      </div>
+      <ModalSkeleton
+        modalTitle="Sign In"
+        modalTitleSuccess="Signed In!"
+        BodyContent={
+          <form id="login-form" onSubmit={this.submitForm}>
+            <LoginForm
+              usernameOrEmail={this.state.usernameOrEmail}
+              password={this.state.password}
+              problemMessage={this.state.problemMessage}
+              hasSuccess={this.state.hasSuccess}
+              hasProblems={this.state.hasProblems}
+              hasUsernameOrEmailProblem={this.state.hasUsernameOrEmailProblem}
+              hasPasswordProblem={this.state.hasPasswordProblem}
+              handleChange={this.handleChange}
+              submitForm={this.submitForm}
+              isLoading={this.state.isLoading}
+            />
+          </form>
+        }
+        FooterContent={
+          <button
+            type="submit"
+            form="login-form"
+            className="button is-success"
+            disabled={this.state.isLoading}
+          >
+            Sign In
+          </button>
+        }
+        isModalActive={this.props.isActive}
+        hasSuccess={this.state.hasSuccess}
+        closeModal={this.props.closeModal}
+        cancel={this.cancelForm}
+        successRedirectPath="/search"
+        isLoading={this.state.isLoading}
+      />
     );
   }
 }

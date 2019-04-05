@@ -1,34 +1,48 @@
 import React from 'react';
+import './style.css';
 import Box from '../box';
 import BookInfoDisplay from '../book-info';
 
-function resultsDisplay({ results, query, openSaveBookModal, openLoginModal, openCreateAccountModal, ...otherProps }) {
+export default ({
+  results,
+  query,
+  openSaveBookModal,
+  openLoginModal,
+  openCreateAccountModal,
+  ...otherProps
+}) => {
+
   let style = {
     box: {
       minHeight: 200,
-      textAlign: 'center'
-    },
-    label: {
-      textAlign: 'left'
+      backgroundColor: results.items ? '#fafafa' : '#f0f0f0'
     }
   }
-  style.boxHasResults = Object.assign({ backgroundColor: '#fafafa', paddingBottom: 1 }, style.box);
-  style.boxNoResults = Object.assign({ backgroundColor: '#f0f0f0' }, style.box);
+  if (results) style.box.paddingBottom = 1
 
-  return(results.items ?
-    <Box style={style.boxHasResults} id="search-results" mainContainer>
-      <label className="label" style={style.label}>Results</label>
-      <p className="is-size-5">Showing {results.items.length} of {results.number} matches for "{query}"</p>
-      {results.items.map(item => (
-        <BookInfoDisplay book={item} key={item.gId} openSaveBookModal={openSaveBookModal} openLoginModal={openLoginModal} openCreateAccountModal={openCreateAccountModal}/>
-      ))}
-    </Box> :
-    <Box style={style.boxNoResults} id="search-results" mainContainer>
-      <label className="label" style={style.label}>Results</label>
-      <h4 className="title is-6">There are no results to display yet.</h4>
-      <h5 className="subtitle is-6">Search for a book using the search bar above.</h5>
+  return (
+    <Box style={style.box} id="search-results" mainContainer>
+      <label className="label">Results</label>
+      {results.items ?
+        <>
+          <p className="is-size-5">
+            Showing {results.items.length} of {results.number} matches for "{query}"
+          </p>
+          {results.items.map(item => (
+            <BookInfoDisplay
+              book={item}
+              key={item.gId}
+              openSaveBookModal={openSaveBookModal}
+              openLoginModal={openLoginModal}
+              openCreateAccountModal={openCreateAccountModal}
+            />
+          ))}
+        </> :
+        <>
+          <h4 className="title is-6">There are no results to display yet.</h4>
+          <h5 className="subtitle is-6">Search for a book using the search bar above.</h5>
+        </>
+      }
     </Box>
   );
 }
-
-export default resultsDisplay;

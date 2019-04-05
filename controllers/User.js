@@ -1,6 +1,9 @@
 const User = require("../models/User");
 
 function createAccount(newUser, callback) {
+  console.log('\n\n')
+  console.log(newUser)
+  console.log('\n------------------------------')
   User.create(newUser)
     .then(result => {
       if (result) {
@@ -13,11 +16,11 @@ function createAccount(newUser, callback) {
       }
       else callback({ success: false });
     })
-    .catch(err => callback({
+    .catch(err => {console.log('\n\n'); console.log(err); console.log('\n\n'); callback({
       success: false,
       message: err.code === 11000 ? 'That username is taken.' : 'Unknown server error.',
       problems: err.code === 11000 ? { username: true } : {}
-    }));
+    })});
 }
 
 module.exports = {

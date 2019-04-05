@@ -1,0 +1,20 @@
+#search-form {
+  text-align: right;
+  position: relative;
+}
+
+#search-form label {
+  text-align: left;
+}
+
+#search-form .powered-by-google {
+  height: 36px;
+  width: 74.4px;
+  position: absolute;
+  bottom: -8px;
+  left: 2px;
+}
+.powered-by-google > img {
+  height: 100%;
+  width: 100%;
+}

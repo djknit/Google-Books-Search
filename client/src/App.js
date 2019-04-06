@@ -105,7 +105,7 @@ class App extends Component {
     return (
       <Router>
         <div id="whole-page">
-          <div id="whole-page-except-footer" className="deep" style={{ color: 'black', minHeight: `calc(100vh - ${this.footerHeight}px)` }}>
+          <div id="whole-page-except-footer" style={{ minHeight: `calc(100vh - ${this.footerHeight}px)` }}>
             <Navbar
               openCreateAccountModal={this.openCreateAccountModal}
               openLoginModal={this.openLoginModal}

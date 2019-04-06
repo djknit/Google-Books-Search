@@ -1,0 +1,7 @@
+hr.save-book {
+  height: 1px;
+  background-color: #a7a7a7;
+  width: calc(100% - 50px);
+  display: inline-block;
+  margin: 0;
+}

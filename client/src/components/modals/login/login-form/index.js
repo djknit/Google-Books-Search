@@ -20,12 +20,12 @@ export default ({
         Usernames are case-sensitive; email addresses are not.
       </p>
       {hasSuccess &&
-        <div className="notification is-success">
+        <div className="notification is-success has-shadow">
           <strong>Success!</strong> You're logged in.
         </div>
       }
       {hasProblems &&
-        <div className="notification is-danger">
+        <div className="notification is-danger has-shadow">
           {problemMessage}
         </div>
       }

@@ -26,13 +26,13 @@ export default ({
         </p>
       }
       {hasSuccess &&
-        <div className="notification is-success">
+        <div className="notification is-success has-shadow">
           <strong>Success!</strong> Your account was created.
           <br />You are now signed in.
         </div>
       }
       {hasProblems &&
-        <div className="notification is-danger">
+        <div className="notification is-danger has-shadow">
           {problemMessage}
         </div>
       }

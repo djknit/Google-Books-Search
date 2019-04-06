@@ -140,7 +140,7 @@ class loginModal extends Component {
         hasSuccess={this.state.hasSuccess}
         closeModal={this.props.closeModal}
         cancel={this.cancelForm}
-        successRedirectPath="/search"
+        successRedirectPath={window.location.pathname === '/' ? '/search' : false}
         isLoading={this.state.isLoading}
       />
     );

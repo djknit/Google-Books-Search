@@ -204,13 +204,13 @@ class createAccountModal extends Component {
               </p>
             }
             {this.state.hasSuccess &&
-              <div className="notification is-success">
+              <div className="notification is-success has-shadow">
                 <strong>Success!</strong> Your account was created.
                 <br />You are now signed in.
               </div>
             }
             {this.state.hasProblems &&
-              <div className="notification is-danger" style={style.problemNotification}>
+              <div className="notification is-danger has-shadow" style={style.problemNotification}>
                 {this.state.problemMessage}
               </div>
             }

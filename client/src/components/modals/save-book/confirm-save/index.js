@@ -4,12 +4,15 @@ import Box from '../../../box';
 export default ({
   book,
   isPublic,
-  isUser
+  isUser,
+  hasSuccess
 }) => {
 
   return (
     <div className="content has-text-centered">
-      <p className="is-size-5 has-text-left">You are about to save...</p>
+      <p className="is-size-5 has-text-left">
+        {`You ${hasSuccess ? 'saved' : 'are about to save'}...`}
+      </p>
       <Box>
         {book.subtitle ?
           <p><span className="title is-4">"{book.title}</span> <span className="subtitle is-4">&mdash; {book.subtitle}"</span></p> :

@@ -13,16 +13,19 @@ export default ({
   cancel,
   isBodyCentered,
   successRedirectPath,
-  isLoading
+  isLoading,
+  hasError
 }) => {
+
+  const headerColor = (hasSuccess && '#20bc56') || (hasError && '#ff3860');
 
   return (
     <div className={isModalActive ? 'modal is-active' : 'modal'}>
       <div className="modal-background"></div>
       <div className="modal-card" style={{ minWidth: 252 }}>
-        <header className="modal-card-head" style={hasSuccess ? { backgroundColor: '#20bc56' } : {}}>
-          <p className={`modal-card-title${hasSuccess ? ' is-success' : ''}`}>
-            {hasSuccess && modalTitleSuccess ? modalTitleSuccess : modalTitle}
+        <header className="modal-card-head" style={headerColor ? { backgroundColor: headerColor } : {}}>
+          <p className="modal-card-title" style={headerColor ? { color: 'white' } : {}}>
+            {(hasSuccess && modalTitleSuccess) || (hasError && 'Error') || modalTitle}
           </p>
           <button
             onClick={hasSuccess ? cancel : closeModal} className="delete has-shadow" aria-label="close" />
@@ -31,18 +34,19 @@ export default ({
           {BodyContent}
         </section>
         <footer className="modal-card-foot buttons is-right">
-          {hasSuccess ?
-            successRedirectPath ?
+          {(hasSuccess || hasError) ?
+            (hasSuccess && successRedirectPath) ?
               <Link
                 onClick={cancel}
                 to={successRedirectPath}
                 className="button is-success has-shadow"
               >
                 OK
-              </Link> :
+              </Link>
+              :
               <button
                 onClick={cancel}
-                className="button is success has-shadow"
+                className={`button has-shadow${hasSuccess ? ' is-success' : ''}`}
               >
                 OK
               </button>

@@ -3,11 +3,12 @@ import './style.css';
 import CreateAccountModal from './create-account';
 import LoginModal from './login';
 import SaveBookModal from './save-book';
+import PrivacySettingsModal from './privacy-settings';
 
 export default ({
   isCreateAccountModalActive,
   closeCreateAccountModal,
-  logUserIn,
+  setUser,
   isLoginModalActive,
   closeLoginModal,
   isSaveBookModalActive,
@@ -15,7 +16,10 @@ export default ({
   openLoginModal,
   openCreateAccountModal,
   bookToSave,
-  user
+  user,
+  closePrivacySettingsModal,
+  isPrivacySettingsModalActive,
+  openPrivacySettingsModal
 }) => {
   
   return (
@@ -23,12 +27,12 @@ export default ({
       <CreateAccountModal
         closeModal={closeCreateAccountModal}
         isActive={isCreateAccountModalActive}
-        logUserIn={logUserIn}
+        setUser={setUser}
       />
       <LoginModal
         closeModal={closeLoginModal}
         isActive={isLoginModalActive}
-        logUserIn={logUserIn}
+        setUser={setUser}
       />
       {isSaveBookModalActive &&
         <SaveBookModal
@@ -38,8 +42,16 @@ export default ({
           openCreateAccountModal={openCreateAccountModal}
           book={bookToSave}
           user={user}
+          openPrivacySettingsModal={openPrivacySettingsModal}
         />
       }
+      <PrivacySettingsModal
+        user={user}
+        closeModal={closePrivacySettingsModal}
+        isActive={isPrivacySettingsModalActive}
+        closeSaveBookModal={closeSaveBookModal}
+        setUser={setUser}
+      />
     </>
   );
 }

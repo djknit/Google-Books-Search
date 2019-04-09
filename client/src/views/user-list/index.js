@@ -7,15 +7,24 @@ class publicListView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: null
+      list: null,
+      errorMessage: null,
+      hasError: false
     };
   }
 
   componentDidMount() {
-    api.saved.publicList.getList()
+    api.saved.userList.getList()
       .then(res => {
         console.log(res)
         if (res.data.books) this.setState({ list: res.data.books.reverse() });
+      })
+      .catch(err => {
+        // if (err.response.status === 401) return this.props.history.push('/');
+        this.setState({
+          hasError: true,
+          errorMessage: (err.response.data && err.response.data.message) || 'Unknown error.'
+        });
       });
   }
 
@@ -26,8 +35,8 @@ class publicListView extends Component {
         <SavedBooks
           list={this.state.list}
           openSaveBookModal={this.props.openSaveBookModal}
-          openLoginModal={this.props.openLoginModal}
-          openCreateAccountModal={this.props.openCreateAccountModal}
+          errorMessage={this.state.errorMessage}
+          hasError={this.state.hasError}
         />
       </div>
     );

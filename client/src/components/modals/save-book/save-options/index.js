@@ -31,7 +31,7 @@ export default ({
         This book is already saved to the public list.
       </Box> :
       <Box style={style.box}>
-        <p style={style.boxText}>This book is not saved to the public list yet.</p>
+        <p className="save-options box-text">This book is not saved to the public list yet.</p>
         <button className="button is-primary" onClick={saveToPublicList}>Save to public list</button>
       </Box>
     }
@@ -41,7 +41,7 @@ export default ({
           This book is already saved to your personal list.
         </Box> :
         <Box style={style.box}>
-          <p style={style.boxText}>This book is not saved to your personal list.</p>
+          <p className="save-options box-text">This book is not saved to your personal list.</p>
           <button className="button is-primary" onClick={saveToUserList}>Save to personal list</button>
         </Box>
       :

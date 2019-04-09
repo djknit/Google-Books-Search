@@ -3,3 +3,8 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
+.save-options.box-text {
+  margin-bottom: 10px;
+  text-align: left;
+}

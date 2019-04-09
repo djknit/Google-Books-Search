@@ -81,6 +81,25 @@ router.get('/fail', (req, res) => {
   res.json(response);
 });
 
+router.post(
+  '/privacy-settings',
+  require('connect-ensure-login').ensureLoggedIn('/api/auth/fail'),
+  (req, res) => {
+    const { shareUsername, shareEmail } = req.body;
+    if (shareUsername === undefined || shareEmail === undefined)
+      return res.status(400).json({
+        message: 'Bad request format. Must specify "shareUsername" and "shareEmail".'
+      });
+    UserController.updateSharingSettings(
+      req.user._id,
+      shareUsername,
+      shareEmail,
+      result => res.json(result),
+      err => res.status(500).json({ message: err })
+    );
+  }
+);
+
 const async = require('async');
 const crypto = require('crypto');
 const sendPasswordResetEmail = require('../../utilities/nodemailer');

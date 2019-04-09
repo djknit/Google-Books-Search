@@ -47,8 +47,6 @@ class searchView extends Component {
           query={this.state.query}
           results={this.state.results}
           openSaveBookModal={this.props.openSaveBookModal}
-          openLoginModal={this.props.openLoginModal}
-          openCreateAccountModal={this.props.openCreateAccountModal}
         />
       </div>
     );

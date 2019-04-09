@@ -6,9 +6,9 @@ import BookInfoDisplay from '../book-info';
 export default ({
   list,
   openSaveBookModal,
-  openLoginModal,
-  openCreateAccountModal, 
-  ...otherProps
+  isPublicList,
+  errorMessage,
+  hasError
 }) => {
 
   const style = {
@@ -20,20 +20,30 @@ export default ({
 
   return (
     <Box style={style.box} id="saved-books" mainContainer>
-      <label className="label">Public List</label>
+      <label className="label">
+        {isPublicList ? 'Public' : 'Your'} List
+      </label>
       {list && list.length ?
         list.map(item => (
           <BookInfoDisplay
             book={item.book}
             key={item.book._id}
             openSaveBookModal={openSaveBookModal}
-            openLoginModal={openLoginModal}
-            openCreateAccountModal={openCreateAccountModal}
+            timeAdded={item.timeAdded}
+            addedBy={item.addedBy}
+            isPublicList={isPublicList}
           />
         )) 
         :
         <h4 className="title is-6">
-          {list ? 'There are no books saved to the public list yet.' : 'Fetching list...'}
+          {list ?
+            `There are no books saved to ${isPublicList ? 'the public' : 'your'} list yet.`
+            :
+            hasError ?
+              <>There was an error retrieving the list.<br /><br />{errorMessage}</>
+              :
+              'Fetching list...'
+          }
         </h4>
       }
     </Box>

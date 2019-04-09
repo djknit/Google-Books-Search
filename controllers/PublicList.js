@@ -7,10 +7,34 @@ module.exports = {
       path: 'books.book'
     }, {
       path: 'books.addedBy',
-      select: 'username email'
+      select: ['username', 'email', 'shareUsername', 'shareEmail']
     }])
-    .then(cb)
-    .catch(handleError)
+    .then(res => {
+      // Protect user information according to users` sharing preferences
+      const books = res.books.map(book => {
+        if (!book.addedBy) return book;
+        console.log(book.addedBy)
+        console.log(book.timeAdded.getTime());
+        let bookCopy = {
+          book: book.book,
+          notes: book.notes,
+          timeAdded: book.timeAdded.getTime()
+        }
+        if (book.addedBy.shareUsername) {
+          bookCopy.addedBy = book.addedBy.username;
+          return bookCopy;
+        }
+        if (book.addedBy.shareEmail) {
+          bookCopy.addedBy = book.addedBy.email;
+          console.log(bookCopy)
+          console.log(bookCopy.addedBy)
+          return bookCopy;
+        }
+        return bookCopy;
+      });
+      cb({ books });
+    })
+    .catch(err => console.log(err))
   ,
   checkIfListContainsBook: (mongoBookId, cb, handleError) => PublicList.findOne({ 'books.book': { _id: mongoBookId } })
     .then(cb)

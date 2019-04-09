@@ -42,6 +42,8 @@ const UserSchema = new Schema({
       time: Date
     })]
   })],
+  shareUsername: Boolean,
+  shareEmail: Boolean,
   passwordResetToken: String,
   resetTokenExpiration: Number
 });

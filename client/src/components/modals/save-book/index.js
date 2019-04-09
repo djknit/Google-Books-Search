@@ -11,13 +11,16 @@ class SaveBookModal extends Component {
   constructor(props) {
     super(props);
     this.saveBook = this.saveBook.bind(this);
+    this.selectSaveToPublicList = this.selectSaveToPublicList.bind(this);
     this.state = {
       hasSuccess: false,
       hasError: false,
       savedStatus: null,
       saveTo: null,
       isLoading: false,
-      failMessage: ''
+      failMessage: '',
+      arePrivacySettingsSet: !this.props.user ||
+        (this.props.user.shareUsername !== undefined && this.props.user.shareEmail !== undefined)
     };
   }
 
@@ -26,7 +29,9 @@ class SaveBookModal extends Component {
     this.setState({ isLoading: true });
     const apiCall = this.state.saveTo.userList ?
       api.saved.userList.post :
-      this.props.user ? api.saved.publicList.postAsUser : api.saved.publicList.postAsGuest;
+      this.props.user ?
+        api.saved.publicList.postAsUser :
+        api.saved.publicList.postAsGuest;
     apiCall(this.props.book)
       .then(res => {
         if (res.data && res.data.success) return this.setState({
@@ -35,8 +40,9 @@ class SaveBookModal extends Component {
           isConfirmed: true
         });
         this.setState({
-          hasError: true,
-          failMessage: (res.data && res.data.message) || '',
+          hasError: true, 
+          failMessage: (res.data && res.data.message) ||
+            'An unknown error was encountered while attempting to save the book.',
           isLoading: false
         });
       })
@@ -47,12 +53,20 @@ class SaveBookModal extends Component {
           isLoading: false,
           failMessage:
             (err && err.response && err.response.data && err.response.data.message) ||
-            'Unknown error. Book was not saved.'
+            'Unknown error. The book was not saved.'
         });
       });
   }
 
+  selectSaveToPublicList() {
+    this.setState({
+      saveTo: { publicList: true }
+    });
+    if (!this.state.arePrivacySettingsSet) this.props.openPrivacySettingsModal();
+  }
+
   componentDidMount() {
+    console.log(this.props.user)
     const apiCall = this.props.user ? api.saved.checkSavedStatusAsUser : api.saved.checkSavedStatusAsGuest;
     apiCall({ gId: this.props.book.gId })
       .then(res => {
@@ -80,14 +94,14 @@ class SaveBookModal extends Component {
                 user={this.props.user}
                 openLoginModal={this.props.openLoginModal}
                 openCreateAccountModal={this.props.openCreateAccountModal}
-                saveToPublicList={() => this.setState({ saveTo: { publicList: true } })}
+                saveToPublicList={this.selectSaveToPublicList}
                 saveToUserList={() => this.setState({ saveTo: { userList: true } })}
               />
             }
           </>
           :
           this.state.hasError ?
-            <div className="notification is-danger">
+            <div className="notification is-danger has-shadow">
               <strong>Error</strong>
               <br />
               {this.state.failMessage || 'Unable to save book. Unknown error.'}

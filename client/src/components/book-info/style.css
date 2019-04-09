@@ -1,3 +1,14 @@
+.book-info-display .book-save-info {
+  margin-bottom: 10px;
+}
+.book-info-display .book-save-info p {
+  margin: -10px 0 10px;
+  text-align: center;
+}
+.book-info-display .book-save-info .divider {
+  width: calc(100% + 40px);
+  margin-left: -20px;
+}
 .book-info-display .title, .book-info-display .subtitle {
   text-align: center;
   margin-bottom: .5rem;
@@ -22,7 +33,7 @@
 .book-info-display .spacer {
   clear: both;
 }  
-.book-info-display > .content .divider {
+.book-info-display .divider {
   margin: 5px 0;
   height: 1px;
   background-color: #bbbbbb;
@@ -72,4 +83,54 @@
   padding-top: 10px;
   text-align: right;
   clear: both;
+}
+
+@media (max-width: 494px) and (min-width: 360px) {
+  .book-info-display .link-button {
+    height: calc(13vw - 12.35px);
+    width: calc(33vw - 31.35px);
+    display: inline-block;
+    border-radius: 17px;
+  }
+  .book-info-display .preview.link-button {
+    position: relative;
+    margin-right: .2vw;
+  }
+  .book-info-display .preview.link-button > img {
+    height: auto;
+    width: 107.575%;
+    max-width: 107.575%;
+    cursor: pointer;
+    position: absolute;
+    left: -9.091%;
+    display: inline-block;
+  }
+  .book-info-display .link-button > .label {
+    /* font-size: 10px; */
+    line-height: 1.2;
+  }
+  .book-info-display .link-button > .label > .go-to {
+    display: none;
+  }
+}
+
+@media (max-width: 385px) {
+  .book-info-display .link-button > .label {
+    line-height: 1.2;
+    font-size: 11px;
+    font-weight: 500;
+  }
+}
+
+@media (max-width: 360px) {
+  .book-info-display .link-button {
+    height: 34.45px;
+    width: 87.45px;
+    display: inline-block;
+    border-radius: 17px;
+  }
+  .book-info-display .preview.link-button {
+    position: relative;
+    margin-right: .7px;
+  }
 }

@@ -7,7 +7,8 @@ class publicListView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: null
+      list: null,
+      errorMessage: null
     };
   }
 
@@ -16,6 +17,11 @@ class publicListView extends Component {
       .then(res => {
         console.log(res)
         if (res.data.books) this.setState({ list: res.data.books.reverse() });
+      })
+      .catch(err => {
+        let errorMessage = 'There was an error getting the list from the server. ' +
+          (err.response.data && err.response.data.message) || '';
+        this.setState({ errorMessage });
       });
   }
 
@@ -26,8 +32,8 @@ class publicListView extends Component {
         <SavedBooks
           list={this.state.list}
           openSaveBookModal={this.props.openSaveBookModal}
-          openLoginModal={this.props.openLoginModal}
-          openCreateAccountModal={this.props.openCreateAccountModal}
+          isPublicList
+          errorMessage={this.state.errorMessage}
         />
       </div>
     );

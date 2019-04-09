@@ -95,3 +95,13 @@ input.input.is-danger:hover {
 input.input.is-danger:focus {
   box-shadow: 0 0 6px #ff3860;
 }
+.notification.has-shadow {
+  box-shadow: 0 0 8px #202020;
+}
+.notification.has-shadow.is-success {
+  box-shadow: 0 0 10px #23d160, 0 0 4px #505050;
+  border: .6px solid rgb(32, 188, 86);
+}
+.notification.has-shadow.is-danger {
+  box-shadow: 0 0 10px #ff3860, 0 0 4px #505050;
+}

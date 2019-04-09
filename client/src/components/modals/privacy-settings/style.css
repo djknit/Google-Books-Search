@@ -1,0 +1,11 @@
+#privacy-settings p {
+  font-size: 16.5px;
+}
+
+#privacy-settings label:not(:last-of-type) {
+  margin-bottom: 7px;
+}
+
+#privacy-settings input[type="radio"] {
+  margin-right: 7px;
+}

@@ -95,13 +95,13 @@ module.exports = {
         path: 'books.book'
       })
       .then(cb)
-      .catch(handleError)
+      .catch(handleError);
   },
   checkIfBookIsOnList(userId, mongoBookId, cb, handleError) {
     User.findById(userId)
       .where({ 'books.book': mongoBookId })
       .then(cb)
-      .catch(handleError)
+      .catch(handleError);
   },
   addBookToList({ userId, mongoBookId, note }, cb, handleError) {
     this.checkIfBookIsOnList(
@@ -123,20 +123,31 @@ module.exports = {
         }
         User.findByIdAndUpdate(
           userId,
-          { $push: { 'books': listItem } },
-          { new: true }
+          { $push: { 'books': listItem } }
         )
           .then(result_2 => result_2 ?
             cb({
               success: true,
-              message: 'Book added to your personal list.',
-              yourList: result_2
+              message: 'Book added to your personal list.'
             }) :
             cb({ success: false })
           )
-          .catch(handleError)
+          .catch(handleError);
       },
       handleError
     );
+  },
+  updateSharingSettings(userId, shareUsername, shareEmail, cb, handleError) {
+    User.findByIdAndUpdate(
+      userId,
+      { shareUsername, shareEmail }
+    ).then(result_2 => result_2 ?
+        cb({
+          success: true,
+          message: "You're privacy settings were successfully updated."
+        }) :
+        cb({ success: false })
+      )
+      .catch(handleError);
   }
 }

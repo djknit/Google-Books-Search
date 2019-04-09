@@ -69,7 +69,7 @@ class loginModal extends Component {
             hasSuccess: true,
             isLoading: false
           });
-          this.props.logUserIn(resData.user);
+          this.props.setUser(resData.user);
         }
         else {
           this.setState({
@@ -87,6 +87,7 @@ class loginModal extends Component {
           hasProblems: true,
           hasUsernameOrEmailProblem: resData.problems && resData.problems.usernameOrEmail,
           hasPasswordProblem: resData.problems && resData.problems.password,
+          isLoading: false
         });
       });
   }

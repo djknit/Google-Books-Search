@@ -5,6 +5,7 @@ import Navbar from './components/navbar';
 import LandingPage from './views/home';
 import SearchView from './views/search';
 import PublicListView from './views/public-list';
+import UserListView from './views/user-list';
 import NotFoundView from './views/not-found';
 import Modals from './components/modals';
 import MyFooter from './components/footer';
@@ -19,10 +20,12 @@ class App extends Component {
     this.openLoginModal = this.openLoginModal.bind(this);
     this.closeLoginModal = this.closeLoginModal.bind(this);
     this.checkAuthentication = this.checkAuthentication.bind(this);
-    this.logUserIn = this.logUserIn.bind(this);
+    this.setUser = this.setUser.bind(this);
     this.logUserOut = this.logUserOut.bind(this);
     this.openSaveBookModal = this.openSaveBookModal.bind(this);
     this.closeSaveBookModal = this.closeSaveBookModal.bind(this);
+    this.openPrivacySettingsModal = this.openPrivacySettingsModal.bind(this);
+    this.closePrivacySettingsModal = this.closePrivacySettingsModal.bind(this);
     this.footerHeight = 50;
     this.state = {
       user: null,
@@ -30,6 +33,7 @@ class App extends Component {
       isCreateAccountModalActive: false,
       isLoginModalActive: false,
       isSaveBookModalActive: false,
+      isPrivacySettingsModalActive: false,
       publicBooksList: []
     };
   }
@@ -67,7 +71,7 @@ class App extends Component {
       .catch(err => console.log(err));
   }
 
-  logUserIn(user) {
+  setUser(user) {
     this.setState({ user });
   }
 
@@ -91,6 +95,18 @@ class App extends Component {
   closeSaveBookModal() {
     this.setState({
       isSaveBookModalActive: false
+    });
+  }
+  
+  openPrivacySettingsModal() {
+    this.setState({
+      isPrivacySettingsModalActive: true
+    });
+  }
+
+  closePrivacySettingsModal() {
+    this.setState({
+      isPrivacySettingsModalActive: false
     });
   }
 
@@ -128,8 +144,6 @@ class App extends Component {
                   {...props}
                   user={this.state.user}
                   openSaveBookModal={this.openSaveBookModal}
-                  openCreateAccountModal={this.openCreateAccountModal}
-                  openLoginModal={this.openLoginModal}
                 />}
               />
               <Route
@@ -138,8 +152,14 @@ class App extends Component {
                   {...props}
                   user={this.state.user}
                   openSaveBookModal={this.openSaveBookModal}
-                  openCreateAccountModal={this.openCreateAccountModal}
-                  openLoginModal={this.openLoginModal}
+                />}
+              />
+              <Route
+                exact path="/my-list"
+                render={props => <UserListView
+                  {...props}
+                  user={this.state.user}
+                  openSaveBookModal={this.openSaveBookModal}
                 />}
               />
               <Route component={NotFoundView} />
@@ -149,7 +169,7 @@ class App extends Component {
           <Modals
             isCreateAccountModalActive={this.state.isCreateAccountModalActive}
             closeCreateAccountModal={this.closeCreateAccountModal}
-            logUserIn={this.logUserIn}
+            setUser={this.setUser}
             isLoginModalActive={this.state.isLoginModalActive}
             closeLoginModal={this.closeLoginModal}
             isSaveBookModalActive={this.state.isSaveBookModalActive}
@@ -158,6 +178,9 @@ class App extends Component {
             openCreateAccountModal={this.openCreateAccountModal}
             bookToSave={this.state.bookToSave}
             user={this.state.user}
+            closePrivacySettingsModal={this.closePrivacySettingsModal}
+            isPrivacySettingsModalActive={this.state.isPrivacySettingsModalActive}
+            openPrivacySettingsModal={this.openPrivacySettingsModal}
           />
         </div>
       </Router>

@@ -14,10 +14,11 @@ export default ({
   isBodyCentered,
   successRedirectPath,
   isLoading,
-  hasError
+  hasError,
+  isPrivacySettingsModal
 }) => {
 
-  const headerColor = (hasSuccess && '#20bc56') || (hasError && '#ff3860');
+  const headerColor = (hasSuccess && '#23d160') || (hasError && '#ff3860');
 
   return (
     <div className={isModalActive ? 'modal is-active' : 'modal'}>
@@ -28,7 +29,10 @@ export default ({
             {(hasSuccess && modalTitleSuccess) || (hasError && 'Error') || modalTitle}
           </p>
           <button
-            onClick={hasSuccess ? cancel : closeModal} className="delete has-shadow" aria-label="close" />
+            onClick={hasSuccess || isPrivacySettingsModal ? cancel : closeModal}
+            className="delete has-shadow"
+            aria-label="close"
+          />
         </header>
         <section className={`modal-card-body${isBodyCentered ? ' has-text-centered' : ''}`}>
           {BodyContent}

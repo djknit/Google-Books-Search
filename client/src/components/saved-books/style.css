@@ -1,3 +1,7 @@
+#saved-books {
+  padding-bottom: 1px;
+}
+
 #saved-books > label {
   text-align: left;
 }

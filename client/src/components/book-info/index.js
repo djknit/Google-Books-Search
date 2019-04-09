@@ -1,14 +1,15 @@
 import React from 'react';
 import Box from '../box';
+import moment from 'moment';
 import LinkButton from './link-button';
 import './style.css';
 
 export default ({
   book,
   openSaveBookModal,
-  openLoginModal,
-  openCreateAccountModal,
-  ...otherProps
+  timeAdded,
+  addedBy,
+  isPublicList
 }) => {
   
   const style = {
@@ -23,6 +24,15 @@ export default ({
 
   return (
     <Box style={style.box} className="book-info-display is-deep">
+      {timeAdded &&
+        <div className="content book-save-info">
+          <p>
+            Saved {moment(timeAdded).calendar()}
+            {isPublicList && <> by {addedBy || <em>anonymous</em>}</>}
+          </p>
+          <hr className="divider" />
+        </div>
+      }
       <h5 className="title is-5">{book.title}</h5>
       {book.subtitle && 
         <h5 className="subtitle is-5">{book.subtitle}</h5>
@@ -103,7 +113,9 @@ export default ({
               <LinkButton href={book.links.webReader} className="link-button middle">Open in Web Reader</LinkButton>
             }
             {book.links.info &&
-              <LinkButton href={book.links.info} className="link-button right">Go to Information Page</LinkButton>
+              <LinkButton href={book.links.info} className="link-button right">
+                <span className="go-to">Go to </span>Information Page
+              </LinkButton>
             }
           </div>
         }

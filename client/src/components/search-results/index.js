@@ -7,8 +7,6 @@ export default ({
   results,
   query,
   openSaveBookModal,
-  openLoginModal,
-  openCreateAccountModal,
   ...otherProps
 }) => {
 
@@ -33,8 +31,6 @@ export default ({
               book={item}
               key={item.gId}
               openSaveBookModal={openSaveBookModal}
-              openLoginModal={openLoginModal}
-              openCreateAccountModal={openCreateAccountModal}
             />
           ))}
         </> :

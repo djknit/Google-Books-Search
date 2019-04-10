@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 
 // Require server that has been configured w/ middleware
 const app = require('./config/server').app;
@@ -19,6 +20,10 @@ require('./config/database').connect(() => {
 const routes = require('./routes');
 const router = require('express').Router();
 router.use(routes);
+
+router.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+});
 
 app.use(router);
 

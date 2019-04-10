@@ -19,24 +19,41 @@
 * Include separate views for searching for titles and viewing saved titles.
 * Serve the app from a Node/Express server and store saved information in a Mongo database.
 
-# (Coming Soon...)
-
 ## Project Features
+* Allows users to enter a search term (title, author, publisher, etc.) to search for books using the Google Books API.
+* The top 10 matches for the query are displayed to the user.
+* Users can save books to the database.
+* Users can create an account or use the site as a guest.
+* Any user can save books to the "Public List" which is shared by all site visitors.
+* Users who are logged in can also save books to their personal list which can not be viewed by other users.
+* Privacy settings can be adjusted so that users can choose to share their username or email address or remain anonymous when they post to the Public List.
+
 
 ## Technologies Used
 #### Front End
+* React
 * Bulma
+* Axios
+* Moment
 
 #### Back End
 * Passport.js Local Strategy
 * Express
 * Node
 * MongoDB
+* Other npm packages used:
+  * iso-639-1
+  * Morgan
+  * Path
+  * Dotenv
+  * Connect-ensure-login
+  * Cookie-parser
+
+#### Public APIs
+* Google Books API
 
 ## Instructions for Use
-#### Building the App
-
-#### Running the App
+### (Coming Soon...)
 
 ## Developer
 This project is developed and maintained by David Knittel. Any and all questions, comments, suggestions, or proposed contributions are welcome.

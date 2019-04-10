@@ -72,7 +72,7 @@ router.get('/fail', (req, res) => {
   }
   else {
     response = {
-      message: 'Unknown error. You are not authenticated.',
+      message: 'You are not authenticated.',
       problems: {}
     }
   }

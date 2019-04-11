@@ -1,0 +1,39 @@
+.comments-section {
+  position: relative;
+  margin-top: 20px;
+  padding-top: 10px;
+  height: 0;
+}
+
+.comments-section.open {
+
+}
+
+.comments-section.closed {
+  animation-name: close;
+  animation-duration: 2s;
+  -webkit-animation-fill-mode: forwards;
+}
+
+.comments-section.open {
+  animation-name: open;
+  animation-duration: 2s;
+  -webkit-animation-fill-mode: forwards;
+}
+
+.comments-section .comment-toggle {
+  position: absolute;
+  top: -56px;
+  left: 0;
+}
+
+/* Animations */
+@keyframes open {
+  from { height: 0; }
+  to { height: auto; }
+}
+
+@keyframes close {
+  from { height: auto; }
+  to { height: 0; }
+}

@@ -27,11 +27,13 @@ export default ({
         list.map(item => (
           <BookInfoDisplay
             book={item.book}
-            key={item.book._id}
+            key={item._id}
             openSaveBookModal={openSaveBookModal}
             timeAdded={item.timeAdded}
             addedBy={item.addedBy}
             isPublicList={isPublicList}
+            comments={item.notes}
+            listItemId={item._id}
           />
         )) 
         :

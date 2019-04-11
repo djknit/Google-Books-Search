@@ -1,15 +1,18 @@
 import React from 'react';
-import Box from '../box';
-import moment from 'moment';
-import LinkButton from './link-button';
 import './style.css';
+import moment from 'moment';
+import Box from '../box';
+import LinkButton from './link-button';
+import CommentsSection from './comments';
 
 export default ({
   book,
   openSaveBookModal,
   timeAdded,
   addedBy,
-  isPublicList
+  isPublicList,
+  comments,
+  listItemId
 }) => {
   
   const style = {
@@ -123,6 +126,14 @@ export default ({
         <div className="lower-button-area">
           <button onClick={save} className="button is-primary">Save</button>
         </div>
+        {comments &&
+          <CommentsSection 
+            isPublicList={isPublicList}
+            listItemId={listItemId}
+            comments={comments}
+          />
+        }
+        
       </div>
     </Box>
   );

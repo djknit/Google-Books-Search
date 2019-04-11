@@ -13,7 +13,7 @@ router.get(
 );
 
 router.post(
-  '/guest',
+  '/save/guest',
   (req, res) => {
     const { bookInfo, note } = req.body;
     if (!bookInfo || !bookInfo.gId) res.status(400).json({ message: 'Missing book information or missing Google Books Id' });
@@ -33,7 +33,7 @@ router.post(
 );
 
 router.post(
-  '/user',
+  '/save/user',
   require('connect-ensure-login').ensureLoggedIn('/api/auth/fail'),
   (req, res) => {
     const { bookInfo, note } = req.body;
@@ -50,6 +50,35 @@ router.post(
         error => res.status(500).json({ error })
       ),
       error => res.status(500).json({ error })
+    );
+  }
+);
+
+router.post(
+  '/comment/:listItemId',
+  require('connect-ensure-login').ensureLoggedIn('/api/auth/fail'),
+  (req, res) => {
+    controllers.PublicList.addComment(
+      req.params.listItemId,
+      req.body.comment,
+      req.user._id,
+      result => res.json(result),
+      err => res.status(500).json({ message: err })
+    );
+  }
+);
+
+router.delete(
+  '/comment',
+  require('connect-ensure-login').ensureLoggedIn('/api/auth/fail'),
+  (req, res) => {
+    const { listItemId, commentId } = req.body;
+    controllers.PublicList.deleteComment(
+      listItemId,
+      commentId,
+      req.user._id,
+      result => res.json(result),
+      err => res.status(500).json({ message: err })
     );
   }
 );

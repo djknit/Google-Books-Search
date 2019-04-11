@@ -82,7 +82,6 @@
 .book-info-display .lower-button-area {
   padding-top: 10px;
   text-align: right;
-  clear: both;
 }
 
 @media (max-width: 494px) and (min-width: 360px) {

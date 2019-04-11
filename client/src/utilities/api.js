@@ -29,8 +29,8 @@ export default {
     checkSavedStatusAsUser: (bookInfo) => savedApi.get(`/check-if-saved/user/${bookInfo.gId}`),
     publicList: {
       getList: () => savedApi.get('/public-list'),
-      postAsGuest: (bookInfo, note) => savedApi.post('/public-list/guest', { bookInfo, note }),
-      postAsUser: (bookInfo, note) => savedApi.post('/public-list/user', { bookInfo, note })
+      postAsGuest: (bookInfo, note) => savedApi.post('/public-list/save/guest', { bookInfo, note }),
+      postAsUser: (bookInfo, note) => savedApi.post('/public-list/save/user', { bookInfo, note })
     },
     userList: {
       getList: () => savedApi.get('/user-list'),

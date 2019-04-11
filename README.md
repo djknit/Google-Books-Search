@@ -41,6 +41,7 @@
 * Express
 * Node
 * MongoDB
+* Mongoose ORM
 * Other npm packages used:
   * iso-639-1
   * Morgan

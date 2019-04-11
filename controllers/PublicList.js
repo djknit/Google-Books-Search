@@ -13,12 +13,11 @@ module.exports = {
       // Protect user information according to users` sharing preferences
       const books = res.books.map(book => {
         if (!book.addedBy) return book;
-        console.log(book.addedBy)
-        console.log(book.timeAdded.getTime());
         let bookCopy = {
           book: book.book,
           notes: book.notes,
-          timeAdded: book.timeAdded.getTime()
+          timeAdded: book.timeAdded.getTime(),
+          _id: book._id
         }
         if (book.addedBy.shareUsername) {
           bookCopy.addedBy = book.addedBy.username;
@@ -26,15 +25,13 @@ module.exports = {
         }
         if (book.addedBy.shareEmail) {
           bookCopy.addedBy = book.addedBy.email;
-          console.log(bookCopy)
-          console.log(bookCopy.addedBy)
           return bookCopy;
         }
         return bookCopy;
       });
       cb({ books });
     })
-    .catch(err => console.log(err))
+    .catch(handleError)
   ,
   checkIfListContainsBook: (mongoBookId, cb, handleError) => PublicList.findOne({ 'books.book': { _id: mongoBookId } })
     .then(cb)
@@ -71,5 +68,37 @@ module.exports = {
       },
       handleError
     )
+  },
+  addComment(listItemId, commentBody, userId, cb, handleError) {
+    // source: https://stackoverflow.com/questions/26156687/mongoose-find-update-subdocument/26157458
+    PublicList.findOneAndUpdate(
+      { 'books._id': listItemId },
+      {
+        $set: {
+          'books.$.notes': {
+            $push: {
+              body: commentBody,
+              time: new Date(),
+              user: userId
+            }
+          }
+        }
+      },
+      { new: true }
+    ).then(cb).catch(handleError);
+  },
+  deleteComment( listItemId, commentId, userId, cb, handleError) {
+    PublicList.findByIdAndUpdate(
+      listItemId,
+      {
+        $pull: {
+          'books.notes': {
+            _id: commentId,
+            user: userId
+          }
+        }
+      },
+      { new: true }
+    ).then(cb).catch(handleError);
   }
 }

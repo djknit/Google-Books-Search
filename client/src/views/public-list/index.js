@@ -20,7 +20,7 @@ class publicListView extends Component {
       })
       .catch(err => {
         let errorMessage = 'There was an error getting the list from the server. ' +
-          (err.response.data && err.response.data.message) || '';
+          (err.response && err.response.data && err.response.data.message) || '';
         this.setState({ errorMessage });
       });
   }
@@ -34,6 +34,9 @@ class publicListView extends Component {
           openSaveBookModal={this.props.openSaveBookModal}
           isPublicList
           errorMessage={this.state.errorMessage}
+          user={this.props.user}
+          openLoginModal={this.props.openLoginModal}
+          openCreateAccountModal={this.props.openCreateAccountModal}
         />
       </div>
     );

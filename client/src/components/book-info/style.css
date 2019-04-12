@@ -1,3 +1,7 @@
+.book-info-display {
+  overflow: hidden;
+}
+
 .book-info-display .book-save-info {
   margin-bottom: 10px;
 }
@@ -9,6 +13,7 @@
   width: calc(100% + 40px);
   margin-left: -20px;
 }
+
 .book-info-display .title, .book-info-display .subtitle {
   text-align: center;
   margin-bottom: .5rem;
@@ -25,11 +30,9 @@
   float: left;
   margin: 7px 10px 5px 0;
 }
-
 .book-info-display > .content .description {
   margin-bottom: 10px;
 }
-
 .book-info-display .spacer {
   clear: both;
 }  
@@ -48,7 +51,7 @@
 }
 
 .book-info-display .content.links {
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 }
 .book-info-display .link-button {
   height: 52px;
@@ -75,16 +78,20 @@
 .book-info-display .preview.link-button:focus {
   border-color: #bbbbbb;
 }
-.book-info-display .link-button.right {
+.book-info-display .link-button:last-child {
   float: right;
 }
 
 .book-info-display .lower-button-area {
   padding-top: 10px;
   text-align: right;
+  position: relative;
+}
+.book-info-display .lower-button-area > button {
+  /* margin-bottom: 20px; */
 }
 
-@media (max-width: 494px) and (min-width: 360px) {
+@media (max-width: 494px) {
   .book-info-display .link-button {
     height: calc(13vw - 12.35px);
     width: calc(33vw - 31.35px);
@@ -129,7 +136,6 @@
     border-radius: 17px;
   }
   .book-info-display .preview.link-button {
-    position: relative;
     margin-right: .7px;
   }
 }

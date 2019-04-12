@@ -1,39 +1,146 @@
+.comment-toggle {
+  position: absolute;
+  top: 10px;
+  left: 0;
+}
+.comment-toggle > span.hide {
+  position: absolute;
+  left: 12px;
+  opacity: 0;
+}
+.comment-toggle > span.fade-out {
+  animation-name: fade-out;
+  animation-duration: 2s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+.comment-toggle > span.fade-in {
+  animation-name: fade-in;
+  animation-duration: 2s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+.comment-toggle > i.fas.flip-up {
+  animation-name: flip-up;
+  animation-duration: 2s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+.comment-toggle > i.fas.flip-down {
+  animation-name: flip-down;
+  animation-duration: 2s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
 .comments-section {
-  position: relative;
-  margin-top: 20px;
-  padding-top: 10px;
-  height: 0;
+  width: 100%;
+  padding-top: .5px;
 }
-
-.comments-section.open {
-
-}
-
 .comments-section.closed {
   animation-name: close;
   animation-duration: 2s;
   -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
 }
-
 .comments-section.open {
   animation-name: open;
   animation-duration: 2s;
   -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
 }
 
-.comments-section .comment-toggle {
-  position: absolute;
-  top: -56px;
-  left: 0;
+.comments-section > .divider:first-child {
+  width: 100%;
+  margin: 22px 0 20px;
+  height: 1px;
+}
+.comments-section > .divider {
+  width: 90%;
+  /* margin-left: auto;
+  margin-right: auto; */
+  margin: 0 auto 10px;
+  height: .7px;
+}
+
+.comments-section .comment {
+  text-align: left;
+}
+
+.comments-section form {
+  text-align: right;
+}
+.comments-section form button {
+  margin-top: 10px;
+}
+.comments-section p.no-comments,
+.comments-section p.must-login {
+  font-size: 1.1rem;
+  margin-top: 10px;
+  text-align: center;
 }
 
 /* Animations */
+/* source: https://css-tricks.com/animate-to-an-inline-style/ */
 @keyframes open {
   from { height: 0; }
-  to { height: auto; }
+}
+@keyframes close {
+  to { height: 0; }
 }
 
-@keyframes close {
-  from { height: auto; }
-  to { height: 0; }
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;      
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;      
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes flip-up {
+  from {
+    -moz-transform: scale(1, 1);
+    -webkit-transform: scale(1, 1);
+    -o-transform: scale(1, 1);
+    -ms-transform: scale(1, 1);
+    transform: scale(1, 1);
+  }
+  to {
+    -moz-transform: scale(1, -1);
+    -webkit-transform: scale(1, -1);
+    -o-transform: scale(1, -1);
+    -ms-transform: scale(1, -1);
+    transform: scale(1, -1);        
+  }
+}
+@keyframes flip-down {
+  from {
+    -moz-transform: scale(1, -1);
+    -webkit-transform: scale(1, -1);
+    -o-transform: scale(1, -1);
+    -ms-transform: scale(1, -1);
+    transform: scale(1, -1);   
+  }
+  to {
+    -moz-transform: scale(1, 1);
+    -webkit-transform: scale(1, 1);
+    -o-transform: scale(1, 1);
+    -ms-transform: scale(1, 1);
+    transform: scale(1, 1);
+  }
 }

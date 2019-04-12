@@ -74,25 +74,32 @@ button.has-no-shadow:focus,
 button.button.has-no-shadow {
   box-shadow: none;
 }
-input.input {
+input.input,
+textarea.textarea {
   box-shadow: inset 0 0 5px #505050;
 }
-input.input:hover {
+input.input:hover,
+textarea.textarea:hover {
   box-shadow: inset 0 0 2px #505050;
 }
-input.input:disabled {
+input.input:disabled,
+textarea.textarea:disabled {
   box-shadow: none;
 }
-input.input:focus {
+input.input:focus,
+textarea.textarea:focus {
   box-shadow: 0 0 6px #3273dc;
 }
-input.input.is-danger {
+input.input.is-danger,
+textarea.textarea.is-danger {
   box-shadow: inset 0 0 5px #ff3860;
 }
-input.input.is-danger:hover {
+input.input.is-danger:hover,
+textarea.textarea.is-danger:hover {
   box-shadow: inset 0 0 2px #ff3860;
 }
-input.input.is-danger:focus {
+input.input.is-danger:focus,
+textarea.textarea.is-danger:focus {
   box-shadow: 0 0 6px #ff3860;
 }
 .notification.has-shadow {

@@ -152,6 +152,8 @@ class App extends Component {
                   {...props}
                   user={this.state.user}
                   openSaveBookModal={this.openSaveBookModal}
+                  openCreateAccountModal={this.openCreateAccountModal}
+                  openLoginModal={this.openLoginModal}
                 />}
               />
               <Route

@@ -12,7 +12,10 @@ export default ({
   addedBy,
   isPublicList,
   comments,
-  listItemId
+  listItemId,
+  user,
+  openCreateAccountModal,
+  openLoginModal
 }) => {
   
   const style = {
@@ -58,7 +61,7 @@ export default ({
         </h5> :
         <h5 className="subtitle is-5 author">Author unknown</h5>
       }
-      <div className="content">
+      <div className="content book-info">
         {book.image &&
           <img src={book.image} alt={book.title}/>
         }
@@ -113,10 +116,10 @@ export default ({
               </a>
             }
             {book.links.webReader &&
-              <LinkButton href={book.links.webReader} className="link-button middle">Open in Web Reader</LinkButton>
+              <LinkButton href={book.links.webReader} className="link-button">Open in Web Reader</LinkButton>
             }
             {book.links.info &&
-              <LinkButton href={book.links.info} className="link-button right">
+              <LinkButton href={book.links.info} className="link-button">
                 <span className="go-to">Go to </span>Information Page
               </LinkButton>
             }
@@ -125,15 +128,17 @@ export default ({
         <hr className="divider" />
         <div className="lower-button-area">
           <button onClick={save} className="button is-primary">Save</button>
+          {false &&
+            <CommentsSection
+              isPublicList={isPublicList}
+              listItemId={listItemId}
+              comments={comments}
+              user={user}
+              openCreateAccountModal={openCreateAccountModal}
+              openLoginModal={openLoginModal}
+            />
+          }
         </div>
-        {comments &&
-          <CommentsSection 
-            isPublicList={isPublicList}
-            listItemId={listItemId}
-            comments={comments}
-          />
-        }
-        
       </div>
     </Box>
   );

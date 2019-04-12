@@ -8,14 +8,33 @@ module.exports = {
     }, {
       path: 'books.addedBy',
       select: ['username', 'email', 'shareUsername', 'shareEmail']
+    }, {
+      path: 'books.notes'
     }])
     .then(res => {
+      console.log(res.books)
       // Protect user information according to users` sharing preferences
       const books = res.books.map(book => {
+        const notes = book.notes.map(note => {
+          let noteCopy = {
+            body: note.body,
+            time: note.time.getTime(),
+            _id: note._id
+          }
+          if (note.user.shareUsername) {
+            noteCopy.user = note.user.username;
+            return noteCopy;
+          }
+          if (note.user.shareEmail) {
+            noteCopy.user = note.user.email;
+            return noteCopy;
+          }
+          return noteCopy;
+        })
         if (!book.addedBy) return book;
         let bookCopy = {
           book: book.book,
-          notes: book.notes,
+          notes,
           timeAdded: book.timeAdded.getTime(),
           _id: book._id
         }

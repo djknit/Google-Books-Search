@@ -30,7 +30,11 @@ export default {
     publicList: {
       getList: () => savedApi.get('/public-list'),
       postAsGuest: (bookInfo, note) => savedApi.post('/public-list/save/guest', { bookInfo, note }),
-      postAsUser: (bookInfo, note) => savedApi.post('/public-list/save/user', { bookInfo, note })
+      postAsUser: (bookInfo, note) => savedApi.post('/public-list/save/user', { bookInfo, note }),
+      postComment: (listItemId, comment) =>
+        savedApi.post(`public-list/comment/${listItemId}`, { comment }),
+      deleteComment: (listItemId, commentId) =>
+        savedApi.delete('/public-list/comment', { data: { listItemId, commentId } })
     },
     userList: {
       getList: () => savedApi.get('/user-list'),

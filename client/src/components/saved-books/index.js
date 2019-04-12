@@ -8,7 +8,10 @@ export default ({
   openSaveBookModal,
   isPublicList,
   errorMessage,
-  hasError
+  hasError,
+  user,
+  openLoginModal,
+  openCreateAccountModal
 }) => {
 
   const style = {
@@ -24,7 +27,7 @@ export default ({
         {isPublicList ? 'Public' : 'Your'} List
       </label>
       {list && list.length ?
-        list.map(item => (
+        list.map((item, index) => (
           <BookInfoDisplay
             book={item.book}
             key={item._id}
@@ -34,6 +37,10 @@ export default ({
             isPublicList={isPublicList}
             comments={item.notes}
             listItemId={item._id}
+            listItemArrayIndex={index}
+            user={user}
+            openLoginModal={openLoginModal}
+            openCreateAccountModal={openCreateAccountModal}
           />
         )) 
         :

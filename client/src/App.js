@@ -125,6 +125,7 @@ class App extends Component {
             <Navbar
               openCreateAccountModal={this.openCreateAccountModal}
               openLoginModal={this.openLoginModal}
+              openPrivacySettingsModal={this.openPrivacySettingsModal}
               user={this.state.user}
               logOut={this.logUserOut}
             />

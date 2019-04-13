@@ -1,4 +1,12 @@
+.navbar-item {
+  cursor: pointer;
+}
+
 .navbar-item.is-active {
   font-style: italic;
   cursor: text;
+}
+
+.navbar .navbar-brand .navbar-item:hover {
+  color: #3273dc;
 }

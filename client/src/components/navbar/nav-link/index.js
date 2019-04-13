@@ -4,12 +4,24 @@ import './style.css';
 
 export default ({
   path,
-  text
+  text,
+  onClick
 }) => {
 
   return (
-    <Link to={path} className={window.location.pathname === path ? "navbar-item is-active" : "navbar-item"} >
-      {text}
-    </Link>
+    path ?
+      <Link
+        to={path}
+        className={window.location.pathname === path ? "navbar-item is-active" : "navbar-item"}
+      >
+        {text}
+      </Link>
+      :
+      <span
+        className={window.location.pathname === path ? "navbar-item is-active" : "navbar-item"}
+        onClick={onClick}
+      >
+        {text}
+      </span>
   );
 }

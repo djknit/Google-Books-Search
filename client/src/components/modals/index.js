@@ -45,13 +45,15 @@ export default ({
           openPrivacySettingsModal={openPrivacySettingsModal}
         />
       }
-      <PrivacySettingsModal
-        user={user}
-        closeModal={closePrivacySettingsModal}
-        isActive={isPrivacySettingsModalActive}
-        closeSaveBookModal={closeSaveBookModal}
-        setUser={setUser}
-      />
+      {user &&
+        <PrivacySettingsModal
+          user={user}
+          closeModal={closePrivacySettingsModal}
+          isActive={isPrivacySettingsModalActive}
+          closeSaveBookModal={closeSaveBookModal}
+          setUser={setUser}
+        />
+      }
     </>
   );
 }

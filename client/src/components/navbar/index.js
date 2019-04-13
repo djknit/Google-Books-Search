@@ -6,6 +6,7 @@ export default ({
   user,
   openCreateAccountModal,
   openLoginModal,
+  openPrivacySettingsModal,
   logOut
 }) => {
 
@@ -33,6 +34,26 @@ export default ({
             </div>
           </div>
         </div>
+        {user &&
+          <div className="navbar-item">
+            <div className="dropdown is-hoverable">
+              <div className="dropdown-trigger">
+                <button className="button has-no-shadow" aria-haspopup="true" aria-controls="account-nav-dropdown">
+                  <span>Account</span>
+                  <span className="icon is-small">
+                    <i className="fas fa-angle-down" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
+              <div className="dropdown-menu has-shadow" id="account-nav-dropdown" role="menu">
+                <div className="dropdown-content">
+                  <NavLink text="Privacy settings" onClick={openPrivacySettingsModal} />
+                  {/* <NavLink path="/my-list" text="Your List" /> */}
+                </div>
+              </div>
+            </div>
+          </div>
+        }
       </div>  
       <div id="auth-links" className="navbar-menu">
         <div className="navbar-end">

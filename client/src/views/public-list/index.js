@@ -6,10 +6,17 @@ import api from '../../utilities/api';
 class publicListView extends Component {
   constructor(props) {
     super(props);
+    this.updateList = this.updateList.bind(this);
     this.state = {
       list: null,
       errorMessage: null
     };
+  }
+
+  updateList(newList) {
+    this.setState({
+      list: newList
+    });
   }
 
   componentDidMount() {
@@ -37,6 +44,7 @@ class publicListView extends Component {
           user={this.props.user}
           openLoginModal={this.props.openLoginModal}
           openCreateAccountModal={this.props.openCreateAccountModal}
+          updateList={this.updateList}
         />
       </div>
     );

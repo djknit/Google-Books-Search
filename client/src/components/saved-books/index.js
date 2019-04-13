@@ -11,7 +11,8 @@ export default ({
   hasError,
   user,
   openLoginModal,
-  openCreateAccountModal
+  openCreateAccountModal,
+  updateList
 }) => {
 
   const style = {
@@ -41,6 +42,7 @@ export default ({
             user={user}
             openLoginModal={openLoginModal}
             openCreateAccountModal={openCreateAccountModal}
+            updateList={updateList}
           />
         )) 
         :

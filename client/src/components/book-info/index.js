@@ -15,7 +15,8 @@ export default ({
   listItemId,
   user,
   openCreateAccountModal,
-  openLoginModal
+  openLoginModal,
+  updateList
 }) => {
   
   const style = {
@@ -128,7 +129,7 @@ export default ({
         <hr className="divider" />
         <div className="lower-button-area">
           <button onClick={save} className="button is-primary">Save</button>
-          {false &&
+          {comments &&
             <CommentsSection
               isPublicList={isPublicList}
               listItemId={listItemId}
@@ -136,6 +137,7 @@ export default ({
               user={user}
               openCreateAccountModal={openCreateAccountModal}
               openLoginModal={openLoginModal}
+              updateList={updateList}
             />
           }
         </div>

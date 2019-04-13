@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './style.css';
 import api from '../../../utilities/api';
+import moment from 'moment';
 
 class CommentsSection extends Component {
   constructor(props) {
@@ -14,7 +15,8 @@ class CommentsSection extends Component {
       isExpanded: null,
       newComment: '',
       isLoading: false,
-      height: null
+      height: null,
+      errorMessage: null
     }
   }
 
@@ -32,10 +34,35 @@ class CommentsSection extends Component {
 
   postComment(event) {
     event.preventDefault();
-    console.log(this.state.newComment)
+    const newComment = this.state.newComment.trim();
+    console.log(newComment);
+    if (!newComment) return this.setState({
+      errorMessage: "You can't submit an empty comment.",
+      height: null
+    });
+    this.setState({ isLoading: true });
     api.saved.publicList.postComment(this.props.listItemId, this.state.newComment)
-      .then(res => console.log(res))
-      .catch()
+      .then(res => {
+        console.log(res);
+        if (res.data && res.data.books) {
+          this.setState({
+            errorMessage: null,
+            newComment: '',
+            isLoading: false,
+            height: null
+          });
+          this.props.updateList(res.data.books.reverse());
+        }
+      })
+      .catch(err => {
+        let errorMessage = 'An error was encountered: ' +
+          (err.response && err.response.data && err.response.data.message) || 'Unknown error.';
+        this.setState({
+          errorMessage,
+          isLoading: false,
+          height: null
+        });
+      });
   }
 
   deleteComment(commentAndListItemIds) {
@@ -58,13 +85,17 @@ class CommentsSection extends Component {
   componentDidUpdate() {
     const height = this.commentsSection.current.clientHeight;
     console.log(height)
-    if (height !== this.state.height && height !== 0) this.setState({ height });
+    if (height !== this.state.height && height > 10) this.setState({ height });
   }
 
   render() {
     return (
       <>
-        <button onClick={this.toggleComments} className="comment-toggle button is-primary">
+        <button
+          onClick={this.toggleComments}
+          className="comment-toggle button is-primary"
+          disabled={this.state.isLoading}
+        >
           <span
             className={
               (this.state.isExpanded === true && 'fade-out') ||
@@ -91,6 +122,7 @@ class CommentsSection extends Component {
             }`}
           />
         </button>
+
         <div
           className={`comments-section${
             (this.state.isExpanded === true && ' open') ||
@@ -108,7 +140,7 @@ class CommentsSection extends Component {
           {this.props.comments.length ?
             this.props.comments.map(comment => (
               <div className="comment" id={comment._id} key={comment._id}>
-                <p className="time">{comment.time}</p>
+                <p className="time">{moment(comment.time).calendar()}</p>
                 <p>
                   <span className="author">{comment.user}:&nbsp;</span>
                   {comment.body}
@@ -121,12 +153,18 @@ class CommentsSection extends Component {
             </div>
           }
           <hr className="divider" />
+          {this.state.errorMessage &&
+            <p className={this.state.isLoading ? 'error-message loading' : 'error-message'}>
+              {this.state.errorMessage}
+            </p>
+          }
           {this.props.user ?
             <form className="new-comment">
               <textarea
                 className="textarea has-fixed-size"
                 placeholder="Share your thoughts..."
                 rows="2"
+                disabled={this.state.isLoading}
                 value={this.state.newComment}
                 onChange={this.handleChange}
               />

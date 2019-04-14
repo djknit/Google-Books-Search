@@ -67,6 +67,7 @@
   padding-bottom: 12px;
   line-height: 1.4;
   font-size: .9rem;
+  position: relative;
 }
 .comments-section .comment .time {
   font-size: .69rem;
@@ -75,6 +76,30 @@
 }
 .comments-section .comment .author {
   font-weight: 500;
+}
+.comments-section .comment .delete-comment {
+  position: absolute;
+  display: inline-block;
+  top: -7px;
+  right: 1px;
+  color: #ff3860;
+  cursor: pointer;
+}
+.comment .delete-comment .word {
+  opacity: 0.6;
+  position: relative;
+  top: 1px;
+  font-size: .8rem;
+}
+.comment .delete-comment .letter {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.comment .delete-comment:hover .word {
+  opacity: 1;
+}
+.comment .delete-comment:hover .letter {
+  font-weight: 700;
 }
 
 .comments-section p.error-message {

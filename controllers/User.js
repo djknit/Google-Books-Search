@@ -1,9 +1,6 @@
 const User = require("../models/User");
 
 function createAccount(newUser, callback) {
-  console.log('\n\n')
-  console.log(newUser)
-  console.log('\n------------------------------')
   User.create(newUser)
     .then(result => {
       if (result) {
@@ -136,6 +133,42 @@ module.exports = {
       },
       handleError
     );
+  },
+  addComment(userId, listItemId, commentBody, cb, handleError) {
+    const note = {
+      body: commentBody,
+      time: new Date()
+    };
+    User.findOneAndUpdate(
+      {
+        _id: userId,
+        'books._id': listItemId
+      }, {
+        $push: {
+          'books.$.notes': note
+        }
+      }, {
+        new: true
+      }
+    ).populate('books.book')
+      .then(res => res ? cb({ books: res.books }) : cb(res))
+      .catch(handleError);
+  },
+  deleteComment(userId, listItemId, commentId, cb, handleError) {
+    User.findOneAndUpdate(
+      {
+        _id: userId,
+        'books._id': listItemId
+      }, {
+        $pull: {
+          'books.$.notes': {
+            _id: commentId
+          }
+        }
+      }
+    ).populate('books.book')
+      .then(res => res ? cb({ books: res.books }) : cb(res))
+      .catch(handleError);
   },
   updateSharingSettings(userId, shareUsername, shareEmail, cb, handleError) {
     User.findByIdAndUpdate(

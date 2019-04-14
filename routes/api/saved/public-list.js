@@ -6,6 +6,7 @@ router.get(
   '/',
   (req, res) => {
     controllers.PublicList.getList(
+      req.user && req.user._id || null,
       result => res.json(result),
       error => res.status(500).json({ error })
     );

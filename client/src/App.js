@@ -64,11 +64,17 @@ class App extends Component {
 
   checkAuthentication() {
     api.auth.test()
-      .then(res => res.data.success ?
-        this.setState({ user: res.data.user }) :
-        this.setState({ user: null })
-      )
-      .catch(err => console.log(err));
+      .then(res => {
+        if (res && res.data && res.data.success) {
+          this.setState({ user: res.data.user })
+          console.log(window.location.pathname)
+        }
+        else this.setState({ user: null })
+      })
+      .catch(err => {
+        console.log(err)
+        console.log(window.location.pathname)
+      });
   }
 
   setUser(user) {

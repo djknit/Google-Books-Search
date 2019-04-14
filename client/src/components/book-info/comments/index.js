@@ -34,14 +34,20 @@ class CommentsSection extends Component {
 
   postComment(event) {
     event.preventDefault();
+
     const newComment = this.state.newComment.trim();
     console.log(newComment);
     if (!newComment) return this.setState({
-      errorMessage: "You can't submit an empty comment.",
+      errorMessage: `You can't submit an empty ${this.props.isPublicList ? 'comment' : 'note'}.`,
       height: null
     });
     this.setState({ isLoading: true });
-    api.saved.publicList.postComment(this.props.listItemId, this.state.newComment)
+
+    const apiCall = this.props.isPublicList ?
+      api.saved.publicList.postComment :
+      api.saved.userList.addComment;
+
+    apiCall(this.props.listItemId, this.state.newComment)
       .then(res => {
         console.log(res);
         if (res.data && res.data.books) {
@@ -70,11 +76,9 @@ class CommentsSection extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.comments)
-    //get height
+    // console.log(this.props.comments)
     // source: https://stackoverflow.com/questions/35153599/reactjs-get-height-of-an-element
     const height = this.commentsSection.current.clientHeight;
-    console.log(height)
     this.setState({ height });
   }
 
@@ -84,11 +88,12 @@ class CommentsSection extends Component {
 
   componentDidUpdate() {
     const height = this.commentsSection.current.clientHeight;
-    console.log(height)
     if (height !== this.state.height && height > 10) this.setState({ height });
   }
 
   render() {
+    const things = this.props.isPublicList ? 'comments' : 'notes';
+
     return (
       <>
         <button
@@ -103,7 +108,7 @@ class CommentsSection extends Component {
               ''
             }
           >
-            Show comments&nbsp;
+            Show {things}&nbsp;
           </span>
           <span
             className={
@@ -112,7 +117,7 @@ class CommentsSection extends Component {
               'hide'
             }
           >
-            Hide comments&nbsp;
+            Hide {things}&nbsp;
           </span>
           <i
             className={`fas fa-chevron-down${
@@ -141,15 +146,23 @@ class CommentsSection extends Component {
             this.props.comments.map(comment => (
               <div className="comment" id={comment._id} key={comment._id}>
                 <p className="time">{moment(comment.time).calendar()}</p>
+                {(comment.currentUser || !this.props.isPublicList) &&
+                  <div className="delete-comment">                  
+                    <span className="word">delete </span>
+                    <span className="letter">x</span>
+                  </div>
+                }
                 <p>
-                  <span className="author">{comment.user}:&nbsp;</span>
+                  {this.props.isPublicList &&
+                    <span className="author">{comment.user || <em>Anonymous</em>}:&nbsp;</span>
+                  }
                   {comment.body}
                 </p>
               </div>
             ))
             :
             <div className="content">
-              <p className="no-comments">There are no comments for this book yet.</p>
+              <p className="no-comments">There are no {things} for this book yet.</p>
             </div>
           }
           <hr className="divider" />
@@ -158,11 +171,11 @@ class CommentsSection extends Component {
               {this.state.errorMessage}
             </p>
           }
-          {this.props.user ?
+          {this.props.user || !this.props.isPublicList ?
             <form className="new-comment">
               <textarea
                 className="textarea has-fixed-size"
-                placeholder="Share your thoughts..."
+                placeholder={this.props.isPublicList ? "Share your thoughts..." : "Write a note..."}
                 rows="2"
                 disabled={this.state.isLoading}
                 value={this.state.newComment}

@@ -7,9 +7,11 @@ class publicListView extends Component {
   constructor(props) {
     super(props);
     this.updateList = this.updateList.bind(this);
+    this.getList = this.getList.bind(this);
     this.state = {
       list: null,
-      errorMessage: null
+      errorMessage: null,
+      noUser: !this.props.user
     };
   }
 
@@ -19,7 +21,7 @@ class publicListView extends Component {
     });
   }
 
-  componentDidMount() {
+  getList() {
     api.saved.publicList.getList()
       .then(res => {
         console.log(res)
@@ -30,6 +32,17 @@ class publicListView extends Component {
           (err.response && err.response.data && err.response.data.message) || '';
         this.setState({ errorMessage });
       });
+  }
+
+  componentDidMount() {
+    this.getList();
+  }
+
+  componentDidUpdate() {
+    if (this.props.user && this.state.noUser) {
+      this.getList();
+      this.setState({ noUser: false });
+    }
   }
 
   render() {

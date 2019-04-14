@@ -53,14 +53,4 @@ router.get(
   }
 );
 
-// router.get('/test',
-//   (req, res) => {
-//     controllers.Book.findByMongoId(
-//       req.body.bookInfo.gId,
-//       result => res.json(result),
-//       er => res.json({success: false, err: er})
-//     )    
-//   }
-// );
-
 module.exports = router;

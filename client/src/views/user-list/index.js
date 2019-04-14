@@ -6,11 +6,18 @@ import api from '../../utilities/api';
 class publicListView extends Component {
   constructor(props) {
     super(props);
+    this.updateList = this.updateList.bind(this);
     this.state = {
       list: null,
       errorMessage: null,
       hasError: false
     };
+  }
+
+  updateList(newList) {
+    this.setState({
+      list: newList
+    });
   }
 
   componentDidMount() {
@@ -20,7 +27,7 @@ class publicListView extends Component {
         if (res.data.books) this.setState({ list: res.data.books.reverse() });
       })
       .catch(err => {
-        // if (err.response.status === 401) return this.props.history.push('/');
+        if (err && err.response && err.response.status === 401) return this.props.history.push('/');
         this.setState({
           hasError: true,
           errorMessage: (err.response.data && err.response.data.message) || 'Unknown error.'
@@ -37,6 +44,7 @@ class publicListView extends Component {
           openSaveBookModal={this.props.openSaveBookModal}
           errorMessage={this.state.errorMessage}
           hasError={this.state.hasError}
+          updateList={this.updateList}
         />
       </div>
     );

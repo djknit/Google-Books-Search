@@ -36,4 +36,33 @@ router.post(
   }
 );
 
+router.post(
+  '/comment/:listItemId',
+  require('connect-ensure-login').ensureLoggedIn('/api/auth/fail'),
+  (req, res) => {
+    controllers.User.addComment(
+      req.user._id,
+      req.params.listItemId,
+      req.body.comment,
+      result => res.json(result),
+      err => res.status(500).json({ message: err })
+    );
+  }
+);
+
+router.delete(
+  '/comment',
+  require('connect-ensure-login').ensureLoggedIn('/api/auth/fail'),
+  (req, res) => {
+    const { listItemId, commentId } = req.body;
+    controllers.User.deleteComment(
+      req.user._id,
+      listItemId,
+      commentId,
+      result => res.json(result),
+      err => res.status(500).json({ message: err })
+    );
+  }
+);
+
 module.exports = router;

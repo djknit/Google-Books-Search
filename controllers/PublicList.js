@@ -1,7 +1,7 @@
 const PublicList = require('../models/PublicList');
 const Book = require('../models/Book');
 
-const processList = list => list.map(book => {
+const processList = (list, currentUserId) => list.map(book => {
   // Protect user information according to users` sharing preferences
   const notes = book.notes.map(note => {
     let noteCopy = {
@@ -9,6 +9,8 @@ const processList = list => list.map(book => {
       time: note.time.getTime(),
       _id: note._id
     }
+    if (!note.user) return noteCopy;
+    if (`${note.user._id}` === `${currentUserId}`) noteCopy.currentUser = true;
     if (note.user.shareUsername) {
       noteCopy.user = note.user.username;
       return noteCopy;
@@ -26,6 +28,7 @@ const processList = list => list.map(book => {
     _id: book._id
   }
   if (!book.addedBy) return bookCopy;
+  if (`${book.addedBy._id}` === `${currentUserId}`) bookCopy.currentUser = true;
   if (book.addedBy.shareUsername) {
     bookCopy.addedBy = book.addedBy.username;
     return bookCopy;
@@ -38,7 +41,7 @@ const processList = list => list.map(book => {
 });
 
 module.exports = {
-  getList: (cb, handleError) => PublicList.findOne({})
+  getList: (currentUserId, cb, handleError) => PublicList.findOne({})
     .populate([{
       path: 'books.book'
     }, {
@@ -48,7 +51,7 @@ module.exports = {
       path: 'books.notes.user',
       select: ['username', 'email', 'shareUsername', 'shareEmail']
     }])
-    .then(res => cb({ books: processList(res.books) }))
+    .then(res => cb({ books: processList(res.books, currentUserId) }))
     .catch(handleError)
   ,
   checkIfListContainsBook: (mongoBookId, cb, handleError) => PublicList.findOne({ 'books.book': { _id: mongoBookId } })
@@ -110,21 +113,22 @@ module.exports = {
       path: 'books.notes.user',
       select: ['username', 'email', 'shareUsername', 'shareEmail']
     }])
-    .then(res => cb({ books: processList(res.books) }))
+    .then(res => cb({ books: processList(res.books, userId) }))
     .catch(handleError);
   }, 
-  deleteComment( listItemId, commentId, userId, cb, handleError) {
-    PublicList.findByIdAndUpdate(
-      listItemId,
+  deleteComment(listItemId, commentId, userId, cb, handleError) {
+    PublicList.findOneAndUpdate(
+      { 'books._id': listItemId },
       {
         $pull: {
-          'books.notes': {
+          'books.$.notes': {
             _id: commentId,
             user: userId
           }
         }
       },
       { new: true }
-    ).then(cb).catch(handleError);
+    ).then(res => cb({ books: processList(res.books, userId) }))
+      .catch(handleError);
   }
 }

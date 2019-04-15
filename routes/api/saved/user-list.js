@@ -65,4 +65,17 @@ router.delete(
   }
 );
 
+router.delete(
+  '/:listItemId',
+  require('connect-ensure-login').ensureLoggedIn('/api/auth/fail'),
+  (req, res) => {
+    controllers.User.removeBookFromList(
+      req.user._id,
+      req.params.listItemId,
+      result => res.json(result),
+      error => res.status(500).json({ message: 'An error was encountered', error })
+    );
+  }
+);
+
 module.exports = router;

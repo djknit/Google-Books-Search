@@ -22,10 +22,13 @@ class App extends Component {
     this.checkAuthentication = this.checkAuthentication.bind(this);
     this.setUser = this.setUser.bind(this);
     this.logUserOut = this.logUserOut.bind(this);
+    this.updateUserList = this.updateUserList.bind(this);
     this.openSaveBookModal = this.openSaveBookModal.bind(this);
     this.closeSaveBookModal = this.closeSaveBookModal.bind(this);
     this.openPrivacySettingsModal = this.openPrivacySettingsModal.bind(this);
     this.closePrivacySettingsModal = this.closePrivacySettingsModal.bind(this);
+    this.openDeleteBookModal = this.openDeleteBookModal.bind(this);
+    this.closeDeleteBookModal = this.closeDeleteBookModal.bind(this);
     this.footerHeight = 50;
     this.state = {
       user: null,
@@ -34,7 +37,9 @@ class App extends Component {
       isLoginModalActive: false,
       isSaveBookModalActive: false,
       isPrivacySettingsModalActive: false,
-      publicBooksList: []
+      isDeleteBookModalActive: false,
+      bookToDelete: null,
+      userBooksList: null
     };
   }
 
@@ -67,13 +72,12 @@ class App extends Component {
       .then(res => {
         if (res && res.data && res.data.success) {
           this.setState({ user: res.data.user })
-          console.log(window.location.pathname)
         }
         else this.setState({ user: null })
       })
       .catch(err => {
-        console.log(err)
-        console.log(window.location.pathname)
+        console.log(err);
+        this.setState({ user: null });
       });
   }
 
@@ -84,10 +88,7 @@ class App extends Component {
   logUserOut() {
     api.auth.logout()
       .then(res => this.setState({ user: null }))
-      .catch(err => {
-        console.log(err);
-        this.checkAuthentication();
-      });
+      .catch(err => this.setState({ user: null }));
   }
 
   openSaveBookModal(book) {
@@ -113,6 +114,27 @@ class App extends Component {
   closePrivacySettingsModal() {
     this.setState({
       isPrivacySettingsModalActive: false
+    });
+  }
+
+  openDeleteBookModal(listItemArrayIndex) {
+    const bookToDelete = this.state.userBooksList[listItemArrayIndex];
+    this.setState({
+      bookToDelete,
+      isDeleteBookModalActive: true
+    });
+  }
+
+  closeDeleteBookModal() {
+    this.setState({
+      isDeleteBookModalActive: false,
+      bookToDelete: null
+    })
+  }
+
+  updateUserList(newList) {
+    this.setState({
+      userBooksList: newList 
     });
   }
 
@@ -168,7 +190,10 @@ class App extends Component {
                 render={props => <UserListView
                   {...props}
                   user={this.state.user}
+                  list={this.state.userBooksList}
+                  updateList={this.updateUserList}
                   openSaveBookModal={this.openSaveBookModal}
+                  openDeleteBookModal={this.openDeleteBookModal}
                 />}
               />
               <Route component={NotFoundView} />
@@ -190,6 +215,10 @@ class App extends Component {
             closePrivacySettingsModal={this.closePrivacySettingsModal}
             isPrivacySettingsModalActive={this.state.isPrivacySettingsModalActive}
             openPrivacySettingsModal={this.openPrivacySettingsModal}
+            isDeleteBookModalActive={this.state.isDeleteBookModalActive}
+            closeDeleteBookModal={this.closeDeleteBookModal}
+            bookToDelete={this.state.bookToDelete}
+            updateUserList={this.updateUserList}
           />
         </div>
       </Router>

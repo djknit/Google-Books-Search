@@ -87,8 +87,8 @@
   text-align: right;
   position: relative;
 }
-.book-info-display .lower-button-area > button {
-  /* margin-bottom: 20px; */
+.book-info-display .lower-button-area > button.is-danger {
+  margin-right: 10px;
 }
 
 @media (max-width: 494px) {

@@ -10,6 +10,7 @@ class CommentsSection extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.postComment = this.postComment.bind(this);
     this.deleteComment = this.deleteComment.bind(this);
+    this.makeApiCall = this.makeApiCall.bind(this);
     this.commentsSection = React.createRef();
     this.state = {
       isExpanded: null,
@@ -36,7 +37,6 @@ class CommentsSection extends Component {
     event.preventDefault();
 
     const newComment = this.state.newComment.trim();
-    console.log(newComment);
     if (!newComment) return this.setState({
       errorMessage: `You can't submit an empty ${this.props.isPublicList ? 'comment' : 'note'}.`,
       height: null
@@ -47,7 +47,11 @@ class CommentsSection extends Component {
       api.saved.publicList.postComment :
       api.saved.userList.addComment;
 
-    apiCall(this.props.listItemId, this.state.newComment)
+    return this.makeApiCall(apiCall, newComment);
+  }
+
+  makeApiCall(apiCall, secondParameter) {
+    apiCall(this.props.listItemId, secondParameter)
       .then(res => {
         console.log(res);
         if (res.data && res.data.books) {
@@ -71,12 +75,15 @@ class CommentsSection extends Component {
       });
   }
 
-  deleteComment(commentAndListItemIds) {
-    console.log(commentAndListItemIds);
+  deleteComment(commentId) {
+    const apiCall = this.props.isPublicList ?
+      api.saved.publicList.deleteComment : api.saved.userList.deleteComment;
+
+    return this.makeApiCall(apiCall, commentId);
   }
 
+  // measure natural height of commments section each time it changes and set height so animation runs smoothly. (doesn't work w/ 'height: auto')
   componentDidMount() {
-    // console.log(this.props.comments)
     // source: https://stackoverflow.com/questions/35153599/reactjs-get-height-of-an-element
     const height = this.commentsSection.current.clientHeight;
     this.setState({ height });
@@ -147,7 +154,7 @@ class CommentsSection extends Component {
               <div className="comment" id={comment._id} key={comment._id}>
                 <p className="time">{moment(comment.time).calendar()}</p>
                 {(comment.currentUser || !this.props.isPublicList) &&
-                  <div className="delete-comment">                  
+                  <div className="delete-comment" onClick={() => this.deleteComment(comment._id)}>                  
                     <span className="word">delete </span>
                     <span className="letter">x</span>
                   </div>

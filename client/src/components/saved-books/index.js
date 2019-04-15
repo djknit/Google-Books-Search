@@ -7,12 +7,14 @@ export default ({
   list,
   openSaveBookModal,
   isPublicList,
+  isUserList,
   errorMessage,
   hasError,
   user,
   openLoginModal,
   openCreateAccountModal,
-  updateList
+  updateList,
+  openDeleteBookModal
 }) => {
 
   const style = {
@@ -27,7 +29,7 @@ export default ({
       <label className="label">
         {isPublicList ? 'Public' : 'Your'} List
       </label>
-      {list && list.length ?
+      {list && list.length && !hasError ?
         list.map((item, index) => (
           <BookInfoDisplay
             book={item.book}
@@ -36,6 +38,7 @@ export default ({
             timeAdded={item.timeAdded}
             addedBy={item.addedBy}
             isPublicList={isPublicList}
+            isUserList={isUserList}
             comments={item.notes}
             listItemId={item._id}
             listItemArrayIndex={index}
@@ -43,17 +46,24 @@ export default ({
             openLoginModal={openLoginModal}
             openCreateAccountModal={openCreateAccountModal}
             updateList={updateList}
+            openDeleteBookModal={openDeleteBookModal}
           />
         )) 
         :
         <h4 className="title is-6">
           {list ?
-            `There are no books saved to ${isPublicList ? 'the public' : 'your'} list yet.`
+            hasError ?
+              <>
+                Oops! An error occured.<br />{errorMessage}<br />
+                Try reloading the page.<br /><br /><br />Sorry about that.
+              </>
+              :
+              `There are no books saved to ${isPublicList ? 'the public' : 'your'} list yet.`
             :
             hasError ?
               <>There was an error retrieving the list.<br /><br />{errorMessage}</>
               :
-              'Fetching list...'
+              <>Fetching list...</>
           }
         </h4>
       }

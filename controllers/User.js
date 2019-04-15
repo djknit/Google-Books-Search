@@ -165,9 +165,29 @@ module.exports = {
             _id: commentId
           }
         }
+      }, {
+        new: true
       }
     ).populate('books.book')
       .then(res => res ? cb({ books: res.books }) : cb(res))
+      .catch(handleError);
+  },
+  removeBookFromList(userId, listItemId, cb, handleError) {
+    User.findByIdAndUpdate(
+      userId,
+      {
+        $pull: {
+          books: {
+            _id: listItemId
+          }
+        }
+      },
+      { new: true }
+    ).populate('books.book')
+      .then(res => res ?
+        cb({ books: res.books }) :
+        handleError({ error: 'Unknown error while deleting book.'})
+      )
       .catch(handleError);
   },
   updateSharingSettings(userId, shareUsername, shareEmail, cb, handleError) {

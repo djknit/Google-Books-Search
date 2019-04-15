@@ -128,7 +128,16 @@ module.exports = {
         }
       },
       { new: true }
-    ).then(res => cb({ books: processList(res.books, userId) }))
+    ).populate([{
+        path: 'books.book'
+      }, {
+        path: 'books.addedBy',
+        select: ['username', 'email', 'shareUsername', 'shareEmail']
+      }, {
+        path: 'books.notes.user',
+        select: ['username', 'email', 'shareUsername', 'shareEmail']
+      }])
+      .then(res => cb({ books: processList(res.books, userId) }))
       .catch(handleError);
   }
 }

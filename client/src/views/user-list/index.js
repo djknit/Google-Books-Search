@@ -3,28 +3,20 @@ import Hero from '../../components/hero';
 import SavedBooks from '../../components/saved-books';
 import api from '../../utilities/api';
 
-class publicListView extends Component {
+class UserListView extends Component {
   constructor(props) {
     super(props);
-    this.updateList = this.updateList.bind(this);
     this.state = {
-      list: null,
       errorMessage: null,
       hasError: false
     };
-  }
-
-  updateList(newList) {
-    this.setState({
-      list: newList
-    });
   }
 
   componentDidMount() {
     api.saved.userList.getList()
       .then(res => {
         console.log(res)
-        if (res.data.books) this.setState({ list: res.data.books.reverse() });
+        if (res.data.books) this.props.updateList(res.data.books.reverse());
       })
       .catch(err => {
         if (err && err.response && err.response.status === 401) return this.props.history.push('/');
@@ -40,15 +32,17 @@ class publicListView extends Component {
       <div>
         <Hero pageName="Saved Titles" />
         <SavedBooks
-          list={this.state.list}
+          list={this.props.list}
           openSaveBookModal={this.props.openSaveBookModal}
           errorMessage={this.state.errorMessage}
           hasError={this.state.hasError}
-          updateList={this.updateList}
+          updateList={this.props.updateList}
+          isUserList
+          openDeleteBookModal={this.props.openDeleteBookModal}
         />
       </div>
     );
   }
 }
 
-export default publicListView;
+export default UserListView;

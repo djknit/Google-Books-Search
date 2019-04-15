@@ -42,7 +42,8 @@ export default {
       addComment: (listItemId, comment) =>
         savedApi.post(`user-list/comment/${listItemId}`, { comment }),
       deleteComment: (listItemId, commentId) =>
-        savedApi.delete('/user-list/comment', { data: { listItemId, commentId } })
+        savedApi.delete('/user-list/comment', { data: { listItemId, commentId } }),
+      deleteBook: listItemId => savedApi.delete(`/user-list/${listItemId}`)
     }
   }
 }

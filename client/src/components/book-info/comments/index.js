@@ -50,6 +50,13 @@ class CommentsSection extends Component {
     return this.makeApiCall(apiCall, newComment);
   }
 
+  deleteComment(commentId) {
+    const apiCall = this.props.isPublicList ?
+      api.saved.publicList.deleteComment : api.saved.userList.deleteComment;
+
+    return this.makeApiCall(apiCall, commentId);
+  }
+
   makeApiCall(apiCall, secondParameter) {
     apiCall(this.props.listItemId, secondParameter)
       .then(res => {
@@ -75,13 +82,6 @@ class CommentsSection extends Component {
       });
   }
 
-  deleteComment(commentId) {
-    const apiCall = this.props.isPublicList ?
-      api.saved.publicList.deleteComment : api.saved.userList.deleteComment;
-
-    return this.makeApiCall(apiCall, commentId);
-  }
-
   // measure natural height of commments section each time it changes and set height so animation runs smoothly. (doesn't work w/ 'height: auto')
   componentDidMount() {
     // source: https://stackoverflow.com/questions/35153599/reactjs-get-height-of-an-element
@@ -90,7 +90,7 @@ class CommentsSection extends Component {
   }
 
   componentWillReceiveProps() {
-    this.setState({ height: undefined });
+    this.setState({ height: null });
   }
 
   componentDidUpdate() {

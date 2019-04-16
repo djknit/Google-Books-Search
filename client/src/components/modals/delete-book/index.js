@@ -72,7 +72,7 @@ class DeleteBookModal extends Component {
                     <p>You are about to remove this book from your list.</p>
                     <p>This action <strong>cannot be reversed.</strong></p>
                     <p className="is-size-5">
-                      Are you sure you want to remove 
+                      Are you sure you want to remove&nbsp;
                       <em>{this.props.book.title}</em> from your list?
                     </p>
                   </>

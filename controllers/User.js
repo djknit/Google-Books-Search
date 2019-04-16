@@ -1,23 +1,23 @@
 const User = require("../models/User");
 
 function createAccount(newUser, callback) {
-  User.create(newUser)
-    .then(result => {
-      if (result) {
-        result.password = undefined;
-        result.lowerCaseEmail = undefined;
-        callback({
-          success: true,
-          user: result
-        });
-      }
-      else callback({ success: false });
-    })
-    .catch(err => {console.log('\n\n'); console.log(err); console.log('\n\n'); callback({
+  const user = new User(newUser);
+  user.save((err, user) => {
+  if (err) return callback({
       success: false,
       message: err.code === 11000 ? 'That username is taken.' : 'Unknown server error.',
       problems: err.code === 11000 ? { username: true } : {}
-    })});
+    });
+    else if (user) {
+      user.password = undefined;
+      user.lowerCaseEmail = undefined;
+      return callback({
+        success: true,
+        user
+      });
+    }
+  callback({ success: false, message: 'Unknown' })
+  });
 }
 
 module.exports = {

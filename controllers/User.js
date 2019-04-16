@@ -16,7 +16,7 @@ function createAccount(newUser, callback) {
         user
       });
     }
-  callback({ success: false, message: 'Unknown' })
+  callback({ success: false, message: 'Unexpected outcome. Reason unknown.' })
   });
 }
 
@@ -66,7 +66,7 @@ module.exports = {
     User.findOne({ username: usernameOrEmail })
       .then(result1 => result1 ?
         callback({ success: true, user: result1 }) :
-        User.findOne({ lowerCaseEmail: usernameOrEmail })
+        User.findOne({ lowerCaseEmail: usernameOrEmail.toLowerCase() })
           .then(result2 => result2 ?
             callback({ success: true, user: result2 }) :
             callback({ success: false, message: 'Invalid username or email.' })
@@ -74,6 +74,14 @@ module.exports = {
           .catch(err => callback({ success: false, error: err }))
       )
       .catch(err => callback({ success: false, error: err }));
+  },
+  findByEmail(email, callback) {
+    User.findOne({ lowerCaseEmail: email.toLowerCase() })
+      .then(user => user ?
+        callback(null, user) :
+        callback('Email not found.', null)
+      )
+      .catch(err => callback(err, null))
   },
   findById(userId, done) {
     User.findById(userId)

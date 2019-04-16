@@ -88,12 +88,12 @@ class PrivacySettingsModal extends Component {
 
   cancelForm(event) {
     event.preventDefault();
-    this.props.closeSaveBookModal();
+    if (!this.state.hasSuccess) this.props.closeSaveBookModal();
     this.setState({
-      problemMessage: 'test',
+      problemMessage: null,
       hasSuccess: false,
-      hasProblems: true,
-      hasInputProblem: true,
+      hasProblems: false,
+      hasInputProblem: false,
       isLoading: false,
       selection: this.currentSettingsSelectionValue()
     });

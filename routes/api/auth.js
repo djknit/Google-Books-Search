@@ -117,6 +117,7 @@ router.post('/forgotpassword', (req, res) => {
     (token, done) => {
       UserController.findByEmail(req.body.email, (err, user) => {
         if (!user) return res.json({ error: 'No account is registered for that address.' });
+        if (err) return res.json({ error: err });
         user.passwordResetToken = token;
         user.resetTokenExpiration = Date.now() + 3600000;
         user.save(err => done(err, req, res, token, user));

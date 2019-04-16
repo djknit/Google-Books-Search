@@ -71,7 +71,7 @@ class App extends Component {
     api.auth.test()
       .then(res => {
         if (res && res.data && res.data.success) {
-          this.setState({ user: res.data.user })
+          this.setState({ user: res.data.user });
         }
         else this.setState({ user: null })
       })
@@ -165,6 +165,7 @@ class App extends Component {
                   {...props}
                   openCreateAccountModal={this.openCreateAccountModal}
                   openLoginModal={this.openLoginModal}
+                  user={this.state.user}
                 />}
               />
               <Route

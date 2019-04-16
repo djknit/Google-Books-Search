@@ -72,9 +72,14 @@ class CommentsSection extends Component {
         }
       })
       .catch(err => {
-        let errorMessage = 'An error was encountered: ' +
-          (err.response && err.response.data && err.response.data.message) || 'Unknown error.';
-        this.setState({
+        let errorMessage = 'An error was encountered: ';
+        if (err && err.response && err.response.status === 401) {
+          errorMessage += 'Unauthorized. Make sure you are logged in. You may need to log-out and log back in.'
+        }
+        else errorMessage += (err && err.response && err.response.data && err.response.data.message)
+          || 'Unknown error.';
+        
+          this.setState({
           errorMessage,
           isLoading: false,
           height: null
@@ -95,7 +100,7 @@ class CommentsSection extends Component {
 
   componentDidUpdate() {
     const height = this.commentsSection.current.clientHeight;
-    if (height !== this.state.height && height > 10) this.setState({ height });
+    if (height !== this.state.height && height > 100) this.setState({ height });
   }
 
   render() {

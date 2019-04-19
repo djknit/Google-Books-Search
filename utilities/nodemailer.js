@@ -14,11 +14,7 @@ const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN } = process
   GOOGLE_REFRESH_TOKEN
 );
 oauth2Client.setCredentials({ refresh_token: process.env.GOOGLE_REFRESH_TOKEN });
-// const tokens = await oauth2Client.refreshAccessToken();
-// const accessToken = tokens.credentials.access_token;
 const accessToken = oauth2Client.getAccessToken();
-  // .then(tokens => tokens.credentials)
-  // .then(credentials => credentials.access_token);
 
 const smtpTransport = nodemailer.createTransport({
   service: 'gmail',
@@ -36,17 +32,20 @@ const sendPasswordResetEmail = (req, res, token, user, done) => {
   const mailOptions = {
     to: user.email,
     from: 'djknit@gmail.com',
-    subject: 'Books Searcher Password Reset',
+    subject: 'Book Search Password Reset',
     text: 'You are receiving this because you (or someone else) has requested to reset the password for your account on Dave\'s Book Search.\n\n' +
-      'Please click on the following link, or paste it into your browser to complete the process:\n\n' +
-      'http://' + req.headers.host + '/passwordreset/' + token + '\n\n' +
+      'Please visit the following link to complete the process:\n\n' +
+      'http://' + req.headers.host + '/reset-password/' + token + '\n\n' +
       'If you did not request this, you can ignore this email and your password will remain unchanged.\n\n' +
       'You may reply to this e-mail if you have any questions.\n\n' +
       'Thanks,\nDavid Knittel'
   };
   smtpTransport.sendMail(mailOptions, function(err) {
     if (err) return done(err, 'done');
-    res.json({ success: 'An e-mail has been sent to ' + user.email + ' with further instructions.\nIf you don\'t see the email in your inbox, check your spam folder.' });
+    return res.json({
+      success: true,
+      message: `Success! An e-mail has been sent to ${user.email} with further instructions.`
+    });
   });
 }
 

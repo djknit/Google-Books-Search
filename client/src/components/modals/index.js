@@ -5,6 +5,7 @@ import LoginModal from './login';
 import SaveBookModal from './save-book';
 import DeleteBookModal from './delete-book';
 import PrivacySettingsModal from './privacy-settings';
+import PasswordResetModal from './password-reset';
 
 export default ({
   isCreateAccountModalActive,
@@ -24,7 +25,10 @@ export default ({
   isDeleteBookModalActive,
   closeDeleteBookModal,
   bookToDelete,
-  updateUserList
+  updateUserList,
+  isPasswordResetModalActive,
+  openPasswordResetModal,
+  closePasswordResetModal
 }) => {
   
   return (
@@ -38,6 +42,7 @@ export default ({
         closeModal={closeLoginModal}
         isActive={isLoginModalActive}
         setUser={setUser}
+        openPasswordResetModal={openPasswordResetModal}
       />
       {isSaveBookModalActive &&
         <SaveBookModal
@@ -69,6 +74,10 @@ export default ({
           setUser={setUser}
         />
       }
+      <PasswordResetModal
+        closeModal={closePasswordResetModal}
+        isActive={isPasswordResetModalActive}
+      />
     </>
   );
 }

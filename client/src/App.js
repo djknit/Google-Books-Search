@@ -9,6 +9,7 @@ import UserListView from './views/user-list';
 import NotFoundView from './views/not-found';
 import Modals from './components/modals';
 import MyFooter from './components/footer';
+import ResetPasswordView from './views/reset-password';
 import api from './utilities/api';
 
 class App extends Component {
@@ -29,6 +30,8 @@ class App extends Component {
     this.closePrivacySettingsModal = this.closePrivacySettingsModal.bind(this);
     this.openDeleteBookModal = this.openDeleteBookModal.bind(this);
     this.closeDeleteBookModal = this.closeDeleteBookModal.bind(this);
+    this.openPasswordResetModal = this.openPasswordResetModal.bind(this);
+    this.closePasswordResetModal = this.closePasswordResetModal.bind(this);
     this.footerHeight = 50;
     this.state = {
       user: null,
@@ -38,6 +41,7 @@ class App extends Component {
       isSaveBookModalActive: false,
       isPrivacySettingsModalActive: false,
       isDeleteBookModalActive: false,
+      isPasswordResetModalActive: false,
       bookToDelete: null,
       userBooksList: null
     };
@@ -65,6 +69,14 @@ class App extends Component {
 
   closeLoginModal() {
     this.setState({ isLoginModalActive: false });
+  }
+
+  openPasswordResetModal() {
+    this.setState({ isPasswordResetModalActive: true });
+  }
+
+  closePasswordResetModal() {
+    this.setState({ isPasswordResetModalActive: false });
   }
 
   checkAuthentication() {
@@ -197,7 +209,19 @@ class App extends Component {
                   openDeleteBookModal={this.openDeleteBookModal}
                 />}
               />
-              <Route component={NotFoundView} />
+              <Route
+                path='/reset-password/:token'
+                render={props => <ResetPasswordView
+                  {...props}
+                  setUser={this.setUser}
+                />}
+              />
+              <Route
+                render={props => <NotFoundView
+                  {...props}
+                  footerHeight={this.footerHeight}
+                />}
+              />
             </Switch>
           </div>
           <MyFooter height={this.footerHeight} />
@@ -220,6 +244,9 @@ class App extends Component {
             closeDeleteBookModal={this.closeDeleteBookModal}
             bookToDelete={this.state.bookToDelete}
             updateUserList={this.updateUserList}
+            isPasswordResetModalActive={this.state.isPasswordResetModalActive}
+            openPasswordResetModal={this.openPasswordResetModal}
+            closePasswordResetModal={this.closePasswordResetModal}
           />
         </div>
       </Router>

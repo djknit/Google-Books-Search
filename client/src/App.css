@@ -42,7 +42,26 @@ body::-webkit-scrollbar-button {
   background-color: #c3c3c3;
 }
 
-/* Box shadow classes for use throughout app (in several components) */
+
+/* Styles used throughout app in multiple components: (from here on) */
+.text-link {
+  color: #3273dc;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.text-link:hover {
+  color: blue;
+  opacity: .7;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.text-link:active {
+  color: blue;
+  opacity: 1;
+  text-decoration: underline;
+  cursor: pointer;
+}
+/* Box shadow classes  */
   /* note: most buttons and input fields will all be given shadow unless otherwise specified */
 .has-shadow,
 button,
@@ -56,7 +75,6 @@ button.button.is-deep,
 nav.navbar.has-shadow {
   box-shadow: 0 0 8px #202020;
 }
-button.button:focus,
 .button:focus,
 button.button:focus,
 button.has-shadow:focus {

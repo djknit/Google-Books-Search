@@ -9,7 +9,8 @@ export default ({
   hasUsernameOrEmailProblem,
   hasPasswordProblem,
   handleChange,
-  isLoading
+  isLoading,
+  openPasswordResetModal
 }) => {
 
   return (
@@ -65,6 +66,9 @@ export default ({
         </div>
       </div>
       <div className="content">
+        <p>
+          <span className="text-link" onClick={openPasswordResetModal}>Forgot your password?</span>
+        </p>
         <p>I will never share or sell your information.</p>
       </div>
     </>

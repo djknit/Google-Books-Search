@@ -210,5 +210,16 @@ module.exports = {
         cb({ success: false })
       )
       .catch(handleError);
+  },
+  resetPassword: (token, password, cb, handleError) => {
+    User.findOne({
+      passwordResetToken: token,
+      resetTokenExpiration: { $gt: Date.now() }
+    }).then(user => {
+      if (!user) return cb(null);
+      user.password = password;
+      user.passwordResetToken = null;
+      user.save((err, user) => err ? handleError(err) : cb(user));
+    }).catch(handleError);
   }
 }

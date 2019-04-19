@@ -19,6 +19,8 @@ module.exports.configurePassport = passport => {
           if (isMatch) {
             user.password = undefined;
             user.lowerCaseEmail = undefined;
+            user.passwordResetToken = undefined;
+            user.resetTokenExpiration = undefined;
             return done(null, user);
           }
           else return done(null, false, { message: 'password' });

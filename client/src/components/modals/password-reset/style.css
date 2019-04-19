@@ -1,0 +1,11 @@
+.modal-card-body form p.help.last-in-form {
+  margin-bottom: 0;
+}
+
+#request-password-reset-form > div.notification {
+  margin-bottom: 15px;
+}
+
+/* #request-password-reset-form a {
+  margin-bottom: 30px;
+} */

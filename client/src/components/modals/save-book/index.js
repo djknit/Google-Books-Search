@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './style.css';
 import ModalSkeleton from '../modal-skeleton';
 import Box from '../../box';
-import BookInfoSummary from './book-info-summary';
+import BookInfoSummary from '../../book-info-summary';
 import ConfirmSave from './confirm-save';
 import SaveOptionsDisplay from './save-options';
 import api from '../../../utilities/api';

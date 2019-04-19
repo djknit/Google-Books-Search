@@ -3,6 +3,17 @@ import api from '../../../utilities/api';
 import ModalSkeleton from '../modal-skeleton';
 import LoginForm from './login-form';
 
+const defaultState = {
+  usernameOrEmail: '',
+  password: '',
+  problemMessage: '',
+  hasSuccess: false,
+  hasProblems: false,
+  hasUsernameOrEmailProblem: false,
+  hasPasswordProblem: false,
+  isLoading: false
+};
+
 class loginModal extends Component {
   constructor(props) {
     // info about super(): http://cheng.logdown.com/posts/2016/03/26/683329
@@ -10,16 +21,7 @@ class loginModal extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.submitForm = this.submitForm.bind(this);
     this.cancelForm = this.cancelForm.bind(this);
-    this.state = {
-      usernameOrEmail: '',
-      password: '',
-      problemMessage: '',
-      hasSuccess: false,
-      hasProblems: false,
-      hasUsernameOrEmailProblem: false,
-      hasPasswordProblem: false,
-      isLoading: false
-    };
+    this.state = defaultState;
   }
   
   handleChange(event) {
@@ -29,6 +31,9 @@ class loginModal extends Component {
 
   submitForm(event) {
     event.preventDefault();
+    // Next line is fix for bug where form was showing problem message after user logs in, logs out,
+      // and then opens login modal again. It looks to have come from this function being run before modal is opened.
+    if (!this.props.isActive) return null;
     const { usernameOrEmail, password } = this.state;
     if (!usernameOrEmail) return this.setState({
       problemMessage: 'You must enter a username or email address.',
@@ -93,16 +98,7 @@ class loginModal extends Component {
   }
 
   cancelForm() {
-    this.setState({
-      usernameOrEmail: '',
-      password: '',
-      problemMessage: '',
-      hasSuccess: false,
-      hasProblems: false,
-      hasUsernameOrEmailProblem: false,
-      hasPasswordProblem: false,
-      isLoading: false
-    });
+    this.setState(defaultState);
     this.props.closeModal();
   }
 
@@ -124,6 +120,7 @@ class loginModal extends Component {
               handleChange={this.handleChange}
               submitForm={this.submitForm}
               isLoading={this.state.isLoading}
+              openPasswordResetModal={this.props.openPasswordResetModal}
             />
           </form>
         }

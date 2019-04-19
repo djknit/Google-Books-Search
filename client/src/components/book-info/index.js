@@ -11,11 +11,15 @@ export default ({
   timeAdded,
   addedBy,
   isPublicList,
+  isUserList,
   comments,
   listItemId,
   user,
   openCreateAccountModal,
-  openLoginModal
+  openLoginModal,
+  updateList,
+  openDeleteBookModal,
+  listItemArrayIndex
 }) => {
   
   const style = {
@@ -127,8 +131,16 @@ export default ({
         }
         <hr className="divider" />
         <div className="lower-button-area">
+          {isUserList &&
+            <button
+              onClick={() => openDeleteBookModal(listItemArrayIndex)}
+              className="button is-danger"
+            >
+              Delete
+            </button>
+          }
           <button onClick={save} className="button is-primary">Save</button>
-          {false &&
+          {comments &&
             <CommentsSection
               isPublicList={isPublicList}
               listItemId={listItemId}
@@ -136,6 +148,7 @@ export default ({
               user={user}
               openCreateAccountModal={openCreateAccountModal}
               openLoginModal={openLoginModal}
+              updateList={updateList}
             />
           }
         </div>

@@ -38,7 +38,12 @@ export default {
     },
     userList: {
       getList: () => savedApi.get('/user-list'),
-      post: (bookInfo, note) => savedApi.post('/user-list', { bookInfo, note })
+      post: (bookInfo, note) => savedApi.post('/user-list', { bookInfo, note }),
+      addComment: (listItemId, comment) =>
+        savedApi.post(`user-list/comment/${listItemId}`, { comment }),
+      deleteComment: (listItemId, commentId) =>
+        savedApi.delete('/user-list/comment', { data: { listItemId, commentId } }),
+      deleteBook: listItemId => savedApi.delete(`/user-list/${listItemId}`)
     }
   }
 }

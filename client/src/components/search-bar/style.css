@@ -8,10 +8,10 @@
 }
 
 #search-form .powered-by-google {
-  height: 36px;
-  width: 74.4px;
+  height: 30px;
+  width: 62px;
   position: absolute;
-  bottom: -8px;
+  bottom: -4px;
   left: 2px;
 }
 .powered-by-google > img {

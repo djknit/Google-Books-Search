@@ -9,20 +9,22 @@ module.exports.configurePassport = passport => {
       usernameField: 'usernameOrEmail'
     },
     function (usernameOrEmail, password, done) {
-      require('../controllers/User').findByUsernameOrEmail(usernameOrEmail, result => {
-        if (result.error) return done(result.error);
-        const { user } = result;
+      UserController.findByUsernameOrEmail(usernameOrEmail, result => {
+        const { user, error } = result;
+        if (error) return done(error);
         if (!user) {
           return done(null, false, { message: 'user' });
         }
-        else if (user.password !== password) {
-          return done(null, false, { message: 'password' });
-        }
-        else {
-          user.password = undefined;
-          user.lowerCaseEmail = undefined;
-          done(null, user);
-        }
+        user.comparePassword(password, (err, isMatch) => {
+          if (isMatch) {
+            user.password = undefined;
+            user.lowerCaseEmail = undefined;
+            user.passwordResetToken = undefined;
+            user.resetTokenExpiration = undefined;
+            return done(null, user);
+          }
+          else return done(null, false, { message: 'password' });
+        });
       });
     }
   ));

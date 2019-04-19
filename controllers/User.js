@@ -1,26 +1,23 @@
 const User = require("../models/User");
 
 function createAccount(newUser, callback) {
-  console.log('\n\n')
-  console.log(newUser)
-  console.log('\n------------------------------')
-  User.create(newUser)
-    .then(result => {
-      if (result) {
-        result.password = undefined;
-        result.lowerCaseEmail = undefined;
-        callback({
-          success: true,
-          user: result
-        });
-      }
-      else callback({ success: false });
-    })
-    .catch(err => {console.log('\n\n'); console.log(err); console.log('\n\n'); callback({
+  const user = new User(newUser);
+  user.save((err, user) => {
+  if (err) return callback({
       success: false,
       message: err.code === 11000 ? 'That username is taken.' : 'Unknown server error.',
       problems: err.code === 11000 ? { username: true } : {}
-    })});
+    });
+    else if (user) {
+      user.password = undefined;
+      user.lowerCaseEmail = undefined;
+      return callback({
+        success: true,
+        user
+      });
+    }
+  callback({ success: false, message: 'Unexpected outcome. Reason unknown.' })
+  });
 }
 
 module.exports = {
@@ -69,7 +66,7 @@ module.exports = {
     User.findOne({ username: usernameOrEmail })
       .then(result1 => result1 ?
         callback({ success: true, user: result1 }) :
-        User.findOne({ lowerCaseEmail: usernameOrEmail })
+        User.findOne({ lowerCaseEmail: usernameOrEmail.toLowerCase() })
           .then(result2 => result2 ?
             callback({ success: true, user: result2 }) :
             callback({ success: false, message: 'Invalid username or email.' })
@@ -77,6 +74,14 @@ module.exports = {
           .catch(err => callback({ success: false, error: err }))
       )
       .catch(err => callback({ success: false, error: err }));
+  },
+  findByEmail(email, callback) {
+    User.findOne({ lowerCaseEmail: email.toLowerCase() })
+      .then(user => user ?
+        callback(null, user) :
+        callback('Email not found.', null)
+      )
+      .catch(err => callback(err, null))
   },
   findById(userId, done) {
     User.findById(userId)
@@ -137,6 +142,62 @@ module.exports = {
       handleError
     );
   },
+  addComment(userId, listItemId, commentBody, cb, handleError) {
+    const note = {
+      body: commentBody,
+      time: new Date()
+    };
+    User.findOneAndUpdate(
+      {
+        _id: userId,
+        'books._id': listItemId
+      }, {
+        $push: {
+          'books.$.notes': note
+        }
+      }, {
+        new: true
+      }
+    ).populate('books.book')
+      .then(res => res ? cb({ books: res.books }) : cb(res))
+      .catch(handleError);
+  },
+  deleteComment(userId, listItemId, commentId, cb, handleError) {
+    User.findOneAndUpdate(
+      {
+        _id: userId,
+        'books._id': listItemId
+      }, {
+        $pull: {
+          'books.$.notes': {
+            _id: commentId
+          }
+        }
+      }, {
+        new: true
+      }
+    ).populate('books.book')
+      .then(res => res ? cb({ books: res.books }) : cb(res))
+      .catch(handleError);
+  },
+  removeBookFromList(userId, listItemId, cb, handleError) {
+    User.findByIdAndUpdate(
+      userId,
+      {
+        $pull: {
+          books: {
+            _id: listItemId
+          }
+        }
+      },
+      { new: true }
+    ).populate('books.book')
+      .then(res => res ?
+        cb({ books: res.books }) :
+        handleError({ error: 'Unknown error while deleting book.'})
+      )
+      .catch(handleError);
+  },
   updateSharingSettings(userId, shareUsername, shareEmail, cb, handleError) {
     User.findByIdAndUpdate(
       userId,
@@ -149,5 +210,16 @@ module.exports = {
         cb({ success: false })
       )
       .catch(handleError);
+  },
+  resetPassword: (token, password, cb, handleError) => {
+    User.findOne({
+      passwordResetToken: token,
+      resetTokenExpiration: { $gt: Date.now() }
+    }).then(user => {
+      if (!user) return cb(null);
+      user.password = password;
+      user.passwordResetToken = null;
+      user.save((err, user) => err ? handleError(err) : cb(user));
+    }).catch(handleError);
   }
 }

@@ -6,13 +6,22 @@ import api from '../../utilities/api';
 class publicListView extends Component {
   constructor(props) {
     super(props);
+    this.updateList = this.updateList.bind(this);
+    this.getList = this.getList.bind(this);
     this.state = {
       list: null,
-      errorMessage: null
+      errorMessage: null,
+      noUser: !this.props.user
     };
   }
 
-  componentDidMount() {
+  updateList(newList) {
+    this.setState({
+      list: newList
+    });
+  }
+
+  getList() {
     api.saved.publicList.getList()
       .then(res => {
         console.log(res)
@@ -23,6 +32,17 @@ class publicListView extends Component {
           (err.response && err.response.data && err.response.data.message) || '';
         this.setState({ errorMessage });
       });
+  }
+
+  componentDidMount() {
+    this.getList();
+  }
+
+  componentDidUpdate() {
+    if (this.props.user && this.state.noUser) {
+      this.getList();
+      this.setState({ noUser: false });
+    }
   }
 
   render() {
@@ -37,6 +57,7 @@ class publicListView extends Component {
           user={this.props.user}
           openLoginModal={this.props.openLoginModal}
           openCreateAccountModal={this.props.openCreateAccountModal}
+          updateList={this.updateList}
         />
       </div>
     );

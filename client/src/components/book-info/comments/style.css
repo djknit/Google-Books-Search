@@ -51,20 +51,66 @@
 }
 
 .comments-section > .divider:first-child {
-  width: 100%;
-  margin: 22px 0 20px;
+  margin: 22px 0 0;
   height: 1px;
 }
 .comments-section > .divider {
-  width: 90%;
   /* margin-left: auto;
   margin-right: auto; */
   margin: 0 auto 10px;
-  height: .7px;
+  height: .4px;
 }
 
 .comments-section .comment {
   text-align: left;
+  border-bottom: .6px solid #bbbbbb;
+  padding-bottom: 12px;
+  line-height: 1.4;
+  font-size: .9rem;
+  position: relative;
+}
+.comments-section .comment .time {
+  font-size: .69rem;
+  color: #666666;
+  margin: 0;
+}
+.comments-section .comment .author {
+  font-weight: 500;
+}
+.comments-section .comment .delete-comment {
+  position: absolute;
+  display: inline-block;
+  top: -7px;
+  right: 1px;
+  color: #ff3860;
+  cursor: pointer;
+}
+.comment .delete-comment .word {
+  opacity: 0.6;
+  position: relative;
+  top: 1px;
+  font-size: .8rem;
+}
+.comment .delete-comment .letter {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.comment .delete-comment:hover .word {
+  opacity: 1;
+}
+.comment .delete-comment:hover .letter {
+  font-weight: 700;
+}
+
+.comments-section p.error-message {
+  color: #ff3860;
+  margin-bottom: 5px;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.comments-section .error-message.loading {
+  opacity: .7;
 }
 
 .comments-section form {
@@ -78,6 +124,9 @@
   font-size: 1.1rem;
   margin-top: 10px;
   text-align: center;
+}
+.comments-section p.no-comments {
+  margin-top: 20px;
 }
 
 /* Animations */

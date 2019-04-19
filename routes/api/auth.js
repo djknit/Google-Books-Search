@@ -116,7 +116,8 @@ router.post('/forgotpassword', (req, res) => {
     },
     (token, done) => {
       UserController.findByEmail(req.body.email, (err, user) => {
-        if (!user) return res.json({ error: 'No account is registered for that address.' });
+        if (!user) return res.json({ problem: true, error: 'Sorry, there is no account registered for that address.' });
+        if (err) return res.json({ error: err });
         user.passwordResetToken = token;
         user.resetTokenExpiration = Date.now() + 3600000;
         user.save(err => done(err, req, res, token, user));
@@ -125,6 +126,7 @@ router.post('/forgotpassword', (req, res) => {
     sendPasswordResetEmail
   ], err => {
     if (err) return console.error(err);
+    res.status(500).json({ error: err })
   });
 });
 
@@ -134,8 +136,20 @@ router.post('/resetpassword/', (req, res) => {
     req.body.newPassword,
     result => {
       if (!result) return res.json({ success: false, message: 'Invalid or expired token.'});
-      else req.login(result, err => err ? res.json(err) : res.json({ success: true, message: 'Successful authentication.' }));
-    }
+      else req.login(
+        result,
+        err => {
+          if (err) return res.json({ success: false, message: err });
+          const user = req.user;
+          user.password = undefined;
+          user.passwordResetToken = undefined;
+          user.resetTokenExpiration = undefined;
+          user.lowerCaseEmail = undefined;
+          res.json({ success: true, message: 'Successful authentication.', user });
+        }
+      );
+    },
+    err => res.json({ success: false, message: err })
   );
 });
 

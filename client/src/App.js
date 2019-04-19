@@ -9,6 +9,7 @@ import UserListView from './views/user-list';
 import NotFoundView from './views/not-found';
 import Modals from './components/modals';
 import MyFooter from './components/footer';
+import ResetPasswordView from './views/reset-password';
 import api from './utilities/api';
 
 class App extends Component {
@@ -22,10 +23,15 @@ class App extends Component {
     this.checkAuthentication = this.checkAuthentication.bind(this);
     this.setUser = this.setUser.bind(this);
     this.logUserOut = this.logUserOut.bind(this);
+    this.updateUserList = this.updateUserList.bind(this);
     this.openSaveBookModal = this.openSaveBookModal.bind(this);
     this.closeSaveBookModal = this.closeSaveBookModal.bind(this);
     this.openPrivacySettingsModal = this.openPrivacySettingsModal.bind(this);
     this.closePrivacySettingsModal = this.closePrivacySettingsModal.bind(this);
+    this.openDeleteBookModal = this.openDeleteBookModal.bind(this);
+    this.closeDeleteBookModal = this.closeDeleteBookModal.bind(this);
+    this.openPasswordResetModal = this.openPasswordResetModal.bind(this);
+    this.closePasswordResetModal = this.closePasswordResetModal.bind(this);
     this.footerHeight = 50;
     this.state = {
       user: null,
@@ -34,7 +40,10 @@ class App extends Component {
       isLoginModalActive: false,
       isSaveBookModalActive: false,
       isPrivacySettingsModalActive: false,
-      publicBooksList: []
+      isDeleteBookModalActive: false,
+      isPasswordResetModalActive: false,
+      bookToDelete: null,
+      userBooksList: null
     };
   }
 
@@ -62,13 +71,26 @@ class App extends Component {
     this.setState({ isLoginModalActive: false });
   }
 
+  openPasswordResetModal() {
+    this.setState({ isPasswordResetModalActive: true });
+  }
+
+  closePasswordResetModal() {
+    this.setState({ isPasswordResetModalActive: false });
+  }
+
   checkAuthentication() {
     api.auth.test()
-      .then(res => res.data.success ?
-        this.setState({ user: res.data.user }) :
-        this.setState({ user: null })
-      )
-      .catch(err => console.log(err));
+      .then(res => {
+        if (res && res.data && res.data.success) {
+          this.setState({ user: res.data.user });
+        }
+        else this.setState({ user: null })
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({ user: null });
+      });
   }
 
   setUser(user) {
@@ -78,10 +100,7 @@ class App extends Component {
   logUserOut() {
     api.auth.logout()
       .then(res => this.setState({ user: null }))
-      .catch(err => {
-        console.log(err);
-        this.checkAuthentication();
-      });
+      .catch(err => this.setState({ user: null }));
   }
 
   openSaveBookModal(book) {
@@ -110,6 +129,27 @@ class App extends Component {
     });
   }
 
+  openDeleteBookModal(listItemArrayIndex) {
+    const bookToDelete = this.state.userBooksList[listItemArrayIndex];
+    this.setState({
+      bookToDelete,
+      isDeleteBookModalActive: true
+    });
+  }
+
+  closeDeleteBookModal() {
+    this.setState({
+      isDeleteBookModalActive: false,
+      bookToDelete: null
+    })
+  }
+
+  updateUserList(newList) {
+    this.setState({
+      userBooksList: newList 
+    });
+  }
+
   componentDidMount() {
     console.log('checking auth (App: componentDidMount)')
     this.checkAuthentication();
@@ -125,6 +165,7 @@ class App extends Component {
             <Navbar
               openCreateAccountModal={this.openCreateAccountModal}
               openLoginModal={this.openLoginModal}
+              openPrivacySettingsModal={this.openPrivacySettingsModal}
               user={this.state.user}
               logOut={this.logUserOut}
             />
@@ -136,6 +177,7 @@ class App extends Component {
                   {...props}
                   openCreateAccountModal={this.openCreateAccountModal}
                   openLoginModal={this.openLoginModal}
+                  user={this.state.user}
                 />}
               />
               <Route
@@ -161,10 +203,25 @@ class App extends Component {
                 render={props => <UserListView
                   {...props}
                   user={this.state.user}
+                  list={this.state.userBooksList}
+                  updateList={this.updateUserList}
                   openSaveBookModal={this.openSaveBookModal}
+                  openDeleteBookModal={this.openDeleteBookModal}
                 />}
               />
-              <Route component={NotFoundView} />
+              <Route
+                path='/reset-password/:token'
+                render={props => <ResetPasswordView
+                  {...props}
+                  setUser={this.setUser}
+                />}
+              />
+              <Route
+                render={props => <NotFoundView
+                  {...props}
+                  footerHeight={this.footerHeight}
+                />}
+              />
             </Switch>
           </div>
           <MyFooter height={this.footerHeight} />
@@ -183,6 +240,13 @@ class App extends Component {
             closePrivacySettingsModal={this.closePrivacySettingsModal}
             isPrivacySettingsModalActive={this.state.isPrivacySettingsModalActive}
             openPrivacySettingsModal={this.openPrivacySettingsModal}
+            isDeleteBookModalActive={this.state.isDeleteBookModalActive}
+            closeDeleteBookModal={this.closeDeleteBookModal}
+            bookToDelete={this.state.bookToDelete}
+            updateUserList={this.updateUserList}
+            isPasswordResetModalActive={this.state.isPasswordResetModalActive}
+            openPasswordResetModal={this.openPasswordResetModal}
+            closePasswordResetModal={this.closePasswordResetModal}
           />
         </div>
       </Router>

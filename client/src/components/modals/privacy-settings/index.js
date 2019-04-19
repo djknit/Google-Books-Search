@@ -5,19 +5,28 @@ import ModalSkeleton from '../modal-skeleton';
 
 class PrivacySettingsModal extends Component {
   constructor(props) {
-    // info about super(): http://cheng.logdown.com/posts/2016/03/26/683329
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.submitForm = this.submitForm.bind(this);
     this.cancelForm = this.cancelForm.bind(this);
+    this.currentSettingsSelectionValue = this.currentSettingsSelectionValue.bind(this);
     this.state = {
-      selection: null,
+      selection: this.currentSettingsSelectionValue(),
       problemMessage: '',
       hasSuccess: false,
       hasProblems: false,
       hasInputProblem: false,
       isLoading: false
     };
+  }
+
+  currentSettingsSelectionValue() {
+    return (
+      (this.props.user.shareUsername && 'username') ||
+      (this.props.user.shareEmail && 'email') ||
+      (this.props.user.shareEmail === false && this.props.user.shareUsername === false && 'none') ||
+      null
+    );
   }
   
   handleChange(event) {
@@ -77,16 +86,18 @@ class PrivacySettingsModal extends Component {
       });
   }
 
-  cancelForm() {
+  cancelForm(event) {
+    event.preventDefault();
     if (!this.state.hasSuccess) this.props.closeSaveBookModal();
     this.setState({
-      selection: null,
-      problemMessage: '',
+      problemMessage: null,
       hasSuccess: false,
       hasProblems: false,
       hasInputProblem: false,
-      isLoading: false
+      isLoading: false,
+      selection: this.currentSettingsSelectionValue()
     });
+    console.log(this.state);
     this.props.closeModal();
   }
 
@@ -109,6 +120,7 @@ class PrivacySettingsModal extends Component {
                       value="username"
                       checked={this.state.selection === 'username'}
                       onChange={this.handleChange}
+                      disabled={this.state.hasSuccess}
                     /> 
                     Let users see my username.
                   </label>
@@ -123,6 +135,7 @@ class PrivacySettingsModal extends Component {
                       value="email"
                       checked={this.state.selection === 'email'}
                       onChange={this.handleChange}
+                      disabled={this.state.hasSuccess}
                     />
                     Let users see my email address.
                   </label>
@@ -135,6 +148,7 @@ class PrivacySettingsModal extends Component {
                   value="none"
                   checked={this.state.selection === 'none'}
                   onChange={this.handleChange}
+                  disabled={this.state.hasSuccess}
                 />
                 Do <strong>not</strong> share my username or email address with other users.
               </label>

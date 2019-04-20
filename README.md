@@ -27,6 +27,10 @@
 * Any user can save books to the "Public List" which is shared by all site visitors.
 * Users who are logged in can also save books to their personal list which can not be viewed by other users.
 * Privacy settings can be adjusted so that users can choose to share their username or email address or remain anonymous when they post to the Public List.
+* 
+* Passwords are hashed using Bcrypt before they are stored in the database.
+* Routes are protected on the back end so that users are unable to access data they do not have permission for.
+* 
 
 
 ## Technologies Used
@@ -42,6 +46,8 @@
 * Node
 * MongoDB
 * Mongoose ORM
+* Bcrypt
+* Nodemailer
 * Other npm packages used:
   * iso-639-1
   * Morgan

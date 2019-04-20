@@ -34,6 +34,7 @@ class SaveBookModal extends Component {
         api.saved.publicList.postAsGuest;
     apiCall(this.props.book)
       .then(res => {
+        console.log(res);
         if (res.data && res.data.success) return this.setState({
           hasSuccess: true,
           isLoading: false,

@@ -1,6 +1,6 @@
 # Google Books Search
 
-### This app uses the Google Books API to search for books and allow the user to save titles in a Mongo database.
+### This app enables users to search for books using the Google Books API and save book information to be referenced later.
 
 ## Contents
 * [Links](#links)
@@ -11,13 +11,16 @@
 * [Developer](#developer)
 
 ## Links
-* GitHub Repository: [github.com/djknit/Google-Books-Search](https://github.com/djknit/Google-Books-Search)
+* GitHub repository: [github.com/djknit/Google-Books-Search](https://github.com/djknit/Google-Books-Search)
+* Deployed page: [daves-book-search.herokuapp.com](https://daves-book-search.herokuapp.com)
 
 ## Project Goals
 * Create an app that allows the user to search for books using the Google Books API.
-* Use React (with React components where appropriate) for the front end.
+* Use React for the front end. (This is my first major project built with React.)
 * Include separate views for searching for titles and viewing saved titles.
+* Allow book information to be saved and viewed later.
 * Serve the app from a Node/Express server and store saved information in a Mongo database.
+* Implement proper user authentication with password encryption.
 
 ## Project Features
 * Allows users to enter a search term (title, author, publisher, etc.) to search for books using the Google Books API.
@@ -27,7 +30,17 @@
 * Any user can save books to the "Public List" which is shared by all site visitors.
 * Users who are logged in can also save books to their personal list which can not be viewed by other users.
 * Privacy settings can be adjusted so that users can choose to share their username or email address or remain anonymous when they post to the Public List.
-
+* User authentication is verified on the server side each time a user tries to interact with their data. This prevents users from accessing other users' data even if they modify the front end code in an attempt to do so.
+* Users who are logged in can comment on books saved to the public list. They can also leave notes on books in their private list.
+* Comments can be deleted by the comment author.
+* Users can remove books and notes from their private list.
+* Passwords are hashed using Bcrypt before they are stored in the database.
+* Routes are protected on the back end so that users are unable to access data they do not have permission for.
+* In case of a forgotten password, users can request a reset link.
+  * A token is generated on the server (using Crypto package) and is saved with the user's information in the database. An expiration time is also set and saved with the user's data.
+  * The link is emailed to the user using Nodemailer with Gmail SMPT transport. This link contains the token.
+  * The link takes the user to the password reset page. If the user clicks the link and enters a new password, the token is matched to the user and the password is reset if and only if the token is valid and has not expired.
+* The app is automatically deployed to Heroku from the master branch of the Github repo.
 
 ## Technologies Used
 #### Front End
@@ -35,20 +48,28 @@
 * Bulma
 * Axios
 * Moment
+* react-router-dom package
+* create-react-app package
 
 #### Back End
-* Passport.js Local Strategy
+* Passport Local Strategy
 * Express
 * Node
 * MongoDB
-* Mongoose ORM
+* Mongoose
+* Bcrypt
+* Nodemailer
 * Other npm packages used:
+  * googleapis (for OAuth2 authentication for Gmail)
+  * axios
   * iso-639-1
-  * Morgan
-  * Path
-  * Dotenv
-  * Connect-ensure-login
-  * Cookie-parser
+  * async
+  * morgan
+  * path
+  * dotenv
+  * connect-ensure-login
+  * cookie-parser
+  * connect-flash
 
 #### Public APIs
 * Google Books API
@@ -63,4 +84,4 @@ This project is developed and maintained by David Knittel. Any and all questions
 * GitHub: [github.com/djknit](https://github.com/djknit)
 * LinkedIn: [linkedin.com/in/djknit](https://www.linkedin.com/in/djknit/)
 
-This project was originally developed as a homework assignment for the KU Coding Bootcamp Full Stack Flex program and uses specifications laid out by the homework requirements.
+This project is based on a homework assignment for the KU Coding Bootcamp Full Stack Flex program and uses some specifications laid out by the homework requirements.

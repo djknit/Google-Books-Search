@@ -4,18 +4,18 @@ function createAccount(newUser, callback) {
   const user = new User(newUser);
   user.save((err, user) => {
   if (err) return callback({
-      success: false,
-      message: err.code === 11000 ? 'That username is taken.' : 'Unknown server error.',
-      problems: err.code === 11000 ? { username: true } : {}
+    success: false,
+    message: err.code === 11000 ? 'That username is taken.' : 'Unknown server error.',
+    problems: err.code === 11000 ? { username: true } : {}
+  });
+  else if (user) {
+    user.password = undefined;
+    user.lowerCaseEmail = undefined;
+    return callback({
+      success: true,
+      user
     });
-    else if (user) {
-      user.password = undefined;
-      user.lowerCaseEmail = undefined;
-      return callback({
-        success: true,
-        user
-      });
-    }
+  }
   callback({ success: false, message: 'Unexpected outcome. Reason unknown.' })
   });
 }
@@ -36,30 +36,42 @@ module.exports = {
       user.lowerCaseEmail = user.email.toLowerCase();
       User.findOne({ lowerCaseEmail: user.lowerCaseEmail })
         .then(result => result ?
+          // email is taken
           user.username ? 
+            // check if username is also taken
             User.findOne({ username: user.username })
               .then(result_2 => result_2 ?
                 callback({
                   success: false,
                   message: 'That username is taken.\nThere is already an account for that email.',
                   problems: { email: true, username: true }
-                }) :
+                })
+                :
                 callback({
                   success: false,
                   message: 'There is already an account for that email.',
                   problems: { email: true }
-                }))
+                })
+              )
+              .catch(err => callback({
+                success: false,
+                error: err,
+                message: 'Unknown server error.'
+              }))
             :
+            // no username provided (& email taken)
             callback({
               success: false,
               message: 'There is already an account for that email.',
               problems: { email: true }
             })
           :
+          // email is available. username will be checked in createAccount()
           createAccount(user, callback)
         )
         .catch(err => callback({ success: false, error: err, message: 'Unknown server error.' }));
     }
+    // no email provided. username availablity is checked in createAccount()
     else createAccount(user, callback);
   },
   findByUsernameOrEmail(usernameOrEmail, callback) {
@@ -215,11 +227,43 @@ module.exports = {
     User.findOne({
       passwordResetToken: token,
       resetTokenExpiration: { $gt: Date.now() }
-    }).then(user => {
-      if (!user) return cb(null);
-      user.password = password;
-      user.passwordResetToken = null;
-      user.save((err, user) => err ? handleError(err) : cb(user));
-    }).catch(handleError);
+    })
+      .then(user => {
+        if (!user) return cb(null);
+        user.password = password;
+        user.passwordResetToken = null;
+        user.save((err, user) => err ? handleError(err) : cb(user));
+      })
+      .catch(handleError);
+  },
+  // used to verify password for account changes while user is already logged in
+  checkPassword: (userId, password, cb, handleError) => {
+    User.findById(userId)
+      .then(user => {
+        if (!user) return handleError('User not found.');
+        user.comparePassword(password, (err, isMatch) => {
+          if (isMatch) return cb(user);
+          else return handleError('Incorrect password. ' + err);
+        })
+      })
+      .catch(handleError);
+  },
+  updateAccountInfo: (userId, currentPassword, updatedProperties, cb, handleError) => {
+    this.checkPassword(
+      userId,
+      currentPassword,
+      user => {
+        if (!user) return cb(null);
+        const { email, username, password } = updatedProperties;
+        if (email) {
+          user.email = email;
+          user.lowerCaseEmail = email.toLowerCase();
+        }
+        if (username) user.username = username;
+        if (password) user.password = password;
+        user.save((err, user) => err ? handleError(err) : cb(user));
+      },
+      handleError
+    );
   }
 }

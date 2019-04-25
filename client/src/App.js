@@ -32,6 +32,12 @@ class App extends Component {
     this.closeDeleteBookModal = this.closeDeleteBookModal.bind(this);
     this.openPasswordResetModal = this.openPasswordResetModal.bind(this);
     this.closePasswordResetModal = this.closePasswordResetModal.bind(this);
+    this.openEditEmailModal = this.openEditEmailModal.bind(this);
+    this.closEditEmailModal = this.closEditEmailModal.bind(this);
+    this.openEditUsernameModal = this.openEditUsernameModal.bind(this);
+    this.closeEditUsernameModal = this.closeEditUsernameModal.bind(this);
+    this.openEditPasswordModal = this.openEditPasswordModal.bind(this);
+    this.closeEditPasswordModal = this.closeEditPasswordModal.bind(this);
     this.footerHeight = 50;
     this.state = {
       user: null,
@@ -42,6 +48,9 @@ class App extends Component {
       isPrivacySettingsModalActive: false,
       isDeleteBookModalActive: false,
       isPasswordResetModalActive: false,
+      isEditEmailModalActive: false,
+      isEditUsernameModalActive: false,
+      isEditPasswordModalActive: false,
       bookToDelete: null,
       userBooksList: null
     };
@@ -150,6 +159,42 @@ class App extends Component {
     });
   }
 
+  openEditEmailModal() {
+    this.setState({
+      isEditEmailModalActive: true
+    });
+  }
+
+  closEditEmailModal() {
+    this.setState({
+      isEditEmailModalActive: false
+    });
+  }
+
+  openEditUsernameModal() {
+    this.setState({
+      isEditUsernamelModalActive: true
+    });
+  }
+  
+  closeEditUsernameModal() {
+    this.setState({
+      isEditUsernameModalActive: false
+    });
+  }
+  
+  openEditPasswordModal() {
+    this.setState({
+      isEditPasswordModalActive: true
+    });
+  }
+  
+  closeEditPasswordModal() {
+    this.setState({
+      isEditPasswordModalActive: false
+    });
+  }
+
   componentDidMount() {
     console.log('checking auth (App: componentDidMount)')
     this.checkAuthentication();
@@ -247,6 +292,12 @@ class App extends Component {
             isPasswordResetModalActive={this.state.isPasswordResetModalActive}
             openPasswordResetModal={this.openPasswordResetModal}
             closePasswordResetModal={this.closePasswordResetModal}
+            isEditEmailModalActive={this.isEditEmailModalActive}
+            isEditUsernameModalActive={this.isEditUsernameModalActive}
+            isEditPasswordModalActive={this.isEditPasswordModalActive}
+            closeEditEmailModal={this.closeEditEmailModal}
+            closeEditUsernameModal={this.closeEditUsernameModal}
+            closeEditPasswordModal={this.closeEditPasswordModal}
           />
         </div>
       </Router>

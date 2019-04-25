@@ -95,7 +95,34 @@ router.post(
       shareUsername,
       shareEmail,
       result => res.json(result),
-      err => res.status(500).json({ message: err })
+      err => res.status(500).json({ message: err || 'unknown error' })
+    );
+  }
+);
+
+router.post(
+  '/user-info',
+  require('connect-ensure-login').ensureLoggedIn('/api/auth/fail'),
+  (req, res) => {
+    const { currentPassword, updatedInfo } = req.body;
+    if (!currentPassword || !updatedInfo) {
+      return res.status(400).json({
+        message: 'Missing "currentPassword" or "updatedInfo"'
+      });
+    }
+    UserController.updateAccountInfo(
+      req.user._id,
+      currentPassword,
+      updatedInfo,
+      user => {
+        if (!user) res.status(500).json({ message: 'user not found' });
+        user.password = undefined;
+        user.passwordResetToken = undefined;
+        user.resetTokenExpiration = undefined;
+        user.lowerCaseEmail = undefined;
+        res.json({ user });
+      },
+      err => res.status(500).json({ message: err || 'unknown error' })
     );
   }
 );

@@ -102,6 +102,8 @@ class PrivacySettingsModal extends Component {
   }
 
   render() {
+    const { user, isActive, closeModal } = this.props;
+
     return(
       <ModalSkeleton
         modalTitle="Update Privacy Settings"
@@ -112,7 +114,7 @@ class PrivacySettingsModal extends Component {
               When you save a book to the public list, do you want other users to be able to see your username or email address?
             </p>
             <div className="control">
-              {this.props.user && this.props.user.username &&
+              {user && user.username &&
                 <>
                   <label className="radio">
                     <input
@@ -127,7 +129,7 @@ class PrivacySettingsModal extends Component {
                   <br />
                 </>
               }
-              {this.props.user && this.props.user.email &&
+              {user && user.email &&
                 <>
                   <label className="radio">
                     <input
@@ -165,9 +167,9 @@ class PrivacySettingsModal extends Component {
             Submit
           </button>
         }
-        isModalActive={this.props.isActive}
+        isModalActive={isActive}
         hasSuccess={this.state.hasSuccess}
-        closeModal={this.props.closeModal}
+        closeModal={closeModal}
         cancel={this.cancelForm}
         isLoading={this.state.isLoading}
         isPrivacySettingsModal

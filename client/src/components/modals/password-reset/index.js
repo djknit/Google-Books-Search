@@ -84,6 +84,8 @@ class PasswordResetModal extends Component {
   }
   
   render() {
+    const { isActive, closeModal } = this.props;
+
     return(
       <ModalSkeleton
         modalTitle="Request Password Reset"
@@ -160,12 +162,13 @@ class PasswordResetModal extends Component {
             Submit
           </button>
         }
-        isModalActive={this.props.isActive}
+        isModalActive={isActive}
         hasSuccess={this.state.hasSuccess}
-        closeModal={this.props.closeModal}
+        closeModal={closeModal}
         cancel={this.cancelForm}
         isLoading={this.state.isLoading}
         hasError={this.state.hasError}
+        isPasswordResetModal
       >
       </ModalSkeleton>
     );

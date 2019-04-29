@@ -4,10 +4,13 @@ import NavLink from './nav-link';
 
 export default ({
   user,
+  logOut,
   openCreateAccountModal,
   openLoginModal,
   openPrivacySettingsModal,
-  logOut
+  openEditUsernameModal,
+  openEditEmailModal,
+  openEditPasswordModal
 }) => {
 
   return (
@@ -48,7 +51,15 @@ export default ({
               <div className="dropdown-menu has-shadow" id="account-nav-dropdown" role="menu">
                 <div className="dropdown-content">
                   <NavLink text="Privacy settings" onClick={openPrivacySettingsModal} />
-                  {/* <NavLink path="/my-list" text="Your List" /> */}
+                  <NavLink
+                    text={`${user.username ? 'Change your' : 'Create a'} username`}
+                    onClick={openEditUsernameModal}
+                  />
+                  <NavLink
+                    text={`${user.email ? 'Change your' : 'Add your'} email`}
+                    onClick={openEditEmailModal}
+                  />
+                  <NavLink text="Change your password" onClick={openEditPasswordModal} />
                 </div>
               </div>
             </div>

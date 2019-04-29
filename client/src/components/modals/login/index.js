@@ -103,6 +103,12 @@ class loginModal extends Component {
   }
 
   render() {
+    const {
+      openPasswordResetModal,
+      isActive,
+      closeModal
+    } = this.props;
+
     return(
       <ModalSkeleton
         modalTitle="Sign In"
@@ -120,7 +126,7 @@ class loginModal extends Component {
               handleChange={this.handleChange}
               submitForm={this.submitForm}
               isLoading={this.state.isLoading}
-              openPasswordResetModal={this.props.openPasswordResetModal}
+              openPasswordResetModal={openPasswordResetModal}
             />
           </form>
         }
@@ -134,9 +140,9 @@ class loginModal extends Component {
             Sign In
           </button>
         }
-        isModalActive={this.props.isActive}
+        isModalActive={isActive}
         hasSuccess={this.state.hasSuccess}
-        closeModal={this.props.closeModal}
+        closeModal={closeModal}
         cancel={this.cancelForm}
         successRedirectPath={window.location.pathname === '/' ? '/search' : false}
         isLoading={this.state.isLoading}

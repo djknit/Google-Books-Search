@@ -15,13 +15,15 @@ export default ({
   successRedirectPath,
   isLoading,
   hasError,
-  isPrivacySettingsModal
+  isPrivacySettingsModal,
+  isPasswordResetModal
 }) => {
 
   const headerColor = (hasSuccess && '#23d160') || (hasError && '#ff3860');
+  const modalStyle = { zIndex: isPasswordResetModal ? 42 : 40 };
 
   return (
-    <div className={isModalActive ? 'modal is-active' : 'modal'}>
+    <div className={isModalActive ? 'modal is-active' : 'modal'} style={modalStyle}>
       <div className="modal-background"></div>
       <div className="modal-card" style={{ minWidth: 252 }}>
         <header className="modal-card-head" style={headerColor ? { backgroundColor: headerColor } : {}}>

@@ -6,8 +6,7 @@ import BookInfoDisplay from '../book-info';
 export default ({
   results,
   query,
-  openSaveBookModal,
-  ...otherProps
+  openSaveBookModal
 }) => {
 
   let style = {

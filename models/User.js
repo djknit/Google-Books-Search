@@ -46,7 +46,10 @@ const UserSchema = new Schema({
   shareUsername: Boolean,
   shareEmail: Boolean,
   passwordResetToken: String,
-  resetTokenExpiration: Number
+  resetTokenExpiration: Number,
+  verifyEmailToken: String,
+  verifyEmailTokenExpiration: Number,
+  unverifiedEmail: String
 });
 
 // source (for using Bcrypt w/ Mongoose): http://sahatyalkabov.com/how-to-implement-password-reset-in-nodejs/

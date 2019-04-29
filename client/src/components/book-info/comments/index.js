@@ -104,7 +104,15 @@ class CommentsSection extends Component {
   }
 
   render() {
-    const things = this.props.isPublicList ? 'comments' : 'notes';
+    const {
+      isPublicList,
+      comments,
+      user,
+      openLoginModal,
+      openCreateAccountModal
+    } = this.props;
+
+    const things = isPublicList ? 'comments' : 'notes';
 
     return (
       <>
@@ -154,18 +162,18 @@ class CommentsSection extends Component {
           }}
         >
           <hr className="divider" />
-          {this.props.comments.length ?
-            this.props.comments.map(comment => (
+          {comments.length ?
+            comments.map(comment => (
               <div className="comment" id={comment._id} key={comment._id}>
                 <p className="time">{moment(comment.time).calendar()}</p>
-                {(comment.currentUser || !this.props.isPublicList) &&
+                {(comment.currentUser || !isPublicList) &&
                   <div className="delete-comment" onClick={() => this.deleteComment(comment._id)}>                  
                     <span className="word">delete </span>
                     <span className="letter">x</span>
                   </div>
                 }
                 <p>
-                  {this.props.isPublicList &&
+                  {isPublicList &&
                     <span className="author">{comment.user || <em>Anonymous</em>}:&nbsp;</span>
                   }
                   {comment.body}
@@ -183,11 +191,11 @@ class CommentsSection extends Component {
               {this.state.errorMessage}
             </p>
           }
-          {this.props.user || !this.props.isPublicList ?
+          {user || !isPublicList ?
             <form className="new-comment">
               <textarea
                 className="textarea has-fixed-size"
-                placeholder={this.props.isPublicList ? "Share your thoughts..." : "Write a note..."}
+                placeholder={isPublicList ? "Share your thoughts..." : "Write a note..."}
                 rows="2"
                 disabled={this.state.isLoading}
                 value={this.state.newComment}
@@ -205,8 +213,8 @@ class CommentsSection extends Component {
             :
             <div className="content">
               <p className="must-login">
-                You must <span className="text-link" onClick={this.props.openLoginModal}>sign in
-                </span> or <span className="text-link" onClick={this.props.openCreateAccountModal}>
+                You must <span className="text-link" onClick={openLoginModal}>sign in
+                </span> or <span className="text-link" onClick={openCreateAccountModal}>
                 create an account</span> to write a comment.
               </p>
             </div>

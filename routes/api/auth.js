@@ -95,39 +95,105 @@ router.post(
       shareUsername,
       shareEmail,
       result => res.json(result),
-      err => res.status(500).json({ message: err })
+      err => res.status(500).json({ message: err || 'unknown error' })
+    );
+  }
+);
+
+router.post(
+  '/verify-email/:token',
+  (req, res) => {
+    UserController.verifyEmail(
+      req.params.token,
+      result => {
+        const { success, user, cleanUser } = result;
+        if (success) return req.login(
+          user,
+          err => res.json({
+            success,
+            user: cleanUser,
+            login: !err
+          })
+        );
+        else res.json({
+          success,
+          user: cleanUser
+        });
+      },
+      err => res.status(500).json({ message: err || 'unknown error' })
     );
   }
 );
 
 const async = require('async');
 const crypto = require('crypto');
-const sendPasswordResetEmail = require('../../utilities/nodemailer');
+const {
+  sendPasswordResetEmail,
+  sendEmailAddressVerificationEmail
+} = require('../../utilities/nodemailer');
+
+router.post(
+  '/edit-user-info',
+  require('connect-ensure-login').ensureLoggedIn('/api/auth/fail'),
+  (req, res) => {
+    const { currentPassword, updatedInfo } = req.body;
+    if (!currentPassword || !updatedInfo) {
+      return res.status(400).json({
+        message: 'Missing "currentPassword" and/or "updatedInfo".'
+      });
+    }
+    if (updatedInfo.email) {
+      UserController.setEmailVerificationToken(
+        req.user._id,
+        currentPassword,
+        updatedInfo.email,
+        req.headers.host,
+        result => res.json(result),
+        err => res.status(500).json({ message: err || 'unknown error' })
+      );
+    }
+    else {
+      UserController.updateAccountInfo(
+        req.user._id,
+        currentPassword,
+        updatedInfo,
+        user => {
+          if (!user) res.status(500).json({ message: 'user not found' });
+          res.json({ user });
+        },
+        err => res.status(500).json({ message: err || 'unknown error' })
+      );
+    }
+  }
+);
 
 // source: http://sahatyalkabov.com/how-to-implement-password-reset-in-nodejs/
 router.post('/forgotpassword', (req, res) => {
   // https://caolan.github.io/async/docs.html#waterfall 
-  async.waterfall([
-    done => {
-      crypto.randomBytes(20, (err, buf) => {
-        const token = buf.toString('hex');
-        done(err, token);
-      });
-    },
-    (token, done) => {
-      UserController.findByEmail(req.body.email, (err, user) => {
-        if (!user) return res.json({ problem: true, error: 'Sorry, there is no account registered for that address.' });
-        if (err) return res.json({ error: err });
-        user.passwordResetToken = token;
-        user.resetTokenExpiration = Date.now() + 3600000;
-        user.save(err => done(err, req, res, token, user));
-      });
-    },
-    sendPasswordResetEmail
-  ], err => {
-    if (err) return console.error(err);
-    res.status(500).json({ error: err })
-  });
+  async.waterfall(
+    [
+      done => {
+        crypto.randomBytes(20, (err, buf) => {
+          const token = buf.toString('hex');
+          done(err, token);
+        });
+      },
+      (token, done) => {
+        UserController.findByEmail(req.body.email, (err, user) => {
+          if (!user) return res.json({ problem: true, error: 'Sorry, there is no account registered for that address.' });
+          if (err) return res.json({ error: err });
+          user.passwordResetToken = token;
+          user.resetTokenExpiration = Date.now() + 3600000;
+          user.save(err => done(err, req, res, token, user));
+        });
+      },
+      sendPasswordResetEmail
+    ],
+    err => {
+      if (err) return console.error(err);
+      res.status(500).json({ error: err })
+    }
+  );
 });
 
 router.post('/resetpassword/', (req, res) => {

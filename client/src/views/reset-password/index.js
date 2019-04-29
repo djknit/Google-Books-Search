@@ -74,8 +74,9 @@ class ResetPasswordPage extends Component {
       hasVerifyPasswordProblem: false,
       problemMessage: null
     });
-    api.auth.resetPassword(this.props.match.params.token, password)
+    api.auth.resetPassword(token, password)
       .then(res => {
+        console.log(res)
         if (!res || !res.data) return this.reportError(null);
         if (res.data.success) return this.reportSuccess(res.data.user);
         this.setState({
@@ -130,7 +131,6 @@ class ResetPasswordPage extends Component {
   }
 
   render() {
-    console.log(this.props.match.params.token);
     const boxStyle = {
       width: 500,
       maxWidth: '92%',

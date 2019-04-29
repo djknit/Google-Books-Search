@@ -5,7 +5,7 @@ export default ({
   text
 }) => {
 
-  // Styles for classes 'is-primary' and 'is-deep' are defined in App.css
+  // Styles for classes 'button' and 'is-deep' are defined in App.css
   return (
     <button className="button is-primary is-deep" onClick={onClick}>{text}</button>
   );

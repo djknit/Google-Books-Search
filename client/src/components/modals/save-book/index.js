@@ -77,13 +77,22 @@ class SaveBookModal extends Component {
   }
   
   render() {
+    const {
+      book,
+      user,
+      openLoginModal,
+      openCreateAccountModal,
+      isActive,
+      closeModal
+    } = this.props;
+
     return(
       <ModalSkeleton
         modalTitle="Save Book"
         modalTitleSuccess="Book Saved!"
         BodyContent={!this.state.saveTo ?
           <>
-            <BookInfoSummary book={this.props.book} isSmall />
+            <BookInfoSummary book={book} isSmall />
             <hr className='save-book' />
             {!this.state.savedStatus ?
               <Box style={{ backgroundColor: '#f0f0f0' }}>
@@ -92,9 +101,9 @@ class SaveBookModal extends Component {
               :
               <SaveOptionsDisplay
                 savedStatus={this.state.savedStatus}
-                user={this.props.user}
-                openLoginModal={this.props.openLoginModal}
-                openCreateAccountModal={this.props.openCreateAccountModal}
+                user={user}
+                openLoginModal={openLoginModal}
+                openCreateAccountModal={openCreateAccountModal}
                 saveToPublicList={this.selectSaveToPublicList}
                 saveToUserList={() => this.setState({ saveTo: { userList: true } })}
               />
@@ -109,8 +118,8 @@ class SaveBookModal extends Component {
             </div>
             :
             <ConfirmSave
-              book={this.props.book}
-              user={this.props.user}
+              book={book}
+              user={user}
               isPublic={this.state.saveTo && this.state.saveTo.publicList}
               isUser={this.state.saveTo && this.state.saveTo.userList}
               hasSuccess={this.state.hasSuccess}
@@ -121,10 +130,10 @@ class SaveBookModal extends Component {
             Confirm
           </button>
         }
-        isModalActive={this.props.isActive}
+        isModalActive={isActive}
         hasSuccess={this.state.hasSuccess}
-        closeModal={this.props.closeModal}
-        cancel={this.props.closeModal}
+        closeModal={closeModal}
+        cancel={closeModal}
         isLoading={this.state.isLoading}
         hasError={this.state.hasError}
       />

@@ -10,6 +10,7 @@ import NotFoundView from './views/not-found';
 import Modals from './components/modals';
 import MyFooter from './components/footer';
 import ResetPasswordView from './views/reset-password';
+import VerifyEmailView from './views/verify-email';
 import api from './utilities/api';
 
 class App extends Component {
@@ -32,6 +33,12 @@ class App extends Component {
     this.closeDeleteBookModal = this.closeDeleteBookModal.bind(this);
     this.openPasswordResetModal = this.openPasswordResetModal.bind(this);
     this.closePasswordResetModal = this.closePasswordResetModal.bind(this);
+    this.openEditEmailModal = this.openEditEmailModal.bind(this);
+    this.closeEditEmailModal = this.closeEditEmailModal.bind(this);
+    this.openEditUsernameModal = this.openEditUsernameModal.bind(this);
+    this.closeEditUsernameModal = this.closeEditUsernameModal.bind(this);
+    this.openEditPasswordModal = this.openEditPasswordModal.bind(this);
+    this.closeEditPasswordModal = this.closeEditPasswordModal.bind(this);
     this.footerHeight = 50;
     this.state = {
       user: null,
@@ -42,6 +49,9 @@ class App extends Component {
       isPrivacySettingsModalActive: false,
       isDeleteBookModalActive: false,
       isPasswordResetModalActive: false,
+      isEditEmailModalActive: false,
+      isEditUsernameModalActive: false,
+      isEditPasswordModalActive: false,
       bookToDelete: null,
       userBooksList: null
     };
@@ -150,6 +160,42 @@ class App extends Component {
     });
   }
 
+  openEditEmailModal() {
+    this.setState({
+      isEditEmailModalActive: true
+    });
+  }
+
+  closeEditEmailModal() {
+    this.setState({
+      isEditEmailModalActive: false
+    });
+  }
+
+  openEditUsernameModal() {
+    this.setState({
+      isEditUsernameModalActive: true
+    });
+  }
+  
+  closeEditUsernameModal() {
+    this.setState({
+      isEditUsernameModalActive: false
+    });
+  }
+  
+  openEditPasswordModal() {
+    this.setState({
+      isEditPasswordModalActive: true
+    });
+  }
+  
+  closeEditPasswordModal() {
+    this.setState({
+      isEditPasswordModalActive: false
+    });
+  }
+
   componentDidMount() {
     console.log('checking auth (App: componentDidMount)')
     this.checkAuthentication();
@@ -163,11 +209,14 @@ class App extends Component {
         <div id="whole-page">
           <div id="whole-page-except-footer" style={{ minHeight: `calc(100vh - ${this.footerHeight}px)` }}>
             <Navbar
+              user={this.state.user}
+              logOut={this.logUserOut}
               openCreateAccountModal={this.openCreateAccountModal}
               openLoginModal={this.openLoginModal}
               openPrivacySettingsModal={this.openPrivacySettingsModal}
-              user={this.state.user}
-              logOut={this.logUserOut}
+              openEditUsernameModal={this.openEditUsernameModal}
+              openEditEmailModal={this.openEditEmailModal}
+              openEditPasswordModal={this.openEditPasswordModal}
             />
             <Switch>
               {/* source: https://tylermcginnis.com/react-router-pass-props-to-components/ */}
@@ -217,6 +266,14 @@ class App extends Component {
                 />}
               />
               <Route
+                path='/verify-email/:token'
+                render={props => <VerifyEmailView
+                  {...props}
+                  footerHeight={this.footerHeight}
+                  setUser={this.setUser}
+                />}
+              />
+              <Route
                 render={props => <NotFoundView
                   {...props}
                   footerHeight={this.footerHeight}
@@ -247,6 +304,12 @@ class App extends Component {
             isPasswordResetModalActive={this.state.isPasswordResetModalActive}
             openPasswordResetModal={this.openPasswordResetModal}
             closePasswordResetModal={this.closePasswordResetModal}
+            isEditEmailModalActive={this.state.isEditEmailModalActive}
+            isEditUsernameModalActive={this.state.isEditUsernameModalActive}
+            isEditPasswordModalActive={this.state.isEditPasswordModalActive}
+            closeEditEmailModal={this.closeEditEmailModal}
+            closeEditUsernameModal={this.closeEditUsernameModal}
+            closeEditPasswordModal={this.closeEditPasswordModal}
           />
         </div>
       </Router>

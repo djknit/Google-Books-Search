@@ -6,6 +6,7 @@ import SaveBookModal from './save-book';
 import DeleteBookModal from './delete-book';
 import PrivacySettingsModal from './privacy-settings';
 import PasswordResetModal from './password-reset';
+import EditAccountInfoModals from './edit-account-info';
 
 export default ({
   isCreateAccountModalActive,
@@ -28,7 +29,13 @@ export default ({
   updateUserList,
   isPasswordResetModalActive,
   openPasswordResetModal,
-  closePasswordResetModal
+  closePasswordResetModal,
+  isEditEmailModalActive,
+  closeEditEmailModal,
+  isEditUsernameModalActive,
+  closeEditUsernameModal,
+  isEditPasswordModalActive,
+  closeEditPasswordModal
 }) => {
   
   return (
@@ -43,6 +50,10 @@ export default ({
         isActive={isLoginModalActive}
         setUser={setUser}
         openPasswordResetModal={openPasswordResetModal}
+      />
+      <PasswordResetModal
+        closeModal={closePasswordResetModal}
+        isActive={isPasswordResetModalActive}
       />
       {isSaveBookModalActive &&
         <SaveBookModal
@@ -66,18 +77,27 @@ export default ({
         />
       }
       {user &&
-        <PrivacySettingsModal
-          user={user}
-          closeModal={closePrivacySettingsModal}
-          isActive={isPrivacySettingsModalActive}
-          closeSaveBookModal={closeSaveBookModal}
-          setUser={setUser}
-        />
+        <>
+          <PrivacySettingsModal
+            user={user}
+            closeModal={closePrivacySettingsModal}
+            isActive={isPrivacySettingsModalActive}
+            closeSaveBookModal={closeSaveBookModal}
+            setUser={setUser}
+          />
+          <EditAccountInfoModals
+            user={user}
+            setUser={setUser}
+            isEditEmailModalActive={isEditEmailModalActive}
+            closeEditEmailModal={closeEditEmailModal}
+            isEditUsernameModalActive={isEditUsernameModalActive}
+            closeEditUsernameModal={closeEditUsernameModal}
+            isEditPasswordModalActive={isEditPasswordModalActive}
+            closeEditPasswordModal={closeEditPasswordModal}
+            openPasswordResetModal={openPasswordResetModal}
+          />
+        </>
       }
-      <PasswordResetModal
-        closeModal={closePasswordResetModal}
-        isActive={isPasswordResetModalActive}
-      />
     </>
   );
 }

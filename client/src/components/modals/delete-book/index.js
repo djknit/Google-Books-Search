@@ -48,18 +48,20 @@ class DeleteBookModal extends Component {
   }
 
   render() {
+    const { book } = this.props;
+
     return(
       <ModalSkeleton
         modalTitle="Remove Book from List"
         modalTitleSuccess="Book Removed!"
         BodyContent={
           <>
-            <BookInfoSummary book={this.props.book} isSmall />
+            <BookInfoSummary book={book} isSmall />
             <hr />
             <div className="content has-text-centered">
               {this.state.hasSuccess ?
                 <p>
-                  <em>{this.props.book.title}</em> was successfully removed from your list.
+                  <em>{book.title}</em> was successfully removed from your list.
                 </p>
                 :
                 this.state.hasError ?
@@ -73,7 +75,7 @@ class DeleteBookModal extends Component {
                     <p>This action <strong>cannot be reversed.</strong></p>
                     <p className="is-size-5">
                       Are you sure you want to remove&nbsp;
-                      <em>{this.props.book.title}</em> from your list?
+                      <em>{book.title}</em> from your list?
                     </p>
                   </>
               }

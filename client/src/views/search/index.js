@@ -10,23 +10,27 @@ class searchView extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.submitSearch = this.submitSearch.bind(this);
     this.state = {
-      query: '',
+      input: '',
+      query: null,
       results: {},
       isLoading: false
     };
   }
 
   handleInputChange(event) {
-    this.setState({ query: event.target.value });
+    this.setState({ input: event.target.value });
   }
 
   submitSearch(event) {
     event.preventDefault();
-    this.setState({ isLoading: true });
-    // console.log(this.state.query);
-    api.search.submitSearch(this.state.query)
+    const { input } = this.state;
+    this.setState({
+      isLoading: true,
+      query: input
+    });
+    api.search.submitSearch(this.state.input)
       .then(res => {
-        // console.log(res.data);
+        console.log(res.data);
         this.setState({
           results: res.data,
           isLoading: false
@@ -35,10 +39,13 @@ class searchView extends Component {
   }
 
   render() {
+    const { openSaveBookModal } = this.props;
+
     return(
       <div>
         <Hero pageName="Search for Books" />
         <SearchBar
+          inputValue={this.state.input}
           handleChange={this.handleInputChange}
           submitSearch={this.submitSearch}
           isLoading={this.state.isLoading}
@@ -46,7 +53,7 @@ class searchView extends Component {
         <SearchResults
           query={this.state.query}
           results={this.state.results}
-          openSaveBookModal={this.props.openSaveBookModal}
+          openSaveBookModal={openSaveBookModal}
         />
       </div>
     );

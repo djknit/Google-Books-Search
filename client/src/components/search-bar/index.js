@@ -3,6 +3,7 @@ import './style.css';
 import Box from '../box';
 
 export default ({
+  inputValue,
   handleChange,
   submitSearch,
   isLoading
@@ -26,6 +27,7 @@ export default ({
               id="search-input"
               className="input has-shadow"
               placeholder="Enter an author or title..."
+              value={inputValue}
               onChange={handleChange}
               disabled={isLoading}
             />
@@ -42,7 +44,7 @@ export default ({
         >
           <img src="assets/images/poweredby.png" alt="Powered by Google" />
         </a>
-        <button onClick={submitSearch} type="submit" className="button is-primary" disabled={isLoading}>
+        <button onClick={submitSearch} type="submit" className="button is-primary" disabled={isLoading || !inputValue}>
           Search!
         </button>
       </form>

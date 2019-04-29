@@ -1,4 +1,9 @@
+const async = require('async');
+const crypto = require('crypto');
+
 const User = require("../models/User");
+
+const { sendEmailAddressVerificationEmail } = require('../utilities/nodemailer');
 
 function createAccount(newUser, callback) {
   const user = new User(newUser);
@@ -18,6 +23,12 @@ function createAccount(newUser, callback) {
   }
   callback({ success: false, message: 'Unexpected outcome. Reason unknown.' })
   });
+}
+
+// function to prepare only basic user info to send back (avoid sending password, etc.)
+function cleanUser(user) {
+  const { _id, username, email, shareEmail, shareUsername } = user;
+  return ({ _id, username, email, shareEmail, shareUsername });
 }
 
 module.exports = {
@@ -232,7 +243,8 @@ module.exports = {
         if (!user) return cb(null);
         user.password = password;
         user.passwordResetToken = null;
-        user.save((err, user) => err ? handleError(err) : cb(user));
+        user.resetTokenExpiration = null;
+        user.save((err, user) => err ? handleError(err) : cb(cleanUser(user)));
       })
       .catch(handleError);
   },
@@ -243,27 +255,89 @@ module.exports = {
         if (!user) return handleError('User not found.');
         user.comparePassword(password, (err, isMatch) => {
           if (isMatch) return cb(user);
-          else return handleError('Incorrect password. ' + err);
-        })
+          else return handleError('Incorrect password. ' + (err || ''));
+        });
       })
       .catch(handleError);
   },
-  updateAccountInfo: (userId, currentPassword, updatedProperties, cb, handleError) => {
+  updateAccountInfo(userId, currentPassword, updatedProperties, cb, handleError) {
     this.checkPassword(
       userId,
       currentPassword,
       user => {
         if (!user) return cb(null);
         const { email, username, password } = updatedProperties;
-        if (email) {
-          user.email = email;
-          user.lowerCaseEmail = email.toLowerCase();
-        }
         if (username) user.username = username;
         if (password) user.password = password;
-        user.save((err, user) => err ? handleError(err) : cb(user));
+        user.save((err, user) => err ? handleError(err) : cb(cleanUser(user)));
       },
       handleError
     );
+  },
+  setEmailVerificationToken(userId, currentPassword, newEmail, baseUrl, cb, handleError) {
+    async.waterfall(
+      [
+        done => {
+          crypto.randomBytes(20, (err, buf) => {
+            const token = buf.toString('hex');
+            done(err, token);
+          });
+        },
+        (token, done) => {
+          User.findById(userId)
+            .then(user => {
+              if (!user) return handleError('Error: User not found.');
+              user.comparePassword(currentPassword, (err, isMatch) => done(err, user, isMatch, token));
+            });
+        },
+        (user, isMatch, token, done) => {
+          if (!isMatch) return cb({
+            success: false,
+            message: err || 'Password didn\'t match.',
+            passwordProblem: true
+          });
+          user.verifyEmailToken = token;
+          user.verifyEmailTokenExpiration = Date.now() + 3600000;
+          user.unverifiedEmail = newEmail;
+          user.save((err, user) => done(err, user, token));
+        },
+        (user, token, done) => {
+          sendEmailAddressVerificationEmail(baseUrl, user, token, done);
+        },
+        (success, done) => {
+          if (!success) return done('Unknown error.');
+          cb({
+            success: true,
+            message: `An email has been sent to ${newEmail} with further instructions. ` +
+              'Please click the link in the email to verify your email address.'
+          });
+        }
+      ],
+      handleError
+    );
+  },
+  verifyEmail(token, cb, handleError) {
+    User.findOne({
+      verifyEmailToken: token,
+      verifyEmailTokenExpiration: { $gt: Date.now() }
+    })
+      .then(user => {
+        if (!user) return cb({ success: false });
+        const { unverifiedEmail } = user;
+        user.email = unverifiedEmail;
+        user.lowerCaseEmail = unverifiedEmail.toLowerCase();
+        user.unverifiedEmail = null;
+        user.verifyEmailToken = null;
+        user.verifyEmailTokenExpiration = null;
+        user.save((err, user) => err ?
+          handleError(err) :
+          cb({
+            success: true,
+            user,
+            cleanUser: cleanUser(user)
+          })
+        );
+      })
+      .catch(handleError);
   }
 }

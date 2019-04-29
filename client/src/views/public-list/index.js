@@ -46,17 +46,24 @@ class publicListView extends Component {
   }
 
   render() {
+    const {
+      openSaveBookModal,
+      user,
+      openLoginModal,
+      openCreateAccountModal
+    } = this.props;
+
     return(
       <div>
         <Hero pageName="Saved Titles" />
         <SavedBooks
           list={this.state.list}
-          openSaveBookModal={this.props.openSaveBookModal}
+          openSaveBookModal={openSaveBookModal}
           isPublicList
           errorMessage={this.state.errorMessage}
-          user={this.props.user}
-          openLoginModal={this.props.openLoginModal}
-          openCreateAccountModal={this.props.openCreateAccountModal}
+          user={user}
+          openLoginModal={openLoginModal}
+          openCreateAccountModal={openCreateAccountModal}
           updateList={this.updateList}
         />
       </div>

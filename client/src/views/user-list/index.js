@@ -28,17 +28,19 @@ class UserListView extends Component {
   }
 
   render() {
+    const { list, openSaveBookModal, updateList, openDeleteBookModal } = this.props;
+
     return(
       <div>
         <Hero pageName="Saved Titles" />
         <SavedBooks
-          list={this.props.list}
-          openSaveBookModal={this.props.openSaveBookModal}
+          list={list}
+          openSaveBookModal={openSaveBookModal}
           errorMessage={this.state.errorMessage}
           hasError={this.state.hasError}
-          updateList={this.props.updateList}
+          updateList={updateList}
           isUserList
-          openDeleteBookModal={this.props.openDeleteBookModal}
+          openDeleteBookModal={openDeleteBookModal}
         />
       </div>
     );

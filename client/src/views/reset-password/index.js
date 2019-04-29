@@ -74,7 +74,7 @@ class ResetPasswordPage extends Component {
       hasVerifyPasswordProblem: false,
       problemMessage: null
     });
-    api.auth.resetPassword(this.props.match.params.token, password)
+    api.auth.resetPassword(token, password)
       .then(res => {
         console.log(res)
         if (!res || !res.data) return this.reportError(null);

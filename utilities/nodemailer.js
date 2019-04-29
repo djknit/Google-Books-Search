@@ -49,4 +49,21 @@ const sendPasswordResetEmail = (req, res, token, user, done) => {
   });
 }
 
-module.exports = sendPasswordResetEmail;
+const sendEmailAddressVerificationEmail = (baseUrl, user, token, done) => {
+  const mailOptions = {
+    to: user.email,
+    from: 'djknit@gmail.com',
+    subject: 'Book Search: Verify Email',
+    text: 'Please visit the following link to verify your email address for Dave\'s Book Search.\n\n' +
+      'http://' + baseUrl + '/verify-email/' + token + '\n\n' +
+      'If you did not request to use this email for an account on the Book Search, you can ignore this email and your address will not be used.\n\n' +
+      'You may reply to this e-mail if you have any questions.\n\n' +
+      'Thanks,\nDavid Knittel'
+  };
+  smtpTransport.sendMail(mailOptions, function(err) {
+    if (err) return done(err, false);
+    done(null, true);
+  });
+}
+
+module.exports = { sendPasswordResetEmail, sendEmailAddressVerificationEmail };

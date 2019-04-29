@@ -162,6 +162,11 @@ class loginModal extends Component {
   }
 
   render() {
+    const {
+      isActive,
+      closeModal
+    } = this.props;
+
     return (
       <ModalSkeleton
         modalTitle="Create Account"
@@ -196,9 +201,9 @@ class loginModal extends Component {
             Submit
           </button>
         }
-        isModalActive={this.props.isActive}
+        isModalActive={isActive}
         hasSuccess={this.state.hasSuccess}
-        closeModal={this.props.closeModal}
+        closeModal={closeModal}
         cancel={this.cancelForm}
         successRedirectPath={window.location.pathname === '/' ? '/search' : false}
         isLoading={this.state.isLoading}

@@ -14,12 +14,17 @@ const savedApi = createApiCall('saved');
 export default {
   auth: {
     createAccount: newUser => authApi.post('/create', newUser),
-    login: (usernameOrEmail, password) => authApi.post('/login', { usernameOrEmail, password }),
+    login: (usernameOrEmail, password) => authApi
+      .post('/login', { usernameOrEmail, password }),
     logout: () => authApi.post('/logout'),
     updatePrivacySettings: newSettings => authApi.post('/privacy-settings', newSettings),
     test: () => authApi.get('/test'),
     forgotPassword: email => authApi.post('/forgotpassword', { email }),
-    resetPassword: (token, newPassword) => authApi.post('/resetpassword', { token, newPassword })
+    resetPassword: (token, newPassword) => authApi
+      .post('/resetpassword', { token, newPassword }),
+    editUserInfo: (updatedInfo, currentPassword) => authApi
+      .post('/edit-user-info', { updatedInfo, currentPassword }),
+    verifyEmail: token => authApi.post(`/verify-email/${token}`)
   },
   search: {
     submitSearch: query => searchApi.get(`/${query}`)

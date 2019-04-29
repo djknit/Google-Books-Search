@@ -1,55 +1,193 @@
 import React, { Component } from 'react';
 import ModalSkeleton from '../../modal-skeleton';
 import EditUserForm from './edit-user-form';
+import api from '../../../../utilities/api';
+
+const defaultState = {
+  hasSuccess: false,
+  hasProblem: false,
+  isLoading: false,
+  problemMessages: [],
+  successMessage: null,
+  input1: '',
+  input2: '',
+  confirmPasswordInput: '',
+  hasInput1Problem: false,
+  hasInput2Problem: false,
+  hasConfirmPasswordProblem: false
+};
 
 class GenericEditAccountInfoModal extends Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.submitForm = this.submitForm.bind(this);
-    this.state = {
-      hasSuccess: false,
-      hasProblem: false,
-      isLoading: false,
-      problemMessage: null,
-      input1: '',
-      input2: this.props.property === 'password' ? '' : undefined,
-      hasInput1Problem: false,
-      hasInput2Problem: this.props.property === 'password' ? false : undefined
+    this.cancelForm = this.cancelForm.bind(this);
+    this.state = defaultState;
+  }
+
+  handleChange({ target }) {
+    this.setState({ [target.name]: target.value });
+  }
+
+  submitForm(event) {
+    event.preventDefault();
+    console.log({
+      input1: this.state.input1,
+      input2: this.state.input2,
+      confirmPasswordInput: this.state.confirmPasswordInput
+    });
+    const { input1, input2, confirmPasswordInput } = this.state;
+    let hasInput1Problem, hasInput2Problem, hasConfirmPasswordProblem;
+    let problemMessages = [];
+    if (!input1) {
+      hasInput1Problem = true;
+      problemMessages.push(`The ${this.props.property} field cannot be empty.`);
+    }
+    if (!confirmPasswordInput) {
+      hasConfirmPasswordProblem = true;
+      problemMessages.push(
+        'You must enter your current password to verify your identity before making changes to your account.'
+      );
+    }
+    if (this.props.property === 'password') {
+      if (!input2) {
+        hasInput2Problem = true;
+        problemMessages.push('You must retype your new password to confirm it.');
+      }
+      else if (input1 !== input2) {
+        hasInput1Problem = true;
+        hasInput2Problem = true;
+        problemMessages.push('Your passwords don\'t match.');
+      }
+    }
+    if (problemMessages.length > 0) {
+      return this.setState({
+        hasProblem: true,
+        problemMessages,
+        hasInput1Problem,
+        hasInput2Problem,
+        hasConfirmPasswordProblem
+      });
+    }
+    else {
+      this.setState({
+        hasProblem: false,
+        problemMessages,
+        hasInput1Problem: false,
+        hasInput2Problem: false,
+        hasConfirmPasswordProblem: false,
+        isLoading: true
+      });
+      api.auth.editUserInfo(
+        { [this.props.property]: this.state.input1 },
+        this.state.confirmPasswordInput
+      )
+        .then(res => {
+          console.log(res);
+          if (this.props.property === 'email') {
+            const success = res && res.data && res.data.success;
+            this.setState({
+              hasSuccess: success,
+              hasProblem: !success,
+              hasInput1Problem: false,
+              hasConfirmPasswordProblem: res && res.data && res.data.passwordProblem,
+              isLoading: false,
+              problemMessages: [!success && (res.data.message || 'Unknown error. Please try again.')],
+              successMessage: success && (res.data.message || 'Please check your inbox for your verification email in order to complete the process.')
+            });
+          }
+          else if (res && res.data && res.data.user) {
+            this.setState({
+              hasSuccess: true,
+              hasProblem: false,
+              hasInput1Problem: false,
+              hasInput2Problem: false,
+              hasConfirmPasswordProblem: false,
+              isLoading: false,
+              problemMessages: []
+            });
+            this.props.setUser(res.data.user);
+          }
+          else this.setState({
+            hasProblem: true,
+            hasInput1Problem: false,
+            hasInput2Problem: false,
+            hasConfirmPasswordProblem: false,
+            isLoading: false,
+            problemMessages: ['Error: unexpected outcome. Please try again.']
+          });
+        })
+        .catch(err => {
+          console.log(err)
+          console.log(err.response)
+          this.setState({
+            hasProblem: true,
+            hasInput1Problem: true,
+            hasInput2Problem: false,
+            hasConfirmPasswordProblem: false,
+            isLoading: false,
+            problemMessages: [
+              (err && err.response && err.response.data && err.response.data.message &&
+                err.response.data.message.code === 11000 && `That ${this.props.property} is taken.`) ||
+                (err && err.response && err.response.data && err.response.data.message) ||
+                'Unknown error. Please try again.'
+            ]
+          });
+        });
     }
   }
 
-  handleChange() {
-
-  }
-
-  submitForm() {
-
+  cancelForm() {
+    this.setState(defaultState);
+    this.props.closeModal();
   }
 
   render() {
-    const { property, isNew } = this.props;
+    const {
+      property,
+      isNew,
+      currentValue,
+      openPasswordResetModal,
+      isActive,
+      closeModal
+    } = this.props;
 
     return (
       <ModalSkeleton
         modalTitle={`${isNew ? 'Add' : 'Edit'} ${property}`}
-        modalTitleSuccess={`${property} ${isNew ? 'Added!' : 'Changed!'}`}
+        modalTitleSuccess={property === 'email' ?
+          'Check your email' :
+          `${property.charAt(0).toUpperCase() + property.slice(1)} ${isNew ? 'Added!' : 'Changed!'}`
+        }
         BodyContent={
           <form id={`edit-${property}-form`} onSubmit={this.submitForm}>
             <EditUserForm
               property={property}
               isNew={isNew}
+              currentValue={currentValue}
               showInstructions={!this.state.hasSuccess && !this.state.hasProblem}
               hasSuccess={this.state.hasSuccess}
               hasProblem={this.state.hasProblem}
-              problemMessage={this.state.problemMessage}
+              problemMessages={this.state.problemMessages}
+              successMessage={this.state.successMessage}
               input1={this.state.input1}
               input2={this.state.input2}
+              confirmPasswordInput={this.state.confirmPasswordInput}
               handleChange={this.handleChange}
               hasInput1Problem={this.state.hasInput1Problem}
               hasInput2Problem={this.state.hasInput2Problem}
+              hasConfirmPasswordProblem={this.state.hasConfirmPasswordProblem}
               isLoading={this.state.isLoading}
             />
+            <div className="content">
+            {!this.state.hasSuccess &&
+                <p>
+                  <span className="text-link" onClick={openPasswordResetModal}>Forgot your password?</span>
+                </p>
+              }
+              <p>I will never share or sell your information.</p>
+            </div>
           </form>
         }
         FooterContent={
@@ -62,9 +200,9 @@ class GenericEditAccountInfoModal extends Component {
             Submit
           </button>
         }
-        isModalActive={this.props.isActive}
+        isModalActive={isActive}
         hasSuccess={this.state.hasSuccess}
-        closeModal={this.props.closeModal}
+        closeModal={closeModal}
         cancel={this.cancelForm}
         isLoading={this.state.isLoading}
       />

@@ -94,6 +94,7 @@ export default ({
             closeEditUsernameModal={closeEditUsernameModal}
             isEditPasswordModalActive={isEditPasswordModalActive}
             closeEditPasswordModal={closeEditPasswordModal}
+            openPasswordResetModal={openPasswordResetModal}
           />
         </>
       }

@@ -11,12 +11,30 @@ export default ({
 
   const style = {
     box: {
-      backgroundColor: '#fdfdfd'
+      backgroundColor: '#fdfdfd',
+      marginTop: 60
     }
   }
 
   return (
     <Box style={style.box} mainContainer>
+      <div className="tabs is-boxed" id="searchbox-tabs">
+        <ul>
+          <li>
+            <a>
+              <span className="icon is-small"><i class="fas fa-minus" /></span>
+              <span>Basic</span>
+            </a>
+          </li>
+          <li className="is-active">
+            <a>
+              <span className="icon is-small"><i class="fas fa-bars" /></span>
+              <span>Advanced</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div id="search-tabs-cover" />
       <form id="search-form">
         <div className="field">
           <label className="label" htmlFor="search-input">

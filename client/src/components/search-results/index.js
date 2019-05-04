@@ -6,7 +6,9 @@ import BookInfoDisplay from '../book-info';
 export default ({
   results,
   query,
-  openSaveBookModal
+  openSaveBookModal,
+  titleInputValue,
+  showNewestFirst 
 }) => {
 
   let style = {
@@ -22,17 +24,34 @@ export default ({
       <label className="label">Results</label>
       {results.items ?
         <>
-          <p className="is-size-5">
-            Showing {results.items.length} of {results.number} matches for "{query}"
-          </p>
-          {results.items.map(item => (
-            <BookInfoDisplay
-              book={item}
-              key={item.gId}
-              openSaveBookModal={openSaveBookModal}
-            />
-          ))}
-        </> :
+          {results.items.length > 0 ?
+            <>
+              <p className="is-size-5">
+                Showing {results.items.length} of&nbsp;
+                {results.number} matches for <em>{query}</em>
+              </p>
+              <p className="is-size-5">
+                {showNewestFirst &&
+                  <>(Newest first.)</>
+                }
+              </p>
+              {results.items.map(item => (
+                <BookInfoDisplay
+                  book={item}
+                  key={item.gId}
+                  openSaveBookModal={openSaveBookModal}
+                />
+              ))}
+            </>
+            :
+            <>
+              <p className="is-size-5">
+                Sorry, no matches were found for <em>{query}</em>.
+              </p>
+            </>
+          }
+        </>
+        :
         <>
           <h4 className="title is-6">There are no results to display yet.</h4>
           <h5 className="subtitle is-6">Search for a book using the search bar above.</h5>

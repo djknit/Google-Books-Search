@@ -1,12 +1,24 @@
 import React from 'react';
 import './style.css';
 import Box from '../box';
+import BasicSearch from './basic';
+import AdvancedSearch from './advanced';
 
 export default ({
   inputValue,
   handleChange,
   submitSearch,
-  isLoading
+  isLoading,
+  isAdvancedSearchShowing,
+  toggleSearchType,
+  titleInputValue,
+  authorInputValue,
+  publisherInputValue,
+  subjectInputValue,
+  isbnInputValue,
+  showNewestFirst,
+  basicErrorMessage,
+  advancedErrorMessage
 }) => {
 
   const style = {
@@ -20,52 +32,47 @@ export default ({
     <Box style={style.box} mainContainer>
       <div className="tabs is-boxed" id="searchbox-tabs">
         <ul>
-          <li>
-            <a>
-              <span className="icon is-small"><i class="fas fa-minus" /></span>
+          <li className={!isAdvancedSearchShowing ? 'is-active' : ''}>
+            <a onClick={() => toggleSearchType(false)}>
+              <span className="icon is-small"><i className="fas fa-minus" /></span>
               <span>Basic</span>
             </a>
           </li>
-          <li className="is-active">
-            <a>
-              <span className="icon is-small"><i class="fas fa-bars" /></span>
+          <li className={isAdvancedSearchShowing ? 'advanced is-active' : 'advanced'}>
+            <a onClick={() => toggleSearchType(true)}>
+              <span className="icon is-small"><i className="fas fa-bars" /></span>
               <span>Advanced</span>
             </a>
           </li>
         </ul>
       </div>
       <div id="search-tabs-cover" />
-      <form id="search-form">
-        <div className="field">
-          <label className="label" htmlFor="search-input">
-            Search Books
-          </label>
-          <div className="control has-icons-left">
-            <input
-              id="search-input"
-              className="input has-shadow"
-              placeholder="Enter an author or title..."
-              value={inputValue}
-              onChange={handleChange}
-              disabled={isLoading}
-            />
-            <span className="icon is-small is-left">
-              <i className="fas fa-search"></i>
-            </span>
-          </div>
-        </div>
-        <a
-          href="https://www.google.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="powered-by-google"
-        >
-          <img src="assets/images/poweredby.png" alt="Powered by Google" />
-        </a>
-        <button onClick={submitSearch} type="submit" className="button is-primary" disabled={isLoading || !inputValue}>
-          Search!
-        </button>
-      </form>
+      {isAdvancedSearchShowing ?
+        <AdvancedSearch
+          inputValue={inputValue}
+          handleChange={handleChange}
+          isLoading={isLoading}
+          submitSearch={submitSearch}
+          isAdvancedSearchShowing={isAdvancedSearchShowing}
+          toggleSearchType={toggleSearchType}
+          titleInputValue={titleInputValue}
+          authorInputValue={authorInputValue}
+          publisherInputValue={publisherInputValue}
+          subjectInputValue={subjectInputValue}
+          isbnInputValue={isbnInputValue}
+          showNewestFirst={showNewestFirst}
+          errorMessage={advancedErrorMessage}
+        />
+        :
+        <BasicSearch
+          inputValue={inputValue}
+          handleChange={handleChange}
+          isLoading={isLoading}
+          submitSearch={submitSearch}
+          errorMessage={basicErrorMessage}
+        />
+        
+      }
     </Box>
   );
 }

@@ -1,0 +1,15 @@
+#search-form .radio input {
+  margin-right: 3px;
+}
+
+#search-form label.radio {
+  margin: 0;
+}
+
+#search-form label.radio:nth-of-type(2) {
+  margin-right: 50px;
+}
+
+#search-form div.control {
+  margin-bottom: .75rem;
+}

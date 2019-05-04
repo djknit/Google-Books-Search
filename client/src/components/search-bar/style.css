@@ -26,6 +26,12 @@
 #searchbox-tabs li.is-active {
   box-shadow: 0 0 8px #202020;
 }
+#searchbox-tabs li.advanced {
+  box-shadow: inset 1px 0 4px #202020;
+}
+#searchbox-tabs li.advanced.is-active {
+  box-shadow: 0 0 8px #202020;
+}
 
 #search-form {
   text-align: right;
@@ -44,4 +50,8 @@
 .powered-by-google > img {
   height: 100%;
   width: 100%;
+}
+
+#search-form .notification {
+  text-align: left;
 }

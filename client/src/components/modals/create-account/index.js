@@ -36,7 +36,9 @@ class loginModal extends Component {
   submitForm(event) {
     event.preventDefault();
     this.setState({ showInstructions: false });
-    const { username, email, password, verifyPassword } = this.state;
+    let { username, email, password, verifyPassword } = this.state;
+    if (username) username = username.trim();
+    if (email) email = email.trim();
     if (!username && !email) return this.setState({
       problemMessage: 'You must enter a username or email address.',
       hasProblems: true,
@@ -54,7 +56,7 @@ class loginModal extends Component {
       hasVerifyPasswordProblem: false
     });
     if (email && !(/.+@.+\..+/.test(email))) return this.setState({
-      problemMessage: 'The email address you entered does not appear to be a valid.',
+      problemMessage: 'The email address you entered does not appear to be a valid address.',
       hasProblems: true,
       hasUsernameProblem: false,
       hasEmailProblem: true,

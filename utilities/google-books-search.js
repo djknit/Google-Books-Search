@@ -5,7 +5,7 @@ const apiKey = process.env.G_BOOKS_KEY;
 function processResponse(response) {
 
   const results = response.data;
-  if (results.totalItems < 1) return { number: 0 };
+  if (results.totalItems < 1) return { number: 0, items: [] };
   return {
     number: results.totalItems,
     items: results.items.map(processResultItem)
@@ -17,9 +17,10 @@ function processResultItem(item) {
   if (!volumeInfo) return {};
   const { imageLinks, industryIdentifiers } = volumeInfo;
   const isbn = {};
-  industryIdentifiers.forEach(_isbn => _isbn.type === 'ISBN_13' ?
-    isbn.isbn13 = _isbn.identifier :
-    isbn.isbn10 = _isbn.identifier
+  if (industryIdentifiers) industryIdentifiers.forEach(_isbn =>
+    _isbn.type === 'ISBN_13' ?
+      isbn.isbn13 = _isbn.identifier :
+      isbn.isbn10 = _isbn.identifier
   );
   let viewability;
   if (accessInfo) {
@@ -63,6 +64,11 @@ function processResultItem(item) {
 };
 
 module.exports = {
-  search: query => axios.get(`https://www.googleapis.com/books/v1/volumes?q=${query}&key=${apiKey}`)
-    .then(processResponse)
+  search: (query, newestFirst) => {
+    const queryUrl = `https://www.googleapis.com/books/v1/volumes?q=${
+      query}&key=${apiKey}${newestFirst ? '&orderBy=newest': ''}`
+    console.log(queryUrl)
+    return axios.get(queryUrl)
+      .then(processResponse) 
+  }
 };

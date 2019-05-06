@@ -135,18 +135,30 @@ class GenericEditAccountInfoModal extends Component {
         .catch(err => {
           console.log(err)
           console.log(err.response)
+          const responseMessage = err && err.response && err.response.data && err.response.data.message;
+          let hasInput1Problem, hasConfirmPasswordProblem, problemMessages;
+          if (err && err.response && err.response.status === 401) {
+            hasInput1Problem = false;
+            hasConfirmPasswordProblem = true;
+            problemMessages = [responseMessage];
+          }
+          else if (responseMessage && responseMessage.code === 1100) {
+            hasInput1Problem = true;
+            hasConfirmPasswordProblem = false;
+            problemMessages = [`That ${this.props.property} is taken.`];
+          }
+          else {
+            hasInput1Problem = false;
+            hasConfirmPasswordProblem = false;
+            problemMessages = ['Unknown error. Please try again.'];
+          }
           this.setState({
             hasProblem: true,
-            hasInput1Problem: true,
-            hasInput2Problem: false,
-            hasConfirmPasswordProblem: false,
+            hasInput1Problem,
+            hasInput2Problem: hasInput1Problem,
+            hasConfirmPasswordProblem,
             isLoading: false,
-            problemMessages: [
-              (err && err.response && err.response.data && err.response.data.message &&
-                err.response.data.message.code === 11000 && `That ${this.props.property} is taken.`) ||
-                (err && err.response && err.response.data && err.response.data.message) ||
-                'Unknown error. Please try again.'
-            ]
+            problemMessages
           });
         });
     }

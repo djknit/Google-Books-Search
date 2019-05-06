@@ -18,7 +18,7 @@ export default ({
       }
       <SearchInput
         id="search-input"
-        placeholder="Enter an author or title..."
+        placeholder="Enter an author, title, or other information..."
         name="inputBasic"
         value={inputValue}
         handleChange={handleChange}

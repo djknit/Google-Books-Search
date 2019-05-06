@@ -11,6 +11,7 @@ router.post(
       .then(results => {
         res.json(results);
       })
+      .catch(err => res.status(500).json({ error: err || 'Unknown error' }));
   }
 );
 

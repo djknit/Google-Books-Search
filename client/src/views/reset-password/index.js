@@ -198,7 +198,14 @@ class ResetPasswordPage extends Component {
                 </span>
               </div>
             </div>
-            <button type="submit" className="button is-success" onClick={this.submit}>Submit</button>
+            <button
+              type="submit"
+              className="button is-success"
+              onClick={this.submit}
+              disabled={this.state.hasSuccess || this.state.isLoading}
+            >
+              Submit
+            </button>
           </form>
         </Box>
       </div>

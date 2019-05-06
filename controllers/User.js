@@ -271,7 +271,7 @@ module.exports = {
         if (password) user.password = password;
         user.save((err, user) => err ? handleError(err) : cb(cleanUser(user)));
       },
-      handleError
+      err => handleError(err, 401)
     );
   },
   setEmailVerificationToken(userId, currentPassword, newEmail, baseUrl, cb, handleError) {

@@ -2,17 +2,16 @@ const router = require('express').Router();
 
 const gBooksSearch = require('../../utilities/google-books-search');
 
-router.get(
+router.post(
   '/:query',
   (req, res) => {
+    const newestFirst = (req && req.body && req.body.newestFirst) || false;
     const query = req.params.query;
-    console.log('`'.repeat(40)+'\n');
-    console.log(query);
-    console.log('\n' + '`'.repeat(40));
-    gBooksSearch.search(query)
+    gBooksSearch.search(query, newestFirst)
       .then(results => {
         res.json(results);
       })
+      .catch(err => res.status(500).json({ error: err || 'Unknown error' }));
   }
 );
 

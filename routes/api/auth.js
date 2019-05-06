@@ -149,7 +149,7 @@ router.post(
         updatedInfo.email,
         req.headers.host,
         result => res.json(result),
-        err => res.status(500).json({ message: err || 'unknown error' })
+        (err, status) => res.status(status || 500).json({ message: err || 'unknown error' })
       );
     }
     else {
@@ -161,7 +161,7 @@ router.post(
           if (!user) res.status(500).json({ message: 'user not found' });
           res.json({ user });
         },
-        err => res.status(500).json({ message: err || 'unknown error' })
+        (err, status) => res.status(status || 500).json({ message: err || 'unknown error' })
       );
     }
   }

@@ -34,7 +34,8 @@ class loginModal extends Component {
     // Next line is fix for bug where form was showing problem message after user logs in, logs out,
       // and then opens login modal again. It looks to have come from this function being run before modal is opened.
     if (!this.props.isActive) return null;
-    const { usernameOrEmail, password } = this.state;
+    let { usernameOrEmail, password } = this.state;
+    if (usernameOrEmail) usernameOrEmail = usernameOrEmail.trim();
     if (!usernameOrEmail) return this.setState({
       problemMessage: 'You must enter a username or email address.',
       hasProblems: true,

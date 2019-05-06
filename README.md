@@ -23,7 +23,8 @@
 * Implement proper user authentication with password encryption.
 
 ## Project Features
-* Allows users to enter a search term (title, author, publisher, etc.) to search for books using the Google Books API.
+* Allows users to enter search term(s) (title, author, publisher, etc.) to search for books using the Google Books API.
+* Also has an advanced search option which allows for more specific searches.
 * The top 10 matches for the query are displayed to the user.
 * Users can save books to the database.
 * Users can create an account or use the site as a guest.
@@ -75,7 +76,13 @@
 * Google Books API
 
 ## Instructions for Use
-### (Coming Soon...)
+Visit [daves-book-search.herokuapp.com](https://daves-book-search.herokuapp.com) to run the app.
+* On the landing page you can choose to create an account or continue as a guest.
+  * As a guest, you can search for books, view the public list, and save books to the public list.
+  * You must create an account to comment on the public list. If you create an account, you will also be able to save books to a private personal list. The only information required to set up an account is a username or email and a password. If you choose not to provide an email address, you will not be able to recover your account if you loose your password.
+* Use the menu at the top of the page to navigate between views. There is the search view and under "Saved Titles" there is the public list view. If you are signed in, the personal list will also appear under "Saved Titles."
+* If you are signed in, there will also be an "Account" dropdown menu  on the navigation bar. This is where you can update your account information and privacy settings.
+* Explore the site to search for books, save books, and view the previously saved books.
 
 ## Developer
 This project is developed and maintained by David Knittel. Any and all questions, comments, suggestions, or proposed contributions are welcome.

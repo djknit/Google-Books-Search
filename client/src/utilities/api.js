@@ -12,6 +12,7 @@ const searchApi = createApiCall('search');
 const savedApi = createApiCall('saved');
 
 export default {
+  test: data => axios.get('/api/test-body-data', { data: { test: 'test' } }),
   auth: {
     createAccount: newUser => authApi.post('/create', newUser),
     login: (usernameOrEmail, password) => authApi
@@ -27,7 +28,7 @@ export default {
     verifyEmail: token => authApi.post(`/verify-email/${token}`)
   },
   search: {
-    submitSearch: query => searchApi.get(`/${query}`)
+    submitSearch: input => searchApi.post(`/${input.query}`, { newestFirst: input.newestFirst } )
   },
   saved: {
     checkSavedStatusAsGuest: (bookInfo) => savedApi.get(`/check-if-saved/guest/${bookInfo.gId}`),

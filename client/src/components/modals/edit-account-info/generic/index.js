@@ -32,25 +32,33 @@ class GenericEditAccountInfoModal extends Component {
 
   submitForm(event) {
     event.preventDefault();
-    console.log({
-      input1: this.state.input1,
-      input2: this.state.input2,
-      confirmPasswordInput: this.state.confirmPasswordInput
-    });
-    const { input1, input2, confirmPasswordInput } = this.state;
+    const { property } = this.props;
+    let { input1, input2, confirmPasswordInput } = this.state;
+    if (property ===  'username' || property === 'email') input1 = input1.trim();
     let hasInput1Problem, hasInput2Problem, hasConfirmPasswordProblem;
     let problemMessages = [];
     if (!input1) {
       hasInput1Problem = true;
-      problemMessages.push(`The ${this.props.property} field cannot be empty.`);
+      problemMessages.push(`The ${property} field cannot be empty.`);
     }
-    if (!confirmPasswordInput) {
-      hasConfirmPasswordProblem = true;
-      problemMessages.push(
-        'You must enter your current password to verify your identity before making changes to your account.'
-      );
+    else if (property === 'username') {
+      if (input1.length < 4) {
+        hasInput1Problem = true;
+        problemMessages.push('Your username must be at least 4 characters long.');
+      }
     }
-    if (this.props.property === 'password') {
+    else if (property === 'email') {
+      if (!(/.+@.+\..+/.test(input1))) {
+        hasInput1Problem = true;
+        problemMessages.push('The email address you entered does not appear to be a valid address');
+      }
+    }
+    else if (property === 'password') {
+      if (input1.length < 7) {
+        hasInput1Problem = true;
+        hasInput2Problem = true;
+        problemMessages.push('Your password must be at least 7 characters long.');
+      }
       if (!input2) {
         hasInput2Problem = true;
         problemMessages.push('You must retype your new password to confirm it.');
@@ -60,6 +68,12 @@ class GenericEditAccountInfoModal extends Component {
         hasInput2Problem = true;
         problemMessages.push('Your passwords don\'t match.');
       }
+    }
+    if (!confirmPasswordInput) {
+      hasConfirmPasswordProblem = true;
+      problemMessages.push(
+        'You must enter your current password to verify your identity before making changes to your account.'
+      );
     }
     if (problemMessages.length > 0) {
       return this.setState({
@@ -121,18 +135,30 @@ class GenericEditAccountInfoModal extends Component {
         .catch(err => {
           console.log(err)
           console.log(err.response)
+          const responseMessage = err && err.response && err.response.data && err.response.data.message;
+          let hasInput1Problem, hasConfirmPasswordProblem, problemMessages;
+          if (err && err.response && err.response.status === 401) {
+            hasInput1Problem = false;
+            hasConfirmPasswordProblem = true;
+            problemMessages = [responseMessage];
+          }
+          else if (responseMessage && responseMessage.code === 1100) {
+            hasInput1Problem = true;
+            hasConfirmPasswordProblem = false;
+            problemMessages = [`That ${this.props.property} is taken.`];
+          }
+          else {
+            hasInput1Problem = false;
+            hasConfirmPasswordProblem = false;
+            problemMessages = ['Unknown error. Please try again.'];
+          }
           this.setState({
             hasProblem: true,
-            hasInput1Problem: true,
-            hasInput2Problem: false,
-            hasConfirmPasswordProblem: false,
+            hasInput1Problem,
+            hasInput2Problem: hasInput1Problem,
+            hasConfirmPasswordProblem,
             isLoading: false,
-            problemMessages: [
-              (err && err.response && err.response.data && err.response.data.message &&
-                err.response.data.message.code === 11000 && `That ${this.props.property} is taken.`) ||
-                (err && err.response && err.response.data && err.response.data.message) ||
-                'Unknown error. Please try again.'
-            ]
+            problemMessages
           });
         });
     }

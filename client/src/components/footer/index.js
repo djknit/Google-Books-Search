@@ -21,7 +21,7 @@ export default ({
         >
           Repo
         </a>
-        <span className="separator"> | </span>
+        <span className="separator">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
         <a
           href="https://djknit.github.io/assets/documents/book-search.html"
           target="_blank"

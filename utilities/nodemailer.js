@@ -8,7 +8,7 @@ const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN } = process
   // 2.) https://medium.com/@nickroach_50526/sending-emails-with-node-js-using-smtp-gmail-and-oauth2-316fe9c790a1  (For setting it up with gmail)
   // 3.) https://medium.com/@bobziroll/okay-so-i-havent-been-able-to-get-the-service-account-thing-to-work-but-i-ended-up-installing-38684d22811  (to help fix an issue i had with code from source 2)
 
-  const oauth2Client = new OAuth2(
+const oauth2Client = new OAuth2(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   GOOGLE_REFRESH_TOKEN

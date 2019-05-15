@@ -65,7 +65,7 @@ export default ({
       <SearchInput
         label="ISBN"
         id="search-isbn-input"
-        placeholder="Search by isbn..."
+        placeholder="Search by ISBN..."
         name="isbnInput"
         value={isbnInputValue}
         handleChange={handleChange}

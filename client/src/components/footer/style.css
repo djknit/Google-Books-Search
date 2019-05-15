@@ -4,4 +4,34 @@ footer#my-footer {
   background-color: #efefef;
   position: relative;
   z-index: 0;
+  padding-left: 15px;
+  padding-right: 25px;
+}
+
+.footer-text {
+  padding-top: 14px;
+  color: #4f4f4f;
+  font-size: .8rem;
+  display: inline-block;
+}
+
+.footer-text > a {
+  color: #6e6e6e;
+  font-size: .86rem;
+}
+
+.footer-text > a:hover {
+  color: #232323;
+}
+
+.footer-text > a:focus, .footer-text > a:active {
+  color: #bababa;
+}
+
+.footer-text.site-links {
+  float: right;
+}
+
+.footer-text > .separator {
+  color: #c0c0c0;
 }

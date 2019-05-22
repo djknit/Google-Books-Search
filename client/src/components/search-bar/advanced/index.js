@@ -19,7 +19,7 @@ export default ({
   return (
     <form id="search-form">
       <label className="label" htmlFor="search-input">
-        Super Advanced Book Search:
+        Advanced Book Search:
       </label>
       {errorMessage &&
         <div className="notification is-danger has-shadow">

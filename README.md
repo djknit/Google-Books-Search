@@ -32,7 +32,7 @@
 * Users who are logged in can also save books to their personal list which can not be viewed by other users.
 * Privacy settings can be adjusted so that users can choose to share their username or email address or remain anonymous when they post to the Public List.
 * User authentication is verified on the server side each time a user tries to interact with their data. This prevents users from accessing other users' data even if they modify the front end code in an attempt to do so.
-* Users who are logged in can comment on books saved to the public list. They can also leave notes on books in their private list.
+* Users who are logged in can comment on books saved to the Public List. They can also leave notes on books in their private list.
 * Comments can be deleted by the comment author.
 * Users can remove books and notes from their private list.
 * Passwords are hashed using Bcrypt before they are stored in the database.
@@ -78,11 +78,25 @@
 ## Instructions for Use
 Visit [daves-book-search.herokuapp.com](https://daves-book-search.herokuapp.com) to run the app.
 * On the landing page you can choose to create an account or continue as a guest.
-  * As a guest, you can search for books, view the public list, and save books to the public list.
-  * You must create an account to comment on the public list. If you create an account, you will also be able to save books to a private personal list. The only information required to set up an account is a username or email and a password. If you choose not to provide an email address, you will not be able to recover your account if you loose your password.
-* Use the menu at the top of the page to navigate between views. There is the search view and under "Saved Titles" there is the public list view. If you are signed in, the personal list will also appear under "Saved Titles."
-* If you are signed in, there will also be an "Account" dropdown menu  on the navigation bar. This is where you can update your account information and privacy settings.
-* Explore the site to search for books, save books, and view the previously saved books.
+  * As a guest, you can search for books, view the Public List, and save books to the Public List.
+  * You must create an account to comment on the Public List. If you create an account, you will also be able to save books to a private personal list ("Your List").
+  * The only information required to set up an account is a username or email and a password. If you choose not to provide an email address, you will not be able to recover your account if you loose your password.
+* Use the menu at the top of the page to navigate between views.
+  * There are two views namely "Search" and "Public List" that are always available. If you are signed in, you will also have a view for "Your List".
+  * The "Public List" and "Your List" links appear in the dropdown menu under "Saved Titles".
+  * If you are signed in, there will also be an "Account" dropdown menu on the navigation bar. This is where you can update your account information and privacy settings.
+* On the "Search" view:
+  * Use the tabs above the box containing the search bar to switch between the basic and advanced search.
+    * The advanced search allows you to be more specific than the basic search.
+    * On the advanced search, you can enter a term in any number of the form fields as long as you use at least one.
+  * The results displayed will include the following for each book.
+    * Information about the book
+    * Links to Google Books resources
+    * A "Save" button
+* On the "Public List" and "Your List" views:
+  * The entries on the lists contain the same information in the same format as the results on the "Search" view.
+  * Each entry also has a comments section at the bottom of the entry.
+* If you are signed in, an "Account" dropdown menu will also be available on the navigation bar. Use this menu to edit any of your account information.
 
 ## Developer
 This project is developed and maintained by David Knittel. Any and all questions, comments, suggestions, or proposed contributions are welcome.

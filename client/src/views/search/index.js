@@ -55,9 +55,10 @@ class searchView extends Component {
       if (query === '/') return this.setState({
         basicErrorMessage: 'Cannot search "/".'
       });
-      if (query === '') return this.setState({
+      else if (query === '') return this.setState({
         basicErrorMessage: 'Cannot submit an empty search.'
       });
+      else this.setState({ basicErrorMessage: null });
       queryDescription = `"${query}"`;
     }
     else {
@@ -115,7 +116,7 @@ class searchView extends Component {
 
   submitSearch(event) {
     event.preventDefault();
-    const { query, queryDescription } = this.generateQuery();
+    const { query, queryDescription } = this.generateQuery() || {};
     console.log(query)
     if (!query) return undefined;
     api.search.submitSearch(query)

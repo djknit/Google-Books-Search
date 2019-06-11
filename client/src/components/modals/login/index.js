@@ -128,6 +128,7 @@ class loginModal extends Component {
               submitForm={this.submitForm}
               isLoading={this.state.isLoading}
               openPasswordResetModal={openPasswordResetModal}
+              isActive={isActive}
             />
           </form>
         }
@@ -137,6 +138,7 @@ class loginModal extends Component {
             form="login-form"
             className="button is-success"
             disabled={this.state.isLoading}
+            tabIndex={isActive ? 5 : -1}
           >
             Sign In
           </button>

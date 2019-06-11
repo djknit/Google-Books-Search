@@ -17,7 +17,8 @@ export default ({
   hasInput1Problem,
   hasInput2Problem,
   isLoading,
-  hasConfirmPasswordProblem
+  hasConfirmPasswordProblem,
+  isActive
 }) => {
   
   return (
@@ -86,6 +87,7 @@ export default ({
             disabled={hasSuccess || isLoading}
             className={hasInput1Problem && !hasSuccess ? 'input is-danger' : 'input'}
             type={(property === 'username' && 'text') || property}
+            tabIndex={isActive ? 1 : -1}
           />
           <span className="icon is-small is-left">
             <i
@@ -118,6 +120,7 @@ export default ({
               onChange={handleChange}
               disabled={hasSuccess || isLoading}
               className={hasInput2Problem && !hasSuccess ? 'input is-danger' : 'input'}
+              tabIndex={isActive ? 2 : -1}
             />
             <span className="icon is-small is-left">
               <i className="fas fa-lock"></i>
@@ -140,6 +143,7 @@ export default ({
             onChange={handleChange}
             disabled={hasSuccess || isLoading}
             className={hasConfirmPasswordProblem && !hasSuccess ? 'input is-danger' : 'input'}
+            tabIndex={isActive ? 3 : -1}
           />
           <span className="icon is-small is-left">
             <i className="fas fa-unlock"></i>

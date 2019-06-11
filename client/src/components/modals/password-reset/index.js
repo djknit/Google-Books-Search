@@ -143,6 +143,7 @@ class PasswordResetModal extends Component {
                   className={this.state.hasEmailProblem && !this.state.hasSuccess ?
                     'input is-danger' : 'input'
                   }
+                  tabIndex={isActive ? 1 : -1}
                 />
                 <span className="icon is-small is-left">
                   <i className="fas fa-envelope"></i>
@@ -158,6 +159,7 @@ class PasswordResetModal extends Component {
             form="request-password-reset-form"
             className="button is-success"
             disabled={this.state.isLoading}
+            tabIndex={isActive ? 2 : -1}
           >
             Submit
           </button>

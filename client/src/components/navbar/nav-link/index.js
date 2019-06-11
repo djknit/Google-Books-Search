@@ -5,7 +5,8 @@ import './style.css';
 export default ({
   path,
   text,
-  onClick
+  onClick,
+  tabIndex
 }) => {
 
   return (

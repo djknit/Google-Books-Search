@@ -10,15 +10,16 @@ export default ({
   openPrivacySettingsModal,
   openEditUsernameModal,
   openEditEmailModal,
-  openEditPasswordModal
+  openEditPasswordModal,
+  areAnyModalsOpen
 }) => {
 
   return (
     <nav className="navbar" role="navigation" aria-label="main navigation">
       <div className="navbar-brand">
-        <NavLink path="/search" text="Search" />  
-        <div className="navbar-item">
-          <div className="dropdown is-hoverable">
+        <NavLink path="/search" text="Search" tabIndex={areAnyModalsOpen ? -1 : 4} />
+        <div className="navbar-item" tabIndex={areAnyModalsOpen ? -1 : 5}>
+          <div className="dropdown is-hoverable" onClick={() => console.log('teestststt')} >
             <div className="dropdown-trigger">
               <button className="button has-no-shadow" aria-haspopup="true" aria-controls="saved-titles-nav-dropdown">
                 <span>Saved Titles</span>
@@ -38,7 +39,7 @@ export default ({
           </div>
         </div>
         {user &&
-          <div className="navbar-item">
+          <div className="navbar-item" tabIndex={areAnyModalsOpen ? -1 : 8}>
             <div className="dropdown is-hoverable">
               <div className="dropdown-trigger">
                 <button className="button has-no-shadow" aria-haspopup="true" aria-controls="account-nav-dropdown">
@@ -74,16 +75,16 @@ export default ({
                 <span id="welcome-message">
                   Hi {user.username || user.email}
                 </span>
-                <button onClick={logOut} className="button">
+                <button onClick={logOut} className="button" tabIndex={areAnyModalsOpen ? -1 : 9}>
                   Log out
                 </button>
               </div>
               :
               <div className="buttons">
-                <button onClick={openCreateAccountModal} className="button is-primary">
+                <button onClick={openCreateAccountModal} className="button is-primary" tabIndex={areAnyModalsOpen ? -1 : 10}>
                   <strong>Sign up</strong>
                 </button>
-                <button onClick={openLoginModal} className="button is-light">
+                <button onClick={openLoginModal} className="button is-light" tabIndex={areAnyModalsOpen ? -1 : 11}>
                   Log in
                 </button>
               </div>

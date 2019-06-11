@@ -10,7 +10,8 @@ export default ({
   hasPasswordProblem,
   handleChange,
   isLoading,
-  openPasswordResetModal
+  openPasswordResetModal,
+  isActive
 }) => {
 
   return (
@@ -41,6 +42,7 @@ export default ({
             onChange={handleChange}
             disabled={hasSuccess || isLoading}
             className={hasUsernameOrEmailProblem && !hasSuccess ? 'input is-danger' : 'input'}
+            tabIndex={isActive ? 1 : -1}
           />
           <span className="icon is-small is-left">
             <i className="fas fa-user-tag"></i>
@@ -59,6 +61,7 @@ export default ({
             onChange={handleChange}
             disabled={hasSuccess || isLoading}
             className={hasPasswordProblem && !hasSuccess ? 'input is-danger' : 'input'}
+            tabIndex={isActive ? 2 : -1}
           />
           <span className="icon is-small is-left">
             <i className="fas fa-lock"></i>
@@ -68,7 +71,12 @@ export default ({
       <div className="content">
         {!hasSuccess &&
           <p>
-            <span className="text-link" onClick={openPasswordResetModal}>Forgot your password?</span>
+            <span className="text-link"
+              onClick={openPasswordResetModal}
+              tabIndex={isActive ? 3 : -1}
+            >
+              Forgot your password?
+            </span>
           </p>
         }
         <p>I will never share or sell your information.</p>

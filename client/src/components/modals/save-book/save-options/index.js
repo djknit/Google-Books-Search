@@ -32,7 +32,13 @@ export default ({
       </Box> :
       <Box style={style.box}>
         <p className="save-options box-text">This book is not saved to the public list yet.</p>
-        <button className="button is-primary" onClick={saveToPublicList}>Save to public list</button>
+        <button
+          className="button is-primary"
+          onClick={saveToPublicList}
+          tabIndex={1}
+        >
+          Save to public list
+        </button>
       </Box>
     }
     {user ?
@@ -42,12 +48,18 @@ export default ({
         </Box> :
         <Box style={style.box}>
           <p className="save-options box-text">This book is not saved to your personal list.</p>
-          <button className="button is-primary" onClick={saveToUserList}>Save to personal list</button>
+          <button
+            className="button is-primary"
+            onClick={saveToUserList}
+            tabIndex={2}
+          >
+            Save to personal list
+          </button>
         </Box>
       :
       <Box style={style.inactiveBox}>
-        If you <span className="text-link" onClick={openLoginModal}>
-          sign in</span> or <span className="text-link" onClick={openCreateAccountModal}>
+        If you <span className="text-link" onClick={openLoginModal} tabIndex={2} >
+          sign in</span> or <span className="text-link" onClick={openCreateAccountModal} tabIndex={3}>
           create an account</span>,
         you can save books to a personal list.
       </Box>

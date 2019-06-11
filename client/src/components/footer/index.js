@@ -9,7 +9,7 @@ export default ({
     <footer id="my-footer" className="has-shadow is-deep is-low" style={{ height }}>
       <span className="footer-text developed-by">
         Developed by&nbsp;
-        <a href="http://djknit.github.io/" target="_blank" rel="noreferrer noopener">
+        <a href="http://djknit.github.io/" target="_blank" rel="noreferrer noopener" tabIndex={-1}>
           David Knittel
         </a>
       </span>
@@ -18,6 +18,7 @@ export default ({
           href="http://github.com/djknit/Google-Books-Search/"
           target="_blank"
           rel="noreferrer noopener"
+          tabIndex={-1}
         >
           Repo
         </a>
@@ -26,6 +27,7 @@ export default ({
           href="https://djknit.github.io/assets/documents/book-search.html"
           target="_blank"
           rel="noreferrer noopener"
+          tabIndex={-1}
         >
           Readme
         </a>

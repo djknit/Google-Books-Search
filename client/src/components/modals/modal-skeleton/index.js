@@ -34,6 +34,7 @@ export default ({
             onClick={hasSuccess || isPrivacySettingsModal ? cancel : closeModal}
             className="delete has-shadow"
             aria-label="close"
+            tabIndex={isModalActive ? 7 : -1}
           />
         </header>
         <section className={`modal-card-body${isBodyCentered ? ' has-text-centered' : ''}`}>
@@ -46,6 +47,7 @@ export default ({
                 onClick={cancel}
                 to={successRedirectPath}
                 className="button is-success has-shadow"
+                tabIndex={isModalActive ? 6 : -1}
               >
                 OK
               </Link>
@@ -53,13 +55,19 @@ export default ({
               <button
                 onClick={cancel}
                 className={`button has-shadow${hasSuccess ? ' is-success' : ''}`}
+                tabIndex={isModalActive ? 6 : -1}
               >
                 OK
               </button>
             :
             <>
               {FooterContent}
-              <button onClick={cancel} className="button" disabled={isLoading}>
+              <button
+                onClick={cancel}
+                className="button"
+                disabled={isLoading}
+                tabIndex={isModalActive ? 6 : -1}
+              >
                 Cancel
               </button>
             </>

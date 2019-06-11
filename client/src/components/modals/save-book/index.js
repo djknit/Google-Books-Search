@@ -126,7 +126,12 @@ class SaveBookModal extends Component {
             />
         }
         FooterContent={this.state.saveTo &&
-          <button onClick={this.saveBook} className="button is-success" disabled={this.state.isLoading}>
+          <button
+            onClick={this.saveBook}
+            className="button is-success"
+            disabled={this.state.isLoading}
+            tabIndex={3}
+          >
             Confirm
           </button>
         }

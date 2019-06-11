@@ -190,6 +190,7 @@ class loginModal extends Component {
               hasPasswordProblem={this.state.hasPasswordProblem}
               hasVerifyPasswordProblem={this.state.hasVerifyPasswordProblem}
               isLoading={this.state.isLoading}
+              isActive={isActive}
             />
           </form>
         }
@@ -199,6 +200,7 @@ class loginModal extends Component {
             type="submit" form="new-user-form"
             className="button is-success"
             disabled={this.state.isLoading}
+            tabIndex={isActive ? 5 : -1}
           >
             Submit
           </button>

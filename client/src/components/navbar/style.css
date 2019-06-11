@@ -14,6 +14,10 @@
   color: rgb(54, 54, 54);
 }
 
+.navbar-item:focus .dropdown-menu {
+  display: block;
+}
+
 .navbar .dropdown-trigger > button {
   border: none;
   padding-left: 0;

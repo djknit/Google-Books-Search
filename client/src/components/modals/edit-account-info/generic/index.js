@@ -208,7 +208,7 @@ class GenericEditAccountInfoModal extends Component {
               isActive={isActive}
             />
             <div className="content">
-            {!this.state.hasSuccess &&
+              {!this.state.hasSuccess &&
                 <p>
                   <span className="text-link" onClick={openPasswordResetModal}>Forgot your password?</span>
                 </p>

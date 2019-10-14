@@ -23,9 +23,9 @@ class PrivacySettingsModal extends Component {
   currentSettingsSelectionValue() {
     return (
       (this.props.user.shareUsername && 'username') ||
-      (this.props.user.shareEmail && 'email') ||
-      (this.props.user.shareEmail === false && this.props.user.shareUsername === false && 'none') ||
-      null
+        (this.props.user.shareEmail && 'email') ||
+        (this.props.user.shareEmail === false && this.props.user.shareUsername === false && 'none') ||
+        null
     );
   }
   

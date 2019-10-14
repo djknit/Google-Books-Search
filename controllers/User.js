@@ -302,7 +302,7 @@ module.exports = {
           user.save((err, user) => done(err, user, token));
         },
         (user, token, done) => {
-          sendEmailAddressVerificationEmail(baseUrl, user, token, done);
+          sendEmailAddressVerificationEmail(baseUrl, newEmail, token, done);
         },
         (success, done) => {
           if (!success) return done('Unknown error.');

@@ -202,6 +202,21 @@ class App extends Component {
   }
 
   render() { 
+    const {
+      isCreateAccountModalActive,
+      isLoginModalActive,
+      isSaveBookModalActive,
+      isPrivacySettingsModalActive,
+      isDeleteBookModalActive,
+      isPasswordResetModalActive,
+      isEditEmailModalActive,
+      isEditUsernameModalActive,
+      isEditPasswordModalActive
+    } = this.state;
+
+    const areAnyModalsOpen = isCreateAccountModalActive || isLoginModalActive || isSaveBookModalActive || isPrivacySettingsModalActive ||
+      isDeleteBookModalActive || isPasswordResetModalActive || isEditEmailModalActive || isEditUsernameModalActive || isEditPasswordModalActive;
+
     // console.log(this.state)
     // console.log(document.location.pathname)
     return (
@@ -217,6 +232,7 @@ class App extends Component {
               openEditUsernameModal={this.openEditUsernameModal}
               openEditEmailModal={this.openEditEmailModal}
               openEditPasswordModal={this.openEditPasswordModal}
+              areAnyModalsOpen={areAnyModalsOpen}
             />
             <Switch>
               {/* source: https://tylermcginnis.com/react-router-pass-props-to-components/ */}

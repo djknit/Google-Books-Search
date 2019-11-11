@@ -87,6 +87,7 @@ class DeleteBookModal extends Component {
             onClick={this.removeBookFromList}
             className="button is-danger"
             disabled={this.state.isLoading}
+            tabIndex={1}
           >
             Confirm
           </button>

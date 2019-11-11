@@ -14,7 +14,8 @@ export default ({
   verifyPassword,
   hasPasswordProblem,
   hasVerifyPasswordProblem,
-  isLoading
+  isLoading,
+  isActive
 }) => {
   
   return (
@@ -47,6 +48,7 @@ export default ({
             onChange={handleChange}
             disabled={hasSuccess || isLoading}
             className={hasUsernameProblem && !hasSuccess ? 'input is-danger' : 'input'}
+            tabIndex={isActive ? 1 : -1}
           />
           <span className="icon is-small is-left">
             <i className="fas fa-user-tag"></i>
@@ -65,6 +67,7 @@ export default ({
             onChange={handleChange}
             disabled={hasSuccess || isLoading}
             className={hasEmailProblem && !hasSuccess ? 'input is-danger' : 'input'}
+            tabIndex={isActive ? 2 : -1}
           />
           <span className="icon is-small is-left">
             <i className="fas fa-envelope"></i>
@@ -84,6 +87,7 @@ export default ({
             onChange={handleChange}
             disabled={hasSuccess || isLoading}
             className={hasPasswordProblem && !hasSuccess ? 'input is-danger' : 'input'}
+            tabIndex={isActive ? 3 : -1}
           />
           <span className="icon is-small is-left">
             <i className="fas fa-lock"></i>
@@ -103,6 +107,7 @@ export default ({
             onChange={handleChange}
             disabled={hasSuccess || isLoading}
             className={hasVerifyPasswordProblem && !hasSuccess ? 'input is-danger' : 'input'}
+            tabIndex={isActive ? 4 : -1}
           />
           <span className="icon is-small is-left">
             <i className="fas fa-unlock"></i>

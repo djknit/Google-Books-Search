@@ -29,9 +29,21 @@ export default ({
         <Box style={style.box} mainContainer>
           <div className="landing-page-menu">
             <h1 className="subtitle is-4">What would you like to do?</h1>
-            <Button text="Create an Account" onClick={openCreateAccountModal} />
-            <Button text="Log in" onClick={openLoginModal} />
-            <Button text="Continue as Guest" onClick={() => history.push('/search')} />
+            <Button
+              text="Create an Account"
+              onClick={openCreateAccountModal}
+              tabIndex={1}
+            />
+            <Button
+              text="Log in"
+              onClick={openLoginModal}
+              tabIndex={1}
+            />
+            <Button
+              text="Continue as Guest"
+              onClick={() => history.push('/search')}
+              tabIndex={1}
+            />
           </div>
         </Box>
       </div>

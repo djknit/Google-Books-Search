@@ -49,9 +49,9 @@ const sendPasswordResetEmail = (req, res, token, user, done) => {
   });
 }
 
-const sendEmailAddressVerificationEmail = (baseUrl, user, token, done) => {
+const sendEmailAddressVerificationEmail = (baseUrl, newEmail, token, done) => {
   const mailOptions = {
-    to: user.email,
+    to: newEmail,
     from: 'djknit@gmail.com',
     subject: 'Book Search: Verify Email',
     text: 'Please visit the following link to verify your email address for Dave\'s Book Search.\n\n' +

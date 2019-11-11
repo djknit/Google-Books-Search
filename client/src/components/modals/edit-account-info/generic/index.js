@@ -205,9 +205,10 @@ class GenericEditAccountInfoModal extends Component {
               hasInput2Problem={this.state.hasInput2Problem}
               hasConfirmPasswordProblem={this.state.hasConfirmPasswordProblem}
               isLoading={this.state.isLoading}
+              isActive={isActive}
             />
             <div className="content">
-            {!this.state.hasSuccess &&
+              {!this.state.hasSuccess &&
                 <p>
                   <span className="text-link" onClick={openPasswordResetModal}>Forgot your password?</span>
                 </p>
@@ -222,6 +223,7 @@ class GenericEditAccountInfoModal extends Component {
             form={`edit-${property}-form`}
             className="button is-success"
             disabled={this.state.isLoading}
+            tabIndex={isActive ? 5 : -1}
           >
             Submit
           </button>

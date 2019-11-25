@@ -4,7 +4,14 @@ const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-  lowerCaseEmail: String,
+  lowerCaseEmail: {
+    type: String,
+    index: {
+      // source: https://stackoverflow.com/questions/7955040/mongodb-mongoose-unique-if-not-null
+      unique: true,
+      partialFilterExpression: { lowercaseEmail: { $type: 'string' } }
+    }
+  },
   email: {
     type: String,
     // from bootcamp week 18 activity 15
@@ -19,7 +26,11 @@ const UserSchema = new Schema({
       },
       message: 'Usernames must be at least 4 characters long.'
     },
-    unique: true
+    index: {
+      // source: see above under lowerCaseEmail
+      unique: true,
+      partialFilterExpression: { username: { $type: 'string' } }
+    }
   },
   password: {
     type: String,

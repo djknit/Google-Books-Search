@@ -1,7 +1,7 @@
-module.exports.connect = function(cb) {
+module.exports.connect = function (cb) {
   const mongoose = require('mongoose');
 
-  const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/googleBooksSearch';
+  const MONGODB_URI = getAtlasUri(process.env) || 'mongodb://localhost/googleBooksSearch';
   mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
   const db = mongoose.connection;
@@ -10,4 +10,12 @@ module.exports.connect = function(cb) {
     console.log('Database connection was successful');
     if (cb) cb();
   });
+};
+
+function getAtlasUri(dbAndUser) {
+  const { DB_USER, DB_PASSWORD, DB_NAME } = dbAndUser;
+  if (!DB_USER) return;
+  return (
+    `mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.6flzb.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`
+  );
 }

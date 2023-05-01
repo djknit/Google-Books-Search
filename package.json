@@ -14,7 +14,7 @@
     "serve": "nodemon server.js"
   },
   "dependencies": {
-    "async": "^2.6.2",
+    "async": "^2.6.4",
     "axios": "^0.21.2",
     "bcrypt": "^3.0.6",
     "connect-ensure-login": "^0.1.1",

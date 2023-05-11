@@ -13,7 +13,8 @@ module.exports.connect = function (cb) {
 };
 
 function getAtlasUri(dbAndUser) {
-  const { DB_USER, DB_PASSWORD, DB_NAME } = dbAndUser;
+  const { DB_USER, DB_PASSWORD, DB_NAME, DB_CONNECTION_STRING } = dbAndUser;
+  if (DB_CONNECTION_STRING) return DB_CONNECTION_STRING;
   if (!DB_USER) return;
   return (
     `mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.6flzb.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`

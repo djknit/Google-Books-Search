@@ -3,3 +3,11 @@ node_modules
 .env
 
 client/node_modules
+
+# source: https://stackoverflow.com/questions/71433785/reactjs-express-app-heroku-push-error-the-yarnpath-could-not-be-read-from-t#answer-75446511
+.yarn/*
+!.yarn/cache
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions

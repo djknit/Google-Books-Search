@@ -3,7 +3,7 @@ const crypto = require('crypto');
 
 const User = require("../models/User");
 
-// const { sendEmailAddressVerificationEmail } = require('../utilities/nodemailer');
+const { sendEmailAddressVerificationEmail } = require('../utilities/nodemailer');
 
 function createAccount(newUser, callback) {
   const user = new User(newUser);
@@ -302,8 +302,7 @@ module.exports = {
           user.save((err, user) => done(err, user, token));
         },
         (user, token, done) => {
-          // sendEmailAddressVerificationEmail(baseUrl, newEmail, token, done);
-          return true;
+          sendEmailAddressVerificationEmail(baseUrl, newEmail, token, done);
         },
         (success, done) => {
           if (!success) return done('Unknown error.');

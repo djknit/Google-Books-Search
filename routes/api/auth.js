@@ -127,10 +127,10 @@ router.post(
 
 const async = require('async');
 const crypto = require('crypto');
-const {
-  sendPasswordResetEmail,
-  sendEmailAddressVerificationEmail
-} = require('../../utilities/nodemailer');
+// const {
+//   sendPasswordResetEmail,
+//   sendEmailAddressVerificationEmail
+// } = require('../../utilities/nodemailer');
 
 router.post(
   '/edit-user-info',
@@ -187,7 +187,7 @@ router.post('/forgotpassword', (req, res) => {
           user.save(err => done(err, req, res, token, user));
         });
       },
-      sendPasswordResetEmail
+      // sendPasswordResetEmail
     ],
     err => {
       if (err) return console.error(err);
